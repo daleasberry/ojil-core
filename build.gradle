@@ -2,4 +2,9 @@ apply plugin: 'java'
 apply plugin: 'maven'
 apply plugin: 'eclipse'
 
+sourceCompatibility=1.6
+targetCompatibility=1.6
+
 repositories { mavenCentral() }
+
+task createWrapper(type: Wrapper) { gradleVersion = '2.2.1' }
