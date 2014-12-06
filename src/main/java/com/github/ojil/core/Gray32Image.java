@@ -25,21 +25,21 @@
 package com.github.ojil.core;
 
 /**
- * Gray32Image is the image type used to store a 32-bit integer image.
+ * Gray32Image is the image type used to store a 32-bit Integereger image.
  *
  * @author webb
  */
 public class Gray32Image extends Image {
-    private final int nImage[];
+    private final Integer nImage[];
     
     /**
      * Creates a new instance of Gray32Image
      * @param cWidth Width of the image (columns).
      * @param cHeight Height of the image (rows)
      */
-    public Gray32Image(int cWidth, int cHeight) {
+    public Gray32Image(Integer cWidth, Integer cHeight) {
         super(cWidth, cHeight);
-        this.nImage = new int[getWidth()*getHeight()];
+        this.nImage = new Integer[getWidth()*getHeight()];
     }
     
     /**
@@ -48,10 +48,10 @@ public class Gray32Image extends Image {
      * @param cHeight Height of the image (rows)
      * @param nValue constant value to be assigned to the image
      */
-    public Gray32Image(int cWidth, int cHeight, int nValue) {
+    public Gray32Image(Integer cWidth, Integer cHeight, Integer nValue) {
         super(cWidth, cHeight);
-        this.nImage = new int[getWidth()*getHeight()];
-        for (int i=0; i<this.getWidth()*this.getHeight();i++) {
+        this.nImage = new Integer[getWidth()*getHeight()];
+        for (Integer i=0; i<this.getWidth()*this.getHeight();i++) {
             this.nImage[i] = nValue;
         }
     }
@@ -73,11 +73,11 @@ public class Gray32Image extends Image {
     }
     
     
-    /** Return a pointer to the image data.
+    /** Return a poIntegerer to the image data.
      *
-     * @return the data pointer.
+     * @return the data poIntegerer.
      */
-    public int[] getData()
+    public Integer[] getData()
     {
         return this.nImage;
     }

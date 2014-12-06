@@ -64,11 +64,11 @@ public class Gray8HorizSum extends PipelineStage {
         Gray8QmSum gqs = new Gray8QmSum();
         gqs.push(imageInput);
         Gray32Image gSum = (Gray32Image) gqs.getFront();
-        int[] sData = gSum.getData();
+        Integer[] sData = gSum.getData();
         Gray32Image gResult = new Gray32Image(
                 imageInput.getWidth(), 
                 imageInput.getHeight());
-        int[] gData = gResult.getData();
+        Integer[] gData = gResult.getData();
         for (int i=1; i<imageInput.getHeight(); i++) {
             for (int j=0; j<this.nSumWidth; j++) {
                 gData[i*imageInput.getWidth()+j] = 0;

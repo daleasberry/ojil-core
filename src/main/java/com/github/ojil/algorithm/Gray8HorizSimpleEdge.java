@@ -58,7 +58,7 @@ public class Gray8HorizSimpleEdge extends PipelineStage {
                 			null);
         }
         Gray8Image input = (Gray8Image) image;
-        byte[] bIn = input.getData();
+        Byte[] bIn = input.getData();
         int cWidth = input.getWidth();
         for (int i=0; i<input.getHeight(); i++) {
         	int nPrev;

@@ -63,10 +63,10 @@ public class Gray3Bands2Rgb {
                 			imBlue.toString());
         }
         RgbImage rgb = new RgbImage(imRed.getWidth(), imRed.getHeight());
-        byte[] redData = imRed.getData();
-        byte[] greenData = imGreen.getData();
-        byte[] blueData = imBlue.getData();
-        int[] rgbData = rgb.getData();
+        Byte[] redData = imRed.getData();
+        Byte[] greenData = imGreen.getData();
+        Byte[] blueData = imBlue.getData();
+        Integer[] rgbData = rgb.getData();
         for (int i=0; i<imRed.getWidth() * imRed.getHeight(); i++) {
             /* Convert from signed byte value to unsigned byte for storage
              * in the RGB image.

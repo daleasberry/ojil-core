@@ -24,11 +24,11 @@ public class RgbMultiVecThresh extends PipelineStage {
     private final int G = 1;
     private final int B = 2;
     
-    private int[][] nRgbVals;
+    private Integer[][] nRgbVals;
     /**
      * Input color values, unpacked.
      */
-    private int[][] nRgbVecs;
+    private Integer[][] nRgbVecs;
     /**
      * Input threshold value.
      */
@@ -54,7 +54,7 @@ public class RgbMultiVecThresh extends PipelineStage {
      * @throws Error if the input Rgb vectors are not the same
      * length.
      */
-    public RgbMultiVecThresh(int [] rgbVals, int[] rgbVecs, int nThreshold) 
+    public RgbMultiVecThresh(Integer[] rgbVals, Integer[] rgbVecs, int nThreshold) 
             throws Error
     {
         if (rgbVals.length != rgbVecs.length) {
@@ -65,16 +65,16 @@ public class RgbMultiVecThresh extends PipelineStage {
                             rgbVals.toString(),
                             null);
 }
-        this.nRgbVecs = new int[rgbVecs.length][3];
-        this.nRgbVals = new int[rgbVecs.length][3];
+        this.nRgbVecs = new Integer[rgbVecs.length][3];
+        this.nRgbVals = new Integer[rgbVecs.length][3];
         for (int i=0; i<rgbVecs.length; i++) {
-            this.nRgbVals[i][R] = RgbVal.getR(rgbVals[i]);
-            this.nRgbVals[i][G] = RgbVal.getG(rgbVals[i]);
-            this.nRgbVals[i][B] = RgbVal.getB(rgbVals[i]);
+            this.nRgbVals[i][R] = RgbVal.getR(rgbVals[i]).intValue();
+            this.nRgbVals[i][G] = RgbVal.getG(rgbVals[i]).intValue();
+            this.nRgbVals[i][B] = RgbVal.getB(rgbVals[i]).intValue();
             
-            this.nRgbVecs[i][R] = RgbVal.getR(rgbVecs[i]);
-            this.nRgbVecs[i][G] = RgbVal.getG(rgbVecs[i]);
-            this.nRgbVecs[i][B] = RgbVal.getB(rgbVecs[i]);
+            this.nRgbVecs[i][R] = RgbVal.getR(rgbVecs[i]).intValue();
+            this.nRgbVecs[i][G] = RgbVal.getG(rgbVecs[i]).intValue();
+            this.nRgbVecs[i][B] = RgbVal.getB(rgbVecs[i]).intValue();
         }
         this.nThreshold = nThreshold;
     }
@@ -97,11 +97,11 @@ public class RgbMultiVecThresh extends PipelineStage {
                 			null);
         }
         RgbImage rgbInput = (RgbImage) imageInput;
-        int [] rgbData = rgbInput.getData();
+        Integer[] rgbData = rgbInput.getData();
         Gray8Image grayOutput = new Gray8Image(
                 rgbInput.getWidth(), 
                 rgbInput.getHeight());
-        byte [] grayData = grayOutput.getData();
+        Byte[] grayData = grayOutput.getData();
         for (int i=0; i<rgbInput.getHeight()*rgbInput.getWidth(); i++) {
             int nR = RgbVal.getR(rgbData[i]);
             int nG = RgbVal.getG(rgbData[i]);

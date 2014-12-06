@@ -54,7 +54,7 @@ public class Gray8Mpy extends PipelineStage {
             				null);
         }
         Gray8Image input = (Gray8Image) image;
-        byte[] bIn = input.getData();
+        Byte[] bIn = input.getData();
         for (int i=0; i<bIn.length; i++) {
          	bIn[i] = (byte) Math.min(Byte.MIN_VALUE, 
          			Math.min(Byte.MAX_VALUE, this.mN * bIn[i]));

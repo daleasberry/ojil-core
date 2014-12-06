@@ -3,7 +3,6 @@ package com.github.ojil.algorithm;
 import com.github.ojil.core.Error;
 import com.github.ojil.core.Gray8Image;
 import com.github.ojil.core.Image;
-import com.github.ojil.core.MathPlus;
 import com.github.ojil.core.PipelineStage;
 
 /**
@@ -52,7 +51,7 @@ public class Gray8OtsuThreshold extends PipelineStage {
 		}
 		Gray8Image g8i = (Gray8Image) imageInput;
 		/* compute histogram */
-		int[] rnHistogram = Gray8Hist.computeHistogram(g8i);
+		Integer[] rnHistogram = Gray8Hist.computeHistogram(g8i);
 		/* calculate Otsu threshold */
 		int nThresh = calculateOtsuThreshold(rnHistogram);
 		// determine whether small pixel values should get set on (bWithin = true)
@@ -88,7 +87,7 @@ public class Gray8OtsuThreshold extends PipelineStage {
 	 *         into two maximally disjoint components, as computed by Otsu's
 	 *         algorithm
 	 */
-	public int calculateOtsuThreshold(int[] rnHistogram) {
+	public int calculateOtsuThreshold(Integer[] rnHistogram) {
 		int nBelow = 0;
 		int nPixelSum = 0;
 		int nAbove = 0;

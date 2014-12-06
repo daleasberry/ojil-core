@@ -71,8 +71,8 @@ public class Gray32Threshold extends PipelineStage {
         			image.getHeight());
         }
         Gray32Image gray = (Gray32Image) image;
-        int[] data = gray.getData();
-        byte[] dataOut = this.imageOutput.getData();
+        Integer[] data = gray.getData();
+        Byte[] dataOut = this.imageOutput.getData();
         for (int i=0; i<data.length; i++) {
             dataOut[i] = (data[i] >= this.nThreshold) ?
             		Byte.MAX_VALUE : Byte.MIN_VALUE;

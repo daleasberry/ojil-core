@@ -37,7 +37,7 @@ public class RgbMeanStdDev {
     public void push(RgbImage rgb) {
         int nSumR = 0, nSumG = 0, nSumB = 0;
         int nSumRSq = 0, nSumGSq = 0, nSumBSq = 0;
-        int[] nData = rgb.getData();
+        Integer[] nData = rgb.getData();
         int nArea = rgb.getWidth() * rgb.getHeight();
         for (int i = 0; i < nArea; i++) {
             int nR = RgbVal.getR(nData[i]);

@@ -58,8 +58,8 @@ public class Gray32Gray8 extends PipelineStage {
         }
         Gray32Image gray32 = (Gray32Image) image;
         Gray8Image gray8 = new Gray8Image(image.getWidth(), image.getHeight());
-        int[] gray32Data = gray32.getData();
-        byte[] gray8Data = gray8.getData();
+        Integer[] gray32Data = gray32.getData();
+        Byte[] gray8Data = gray8.getData();
         for (int i=0; i<gray32.getWidth() * gray32.getHeight(); i++) {
             /* Convert from 32-bit value to 8-bit value.
              */

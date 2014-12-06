@@ -84,11 +84,11 @@ public class Gray8Reduce extends PipelineStage {
             		null);
         }
         Gray8Image gray = (Gray8Image) image;
-        byte[] bIn = gray.getData();
+        Byte[] bIn = gray.getData();
         int cReducedHeight = image.getHeight() / this.cReduceHeight;
         int cReducedWidth = image.getWidth() / this.cReduceWidth;
         Gray8Image result = new Gray8Image(cReducedWidth, cReducedHeight);
-        byte[] bOut = result.getData();
+        Byte[] bOut = result.getData();
         for (int i=0; i<cReducedHeight; i++) {
             for (int j=0; j<cReducedWidth; j++) {
                 int sum = 0;

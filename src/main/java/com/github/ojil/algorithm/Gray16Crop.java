@@ -97,8 +97,8 @@ public class Gray16Crop extends PipelineStage {
                             null);
         }
         Gray16Image imageResult = new Gray16Image(this.cWidth,this.cHeight);
-        short[] src = imageInput.getData();
-        short[] dst = imageResult.getData();
+        Short[] src = imageInput.getData();
+        Short[] dst = imageResult.getData();
         for (int i=0; i<this.cHeight; i++) {
             System.arraycopy(
                     src, 

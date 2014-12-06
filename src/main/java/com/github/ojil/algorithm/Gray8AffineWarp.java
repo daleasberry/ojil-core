@@ -38,9 +38,9 @@ public class Gray8AffineWarp extends PipelineStage {
     int nMaxX, nMaxY, nMinX, nMinY;
     private int nWarpOrder; // either WARP_X_FIRST or WARP_Y_FIRST
     int nXOffset, nYOffset;
-    int rnWarp[][];
-    int rnWarpX[];
-    int rnWarpY[];
+    Integer rnWarp[][];
+    Integer[] rnWarpX;
+    Integer[] rnWarpY;
     
     /** Creates a new instance of Gray8AffineWarp. Gray8AffineWarp performs
      * an affine warp on an input Gray8Image. The affine transformation is
@@ -52,7 +52,7 @@ public class Gray8AffineWarp extends PipelineStage {
      * matrix are assumed to be scaled by 2**16 for accuracy.
      * @throws com.github.ojil.core.Error if the warp is null or not a 2x3 matrix.
      */
-    public Gray8AffineWarp(int[][] warp) throws com.github.ojil.core.Error {
+    public Gray8AffineWarp(Integer[][] warp) throws com.github.ojil.core.Error {
         this.setWarp(warp);
     }
     
@@ -65,7 +65,7 @@ public class Gray8AffineWarp extends PipelineStage {
      * @param p input vector
      * @return transformed vector
      */
-    private Vec2 affineTrans(int a[][], Vec2 p) {
+    private Vec2 affineTrans(Integer a[][], Vec2 p) {
         return new Vec2(
                 (a[0][0] * p.getX() + a[0][1] * p.getY() + a[0][2])>>16,
                 (a[1][0] * p.getX() + a[1][1] * p.getY() + a[1][2])>>16);
@@ -123,7 +123,7 @@ public class Gray8AffineWarp extends PipelineStage {
      * @throws com.github.ojil.core.Error if the warp is not 2x3 or the warp is not
      * decomposable (warp[0][0] or warp[1][1] is 0).
      */
-    public void setWarp(int[][] warp) throws com.github.ojil.core.Error {
+    public void setWarp(Integer[][] warp) throws com.github.ojil.core.Error {
         if (warp.length != 2 || warp[0].length != 3 || warp[1].length != 3) {
             throw new Error(
                             Error.PACKAGE.ALGORITHM,
@@ -156,13 +156,13 @@ public class Gray8AffineWarp extends PipelineStage {
             // the warp values (except column 2)
             // are all < 1 so scaling by 2**16 gives a number
             // less than 2**16 which means it can be safely scaled up 8 bits
-            this.rnWarpX = new int[3];
+            this.rnWarpX = new Integer[3];
             this.rnWarpX[0] = (warp[1][1]<<8) / (nDivisorY>>8);
             this.rnWarpX[1] = -(warp[0][1]<<8) / (nDivisorY>>8);
             this.rnWarpX[2] = ((warp[0][1]>>4)*(warp[1][2]>>4) - 
                     (warp[0][2]>>4)*(warp[1][1]>>4))/(nDivisorY>>8);
             // calculate y warp
-            this.rnWarpY = new int[3];
+            this.rnWarpY = new Integer[3];
             this.rnWarpY[0] = -(warp[1][0]<<8)/(warp[1][1]>>8);
             this.rnWarpY[1] = (1<<24) / (warp[1][1]>>8);
             this.rnWarpY[2] = -(warp[1][2]<<8) / (warp[1][1]>>8);
@@ -170,13 +170,13 @@ public class Gray8AffineWarp extends PipelineStage {
             // warp in y direction first
             this.nWarpOrder = Gray8AffineWarp.WARP_Y_FIRST;
             // copy y warp
-            this.rnWarpY = new int[3];
+            this.rnWarpY = new Integer[3];
             this.rnWarpY[0] = -(warp[1][0]<<8) / (nDivisorY>>8);
             this.rnWarpY[1] = (warp[0][0]<<8) / (nDivisorY>>8);
             this.rnWarpY[2] = ((warp[0][2]>>4)*(warp[1][0]>>4) - 
                     (warp[0][0]>>4)*(warp[1][2]>>4))/(nDivisorY>>8);
             // calculate x warp
-            this.rnWarpX = new int[3];
+            this.rnWarpX = new Integer[3];
             this.rnWarpX[0] = (1<<24) / (warp[0][0]>>8);
             this.rnWarpX[1] = -(warp[0][1]<<8) / (warp[0][0]>>8);
             this.rnWarpX[2] = -(warp[0][2]<<8) / (warp[0][0]>>8);
@@ -198,8 +198,8 @@ public class Gray8AffineWarp extends PipelineStage {
                 grayIn.getHeight(), 
                 Byte.MIN_VALUE);
         // pointer to input
-        byte[] bDataIn = grayIn.getData();
-        byte[] bDataOut = grayOut.getData();
+        Byte[] bDataIn = grayIn.getData();
+        Byte[] bDataOut = grayOut.getData();
         for (int x = nMinX; x<nMaxX; x++) {
             for (int y = 0; y<grayIn.getHeight(); y++) {
                 // calculate x in original image.
@@ -233,8 +233,8 @@ public class Gray8AffineWarp extends PipelineStage {
                 nMaxY - nMinY, 
                 Byte.MIN_VALUE);
         // pointer to input
-        byte[] bDataIn = grayIn.getData();
-        byte[] bDataOut = grayOut.getData();
+        Byte[] bDataIn = grayIn.getData();
+        Byte[] bDataOut = grayOut.getData();
         for (int y = nMinY; y<nMaxY; y++) {
             for (int x = 0; x<grayIn.getWidth(); x++) {
                 // calculate y in original image

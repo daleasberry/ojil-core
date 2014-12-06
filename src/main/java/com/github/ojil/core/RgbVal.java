@@ -124,7 +124,7 @@ public class RgbVal {
      * @return the blue byte value, converted to a signed byte
      * @param ARGB the input color ARGB word.
      */
-    public static byte getB(int ARGB) {
+    public static Byte getB(int ARGB) {
         return toSignedByte((byte)(ARGB & 0xff));
     }
     
@@ -136,7 +136,7 @@ public class RgbVal {
      * @param ARGB the input color ARGB word.
      * @return the green byte value, converted to a signed byte
      */
-    public static byte getG(int ARGB) {
+    public static Byte getG(int ARGB) {
         return toSignedByte((byte) ((ARGB>>8) & 0xff));
     }
     
@@ -148,7 +148,7 @@ public class RgbVal {
      * @param ARGB the input color ARGB word.
      * @return the red byte value, converted to a signed byte
      */
-    public static byte getR(int ARGB) {
+    public static Byte getR(int ARGB) {
         return toSignedByte((byte) ((ARGB>>16) & 0xff));
     }
     

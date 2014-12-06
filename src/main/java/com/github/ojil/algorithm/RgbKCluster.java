@@ -71,12 +71,12 @@ public class RgbKCluster {
         this.nTolerance = nTolerance;
     }
     
-    public Vector cluster(Vector vRgbClusters) {
-        Vector vResult = new Vector();
+    public Vector<?> cluster(Vector<?> vRgbClusters) {
+        Vector<RgbCluster> vResult = new Vector<>();
         do {
             // find the largest cluster
             RgbCluster cLarge = null;
-            for (Enumeration e = vRgbClusters.elements(); e.hasMoreElements();) {
+            for (Enumeration<?> e = vRgbClusters.elements(); e.hasMoreElements();) {
                 RgbCluster c = (RgbCluster) e.nextElement();
                 if (cLarge == null || cLarge.getPixels() < c.getPixels()) {
                     cLarge = c;
@@ -85,8 +85,8 @@ public class RgbKCluster {
             vRgbClusters.removeElement(cLarge);
             // group all the remaining clusters together with the largest cluster
             // if they fall within a tolerance
-            Vector vRemaining = new Vector();
-            for (Enumeration e = vRgbClusters.elements(); e.hasMoreElements();) {
+            Vector<RgbCluster> vRemaining = new Vector<>();
+            for (Enumeration<?> e = vRgbClusters.elements(); e.hasMoreElements();) {
                 RgbCluster c = (RgbCluster) e.nextElement();
                 if (cLarge.getDiff(c) < this.nTolerance) {
                     cLarge.add(c);

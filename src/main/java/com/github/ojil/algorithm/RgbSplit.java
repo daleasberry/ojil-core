@@ -28,7 +28,7 @@ public class RgbSplit extends PipelineStage {
     int nRVar, nGVar, nBVar;
     Random random = new Random();
     RgbImage rgbInput;
-    Vector vecROk = null;  // vector of RgbRegions
+    Vector<RgbRegion> vecROk = null;  // vector of RgbRegions
     
     /**
      * Construct the class, setting the maximum standard deviation in each
@@ -52,7 +52,7 @@ public class RgbSplit extends PipelineStage {
      * @return a MeanVar object containing the mean and variance of the region.
      */
     private MeanVar computeVariance(Rect r) {
-        int[] nData = rgbInput.getData();
+        Integer[] nData = rgbInput.getData();
         int nSumR = 0, nSumG = 0, nSumB = 0;
         int nSumRSq = 0, nSumGSq = 0, nSumBSq = 0;
         for (int i=r.getTop(); i<r.getBottom(); i++) {
@@ -90,8 +90,8 @@ public class RgbSplit extends PipelineStage {
      */
     public void split(RgbImage rgbImage) {
         this.rgbInput = rgbImage;
-        Vector vecRNotOk = new Vector();
-        this.vecROk = new Vector();
+        Vector<Rect> vecRNotOk = new Vector<>();
+        this.vecROk = new Vector<>();
         vecRNotOk.addElement(new Rect(
                 0,
                 0,
@@ -167,7 +167,7 @@ public class RgbSplit extends PipelineStage {
         RgbImage rgbImage = new RgbImage(
                 this.rgbInput.getWidth(),
                 this.rgbInput.getHeight());
-        for (Enumeration e = this.vecROk.elements(); e.hasMoreElements();) {
+        for (Enumeration<RgbRegion> e = this.vecROk.elements(); e.hasMoreElements();) {
             RgbRegion r = (RgbRegion) e.nextElement();
             int nRgb = RgbVal.toRgb(
                     (byte)((this.random.nextInt()&0xff)+Byte.MIN_VALUE), 
@@ -185,7 +185,7 @@ public class RgbSplit extends PipelineStage {
      * @return an Enumeration on RgbRegion objects.
      * @throws com.github.ojil.core.Error if push() hasn't been called yet
      */
-    public Enumeration getRegions() throws com.github.ojil.core.Error {
+    public Enumeration<RgbRegion> getRegions() throws com.github.ojil.core.Error {
         if (this.vecROk == null) {
             throw new com.github.ojil.core.Error(
                             com.github.ojil.core.Error.PACKAGE.CORE,
@@ -217,7 +217,7 @@ public class RgbSplit extends PipelineStage {
         RgbImage rgbImage = new RgbImage(
                 this.rgbInput.getWidth(),
                 this.rgbInput.getHeight());
-        for (Enumeration e = this.vecROk.elements(); e.hasMoreElements();) {
+        for (Enumeration<RgbRegion> e = this.vecROk.elements(); e.hasMoreElements();) {
             RgbRegion r = (RgbRegion) e.nextElement();
             int nRgb = r.getColor();
             Rect rect = r.getRect();

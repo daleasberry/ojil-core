@@ -56,7 +56,7 @@ public class Gray8Abs extends PipelineStage {
             				null);
         }
         Gray8Image input = (Gray8Image) image;
-        byte[] bIn = input.getData();
+        Byte[] bIn = input.getData();
         for (int i=0; i<bIn.length; i++) {
          	bIn[i] = (byte) Math.min(Byte.MAX_VALUE, Math.abs(bIn[i]));
         }

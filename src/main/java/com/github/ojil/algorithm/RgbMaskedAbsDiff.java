@@ -74,12 +74,12 @@ public class RgbMaskedAbsDiff extends PipelineStage {
         
         }
         RgbMaskedImage rgbInput = (RgbMaskedImage)imInput;
-        int wInput[] = rgbInput.getData();
-        int wBack[] = this.rgbBack.getData();
+        Integer[] wInput = rgbInput.getData();
+        Integer[] wBack = this.rgbBack.getData();
         Gray8Image grayOut = new Gray8Image(
                 this.rgbBack.getWidth(), 
                 this.rgbBack.getHeight());        
-        byte bGray[] = grayOut.getData();
+        Byte[] bGray = grayOut.getData();
         for (int i=0; i<imInput.getHeight(); i++) {
             for (int j=0; j<imInput.getWidth(); j++) {
                 if (!rgbInput.isMasked(i, j) && !this.rgbBack.isMasked(i,j)) {

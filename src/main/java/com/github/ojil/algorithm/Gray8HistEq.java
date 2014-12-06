@@ -42,7 +42,7 @@ public class Gray8HistEq extends PipelineStage {
      * @throws com.github.ojil.core.Error if Gray8HistMatch throws jjil.core.Error due to coding error.
      */
     public Gray8HistEq() throws com.github.ojil.core.Error {
-        int[] nullHist = new int[256];
+        Integer[] nullHist = new Integer[256];
         this.histMatch = new Gray8HistMatch(nullHist);
     }
     
@@ -72,7 +72,7 @@ public class Gray8HistEq extends PipelineStage {
              * which is as flat as possible. The calculation below evens
              * out the histogram values so all are within 1 of each other.
              */
-            int[] histogram = new int[256];
+            Integer[] histogram = new Integer[256];
             for (int i=0; i<256; i++) {
                 int c = cPixelsRemaining / (256 - i);
                 histogram[i] = c;

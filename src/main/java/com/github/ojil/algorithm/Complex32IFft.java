@@ -122,7 +122,7 @@ public class Complex32IFft extends PipelineStage {
         // first convert it to an integer image
         Gray32Image imInteger = new Gray32Image(nWidth, nHeight);
         Complex cxData[] = cxmResult.getData();
-        int nData[] = imInteger.getData();
+        Integer nData[] = imInteger.getData();
         int nMinVal = Integer.MAX_VALUE;
         int nMaxVal = Integer.MIN_VALUE;
         for (int i = 0; i < nWidth * nHeight; i++) {
@@ -138,7 +138,7 @@ public class Complex32IFft extends PipelineStage {
         int nDiff = Math.max(nMaxVal - nMinVal, 1);
         // this inverts the operation in Gray8Fft. The two must be kept in sync.
         Gray8Image imResult = new Gray8Image(nWidth, nHeight);
-        byte bData[] = imResult.getData();
+        Byte bData[] = imResult.getData();
         if (bScale) {
             for (int i = 0; i < nWidth * nHeight; i++) {
                 // magnitude is always guaranteed to be >= 0 so we only have to clamp

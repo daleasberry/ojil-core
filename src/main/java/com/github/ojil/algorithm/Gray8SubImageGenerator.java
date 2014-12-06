@@ -101,7 +101,7 @@ public class Gray8SubImageGenerator extends PipelineStage {
         // larget image.
         int nHOffset = this.nXOffset * this.nHorizIndex;
         int nVOffset = this.nYOffset * this.nVertIndex;
-        byte[] dataIn = this.imageInput.getData();
+        Byte[] dataIn = this.imageInput.getData();
         // reuse output image
         // check to make sure nobody damaged it somehow
         if (!(super.imageOutput instanceof Gray8OffsetImage)) {
@@ -115,7 +115,7 @@ public class Gray8SubImageGenerator extends PipelineStage {
         Gray8OffsetImage imageResult = (Gray8OffsetImage) super.imageOutput;
         imageResult.setXOffset(nHOffset);
         imageResult.setYOffset(nVOffset);
-        byte[] dataOut = imageResult.getData();
+        Byte[] dataOut = imageResult.getData();
         for (int i=0; i<this.nHeight; i++) {
             int nVInLoc = i + nVOffset;
             System.arraycopy( 

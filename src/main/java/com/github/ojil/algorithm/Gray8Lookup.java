@@ -36,14 +36,14 @@ import com.github.ojil.core.PipelineStage;
  * @author webb
  */
 public class Gray8Lookup extends PipelineStage {
-    private byte[] table;
+    private Byte[] table;
     
     /**
      * Creates a new instance of Gray8Lookup.
      * @param table The mapping table. Element i maps gray value Byte.MinValue + i to table[i].
      * @throws com.github.ojil.core.Error when table is not a 256-element array.
      */
-    public Gray8Lookup(byte[] table) throws com.github.ojil.core.Error {
+    public Gray8Lookup(Byte[] table) throws com.github.ojil.core.Error {
         setTable(table);
     }
     
@@ -51,8 +51,8 @@ public class Gray8Lookup extends PipelineStage {
      * Return the lookup table currently being used.
      * @return the lookup table.
      */
-    public byte[] getTable() {
-        byte[] result = new byte[256];
+    public Byte[] getTable() {
+        Byte[] result = new Byte[256];
         System.arraycopy(this.table, 0, result, 0, this.table.length);
         return result;
     }
@@ -72,7 +72,7 @@ public class Gray8Lookup extends PipelineStage {
             				null);
         }
         Gray8Image input = (Gray8Image) image;
-        byte[] data = input.getData();
+        Byte[] data = input.getData();
         for (int i=0; i<data.length; i++) {
             data[i] = this.table[data[i]+128];
         }
@@ -85,7 +85,7 @@ public class Gray8Lookup extends PipelineStage {
      * @param table The lookup table. Input image value g is mapped to table[g + Byte.MinValue]
      * @throws com.github.ojil.core.Error if table is not a 256-element array.
      */
-    public void setTable(byte[] table) throws com.github.ojil.core.Error {
+    public void setTable(Byte[] table) throws com.github.ojil.core.Error {
         if (table.length != 256) {
             throw new Error(
             				Error.PACKAGE.ALGORITHM,
@@ -94,7 +94,7 @@ public class Gray8Lookup extends PipelineStage {
             				null,
             				null);
         }
-        this.table = new byte[256];
+        this.table = new Byte[256];
         System.arraycopy(table, 0, this.table, 0, this.table.length);
     }
 }

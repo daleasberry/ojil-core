@@ -102,8 +102,7 @@ public class RgbStretch extends PipelineStage {
         /* stretch B band */
         this.seqB.push(image);
         /* recombine bands */
-        Gray3Bands2Rgb g3rgb = new Gray3Bands2Rgb();
-        super.setOutput(g3rgb.push(
+        super.setOutput(Gray3Bands2Rgb.push(
                 (Gray8Image)this.seqR.getFront(), 
                 (Gray8Image)this.seqG.getFront(), 
                 (Gray8Image)this.seqB.getFront()));

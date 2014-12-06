@@ -79,9 +79,9 @@ public class RgbVecThresh extends PipelineStage {
                             null);
         }
         RgbImage rgb = (RgbImage) imageInput;
-        int[] nData = rgb.getData();
+        Integer[] nData = rgb.getData();
         Gray8Image imageResult = new Gray8Image(rgb.getWidth(), rgb.getHeight());
-        byte[] bData = imageResult.getData();
+        Byte[] bData = imageResult.getData();
         for (int i=0; i<rgb.getWidth()*rgb.getHeight(); i++) {
             int nRCurr = RgbVal.getR(nData[i]) - Byte.MIN_VALUE;
             int nGCurr = RgbVal.getG(nData[i]) - Byte.MIN_VALUE;

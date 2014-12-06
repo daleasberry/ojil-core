@@ -33,7 +33,7 @@ package com.github.ojil.core;
 public final class Gray16Image extends Image {
     /** A pointer to the image data
      */
-    private final short[] wImage;
+    private final Short[] wImage;
     
     /** Creates a new instance of Gray16Image 
      *
@@ -42,7 +42,7 @@ public final class Gray16Image extends Image {
      */
     public Gray16Image(int cWidth, int cHeight) {
         super(cWidth, cHeight);
-        this.wImage = new short[getWidth()*getHeight()];
+        this.wImage = new Short[getWidth()*getHeight()];
     }
     
     /**
@@ -51,9 +51,9 @@ public final class Gray16Image extends Image {
      * @param cHeight Height of the image (rows)
      * @param wValue constant value to be assigned to the image
      */
-    public Gray16Image(int cWidth, int cHeight, short wValue) {
+    public Gray16Image(int cWidth, int cHeight, Short wValue) {
         super(cWidth, cHeight);
-        this.wImage = new short[getWidth()*getHeight()];
+        this.wImage = new Short[getWidth()*getHeight()];
         for (int i=0; i<this.getWidth()*this.getHeight();i++) {
             this.wImage[i] = wValue;
         }
@@ -79,7 +79,7 @@ public final class Gray16Image extends Image {
      *
      * @return the data pointer.
      */
-    public short[] getData()
+    public Short[] getData()
     {
         return this.wImage;
     }

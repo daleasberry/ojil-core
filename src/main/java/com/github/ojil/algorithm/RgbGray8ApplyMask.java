@@ -59,8 +59,8 @@ public class RgbGray8ApplyMask {
                             imMask.toString(),
                             null);
         }
-        int[] rgbData = imRgb.getData();
-        byte[] maskData = imMask.getData();
+        Integer[] rgbData = imRgb.getData();
+        Byte[] maskData = imMask.getData();
         for (int i=0; i<imRgb.getWidth() * imRgb.getHeight(); i++) {
             if (maskData[i] == Byte.MIN_VALUE) {
                 /* get individual r, g, and b values, unmasking them from the

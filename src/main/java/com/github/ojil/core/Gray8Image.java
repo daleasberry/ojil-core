@@ -26,13 +26,13 @@ package com.github.ojil.core;
 
 /**
  * Gray8Image is the image type used to store a signed
- * 8-bit image. Note that Java limitations (no unsigned byte) make it necessary
+ * 8-bit image. Note that Java limitations (no unsigned Byte) make it necessary
  * to treat alll 8-bit images as signed.
  *
  * @author webb
  */
 public class Gray8Image extends Image {
-    private final byte bImage[];
+    private final Byte bImage[];
     
     /**
      * Creates a new instance of Gray8Image
@@ -41,10 +41,10 @@ public class Gray8Image extends Image {
      */
     public Gray8Image(int cWidth, int cHeight) {
         super(cWidth, cHeight);
-        this.bImage = new byte[getWidth()*getHeight()];
+        this.bImage = new Byte[getWidth()*getHeight()];
     }
     
-    public Gray8Image(int cWidth, int cHeight, byte[] rbData) {
+    public Gray8Image(int cWidth, int cHeight, Byte[] rbData) {
         super(cWidth, cHeight);
         this.bImage = rbData;
     }
@@ -55,9 +55,9 @@ public class Gray8Image extends Image {
      * @param cHeight Height of the image (rows)
      * @param bValue constant value to be assigned to the image
      */
-    public Gray8Image(int cWidth, int cHeight, byte bValue) {
+    public Gray8Image(int cWidth, int cHeight, Byte bValue) {
         super(cWidth, cHeight);
-        this.bImage = new byte[getWidth()*getHeight()];
+        this.bImage = new Byte[getWidth()*getHeight()];
         for (int i=0; i<this.getWidth()*this.getHeight();i++) {
             this.bImage[i] = bValue;
         }
@@ -86,7 +86,7 @@ public class Gray8Image extends Image {
      * @param bVal the value to assign
      * @return modified Gray8Image (this)
      */
-    public Gray8Image fill(Rect r, byte bVal) {
+    public Gray8Image fill(Rect r, Byte bVal) {
         for (int i=r.getTop(); i<r.getBottom(); i++) {
             for (int j=r.getLeft(); j<r.getRight(); j++) {
                 this.bImage[i*this.getWidth()+j] = bVal;
@@ -95,11 +95,11 @@ public class Gray8Image extends Image {
         return this;
     }
 
-    /** Return a pointer to the byte image data.
+    /** Return a pointer to the Byte image data.
      *
      * @return the data pointer.
      */
-    public byte[] getData()
+    public Byte[] getData()
     {
         return this.bImage;
     }

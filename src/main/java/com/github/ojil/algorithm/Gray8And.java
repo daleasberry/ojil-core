@@ -74,8 +74,8 @@ public class Gray8And implements Ladder.Join {
         }
         Gray8Image gray1 = (Gray8Image) imageFirst;
         Gray8Image gray2 = (Gray8Image) imageSecond;
-        byte[] data1 = gray1.getData();
-        byte[] data2 = gray2.getData();
+        Byte[] data1 = gray1.getData();
+        Byte[] data2 = gray2.getData();
         for (int i=0; i<data1.length; i++) {
             data1[i] = 
                     (data1[i] == Byte.MAX_VALUE && data2[i] == Byte.MAX_VALUE) ?

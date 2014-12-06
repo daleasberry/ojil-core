@@ -214,10 +214,6 @@ public class RgbVertTrapWarp extends PipelineStage {
                             null,
                             null);
         }
-        int nWidth = this.nColEnd - this.nColStart;
-	    int nHeight = Math.max(
-                this.nRowBotStart - this.nRowTopStart, 
-                this.nRowBotEnd - this.nRowTopEnd);
         this.seqR = new Sequence(new RgbSelectGray(RgbSelectGray.RED));
         this.seqR.add(new Gray8VertTrapWarp(this.nColStart, this.nColEnd,
                 this.nRowTopStart, this.nRowBotStart, this.nRowTopEnd,

@@ -43,8 +43,8 @@ public class FindLinesHoriz {
     }
     
     public void push(Gray8Image im) throws Error {
-        byte[] bData = im.getData();
-        Vector points = new Vector();
+        Byte[] bData = im.getData();
+        Vector<Point> points = new Vector<>();
         for (int i=0; i<im.getHeight(); i++) {
             for (int j=0; j<im.getWidth(); j++) {
                 if (bData[i*im.getWidth()+j] != Byte.MIN_VALUE) {

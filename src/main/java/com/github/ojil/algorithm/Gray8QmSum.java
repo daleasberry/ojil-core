@@ -65,8 +65,8 @@ public class Gray8QmSum extends PipelineStage {
         }
         Gray8Image gray = (Gray8Image) image;
         Gray32Image gray32 = new Gray32Image(image.getWidth(), image.getHeight());
-        byte[] grayData = gray.getData();
-        int[] gray32Data = gray32.getData();
+        Byte[] grayData = gray.getData();
+        Integer[] gray32Data = gray32.getData();
         // First row
         int nSum = 0;
         for (int j=0; j<gray.getWidth(); j++) {

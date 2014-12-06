@@ -32,9 +32,9 @@ public class Gray8Peak3x3 extends PipelineStage {
                             null);
         }
         Gray8Image grayInput = (Gray8Image) imageInput;
-        byte[] bData = grayInput.getData();
+        Byte[] bData = grayInput.getData();
         Gray8Image grayOutput = new Gray8Image(imageInput.getWidth(),imageInput.getHeight());
-        byte[] bDataOut = grayOutput.getData();
+        Byte[] bDataOut = grayOutput.getData();
         for (int i=1; i<grayInput.getHeight()-1; i++) {
             for (int j=1; j<grayInput.getWidth()-1; j++) {
                 if (bData[i*grayInput.getWidth()+j] != 

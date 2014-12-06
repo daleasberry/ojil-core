@@ -113,7 +113,7 @@ public class Gray8WienerDeconv extends PipelineStage {
         Complex32Image cxmResult = new Complex32Image(im.getWidth(), im.getHeight());
         Complex cxOut[] = cxmResult.getData();
         Complex cxPsfInv[] = this.cxmPsfInv.getData();
-        int nPsfSq[] = this.gPsfSq.getData();
+        Integer[] nPsfSq = this.gPsfSq.getData();
         // compute Wiener filter
         for (int i=0; i<im.getWidth() * im.getHeight(); i++) {
             int nMag = cxIn[i].magnitude();
@@ -126,7 +126,7 @@ public class Gray8WienerDeconv extends PipelineStage {
     private void invertPsf() throws com.github.ojil.core.Error {
         this.gPsfSq = new Gray32Image(this.cxmPsfInv.getWidth(), this.cxmPsfInv.getHeight());
         Complex cxPsf[] = this.cxmPsfInv.getData();
-        int nData[] = this.gPsfSq.getData();
+        Integer[] nData = this.gPsfSq.getData();
         for (int i=0; i<this.cxmPsfInv.getWidth() * this.cxmPsfInv.getHeight(); i++) {
             if (Math.abs(cxPsf[i].real()) > MathPlus.SCALE ||
                 Math.abs(cxPsf[i].imag()) > MathPlus.SCALE) {

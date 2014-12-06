@@ -98,12 +98,12 @@ public class Gray8ZeroCrossingHoriz {
      * @param v the Vector of Integers
      * @return the array of ints
      */
-    private int[] copyVectorToArray(Vector v) {
+    private Integer[] copyVectorToArray(Vector<?> v) {
         /* copy v into an array of ints
          */
-        int[] resultRow = new int[v.size()];
+        Integer[] resultRow = new Integer[v.size()];
         int elem=0;
-        for (Enumeration e = v.elements(); e.hasMoreElements();) {
+        for (Enumeration<?> e = v.elements(); e.hasMoreElements();) {
             resultRow[elem++] = ((Integer)e.nextElement()).intValue();
         }
         return resultRow;
@@ -119,14 +119,14 @@ public class Gray8ZeroCrossingHoriz {
      * can be represented. A value of null means there were no zero crossings
      * in the row.
      */
-    public int[][] push(Gray8Image image) {
-        byte[] data = image.getData();
-        int[][] result = new int[image.getHeight()][];
+    public Integer[][] push(Gray8Image image) {
+        Byte[] data = image.getData();
+        Integer[][] result = new Integer[image.getHeight()][];
         for (int i=0; i<image.getHeight(); i++) {
             /* for holding the variable number of zero crossings
              * as we find them.
              */
-            Vector v = new Vector();
+            Vector<Integer> v = new Vector<>();
             int cLastPos = -1;
             byte wLastEdge = 0;
             for (int j=0; j<image.getWidth(); j++) {

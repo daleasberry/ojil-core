@@ -160,8 +160,8 @@ public class Gray8VertTrapWarp extends PipelineStage {
         int nWidth = imageOutput.getWidth();
         int fTopIncr = ((this.nRowTopEnd - this.nRowTopStart) << 8) / nWidth;
         int fBotIncr = ((this.nRowBotEnd - this.nRowBotStart) << 8) / nWidth;
-        byte[] in = ((Gray8Image) image).getData();
-        byte[] out = ((Gray8Image)super.imageOutput).getData();
+        Byte[] in = ((Gray8Image) image).getData();
+        Byte[] out = ((Gray8Image)super.imageOutput).getData();
         for (int i=0; i<nWidth; i++) {
             // these are scaled by 8 bits
             int fY = fTop;

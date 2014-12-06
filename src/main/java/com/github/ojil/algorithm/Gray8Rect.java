@@ -67,7 +67,7 @@ public class Gray8Rect extends PipelineStage {
             				null);
         }
         Gray8Image input = (Gray8Image) image;
-        byte[] data = input.getData();
+        Byte[] data = input.getData();
         int nLimitY = Math.min(input.getHeight(), this.cY + this.nHeight);
         int nLimitX = Math.min(input.getWidth(), this.cX + this.nWidth);
         for (int i=this.cY; i<nLimitY; i++) {

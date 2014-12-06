@@ -23,7 +23,9 @@ import java.io.Serializable;
  * @author webb
  */
 public class Vec2 implements Serializable {
-    private int mnX, mnY;
+	private static final long serialVersionUID = -9045538016956571364L;
+
+	private int mnX, mnY;
 
     public Vec2(Point Last) {
         this.mnX = Last.getX();

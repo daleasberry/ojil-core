@@ -85,8 +85,8 @@ public class Gray16LinComb implements Ladder.Join {
         			imageSecond.toString(),
         			null);
         }
-        short[] dataFirst = ((Gray16Image) imageFirst).getData();
-        short[] dataSecond = ((Gray16Image) imageSecond).getData();
+        Short[] dataFirst = ((Gray16Image) imageFirst).getData();
+        Short[] dataSecond = ((Gray16Image) imageSecond).getData();
         for (int i=0; i<dataFirst.length; i++) {
         	dataFirst[i] = (short) ((this.nA * dataFirst[i] + this.nB * dataSecond[i]) / this.nC);
         }

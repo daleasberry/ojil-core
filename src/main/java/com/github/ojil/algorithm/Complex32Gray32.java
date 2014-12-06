@@ -59,7 +59,7 @@ public class Complex32Gray32 extends PipelineStage {
         }
         Gray32Image imResult = new Gray32Image(im.getWidth(), im.getHeight());
         Complex cData[] = ((Complex32Image) im).getData();
-        int nData[] = imResult.getData();
+        Integer nData[] = imResult.getData();
         for (int i=0; i<im.getWidth()*im.getHeight(); i++) {
             nData[i] = cData[i].magnitude();
         }

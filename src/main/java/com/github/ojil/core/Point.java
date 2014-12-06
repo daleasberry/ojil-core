@@ -32,7 +32,9 @@ import java.io.Serializable;
  * @author webb
  */
 public class Point implements Serializable {
-    private int mnX;
+	private static final long serialVersionUID = 2890838604858533735L;
+	
+	private int mnX;
     private int mnY;
     
     /** Creates a new instance of Point 

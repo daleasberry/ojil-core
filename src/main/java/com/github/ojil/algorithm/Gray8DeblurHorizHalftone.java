@@ -75,7 +75,7 @@ public class Gray8DeblurHorizHalftone extends PipelineStage {
                 			null,
                 			null);
         }
-        byte[] bData = ((Gray8Image) im).getData();
+        Byte[] bData = ((Gray8Image) im).getData();
         for (int i=0; i<im.getHeight(); i++) {
             int nRow = i * im.getWidth();
             for (int j=0; j<im.getWidth(); j++) {

@@ -92,7 +92,7 @@ public class Gray8Fft extends PipelineStage {
         }
         
         Gray8Image gray = (Gray8Image) im;
-        byte data[] = gray.getData();
+        Byte data[] = gray.getData();
         // create output
         Complex32Image cxmResult = new Complex32Image(nWidth, nHeight);
         // take FFT of each row

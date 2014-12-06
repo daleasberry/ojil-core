@@ -32,10 +32,11 @@ package com.github.ojil.core;
  * A simple implementation of complex numbers for use in FFT, etc.
  * @author webb
  */
-public class Complex {
-    private int nImag;
+public class Complex extends Number{
+	private static final long serialVersionUID = 777755552694276640L;
+	
+	private int nImag;
     private int nReal;
-    
     
     /**
      * Default constructor.
@@ -279,4 +280,24 @@ public class Complex {
     public String toString() {
         return "(" + this.nReal + ", " + this.nImag + ")"; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
     }
+
+	@Override
+	public double doubleValue() {
+		return nReal;
+	}
+
+	@Override
+	public float floatValue() {
+		return nReal;
+	}
+
+	@Override
+	public int intValue() {
+		return nReal;
+	}
+
+	@Override
+	public long longValue() {
+		return nReal;
+	}
 }

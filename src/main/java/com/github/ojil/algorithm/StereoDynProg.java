@@ -21,24 +21,24 @@ package com.github.ojil.algorithm;
  * @author webb
  */
 public class StereoDynProg {
-    private int rnLeft[], rnRight[];
+	private Integer[] rnRight, rnLeft;
     
-    public StereoDynProg(int[] rnLeft, int[] rnRight) {
+    public StereoDynProg(Integer[] rnLeft, Integer[] rnRight) {
         this.rnLeft = rnLeft;
         this.rnRight = rnRight;
     }
     
-    public int[] doMatch() {
+    public Integer[] doMatch() {
         // first build an array matching every column of rnLeft with every
         // column of rnRight
-        int[][] rnCost = new int[this.rnLeft.length][this.rnRight.length];
+        Integer[][] rnCost = new Integer[this.rnLeft.length][this.rnRight.length];
         for (int i=0; i<this.rnLeft.length; i++) {
             for (int j=0; j<this.rnRight.length; j++) {
                 rnCost[i][j] = Math.abs(this.rnLeft[i] - this.rnRight[i]);
             }
         }
         // calculate minimal cost at each node
-        int[][] rnMin = new int[this.rnLeft.length][this.rnRight.length];
+        Integer[][] rnMin = new Integer[this.rnLeft.length][this.rnRight.length];
         // initialize first row and column
         for (int i=0; i<rnLeft.length; i++) {
             rnMin[i][0] = rnCost[i][0];
@@ -57,7 +57,7 @@ public class StereoDynProg {
             }
         }
         // backtrack from terminal node to get match
-        int[] rnDepth = new int[rnRight.length];
+        Integer[] rnDepth = new Integer[rnRight.length];
         int nMatchLeft = rnLeft.length-1;
         int nMatchRight = rnRight.length - 1;
         while (nMatchRight>=0) {

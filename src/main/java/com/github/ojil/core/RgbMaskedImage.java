@@ -70,8 +70,8 @@ public class RgbMaskedImage extends RgbImage {
         System.arraycopy(rgb.getData(), 0, super.getData(), 0, 
                 super.getWidth() * super.getHeight());
         // set mask
-        int[] rgbData = this.getData();
-        byte[] maskData = grayMask.getData();
+        Integer[] rgbData = this.getData();
+        Byte[] maskData = grayMask.getData();
         for (int i=0; i<this.getWidth()*this.getHeight(); i++) {
             if (maskData[i] != Byte.MIN_VALUE) {
                 // mask pixel

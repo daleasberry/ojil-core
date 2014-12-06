@@ -162,9 +162,9 @@ public class RgbSelectGray extends PipelineStage {
             			null);
         }
         RgbImage rgb = (RgbImage) image;
-        int[] rgbData = rgb.getData();
+        Integer[] rgbData = rgb.getData();
         Gray8Image gray = new Gray8Image(image.getWidth(), image.getHeight());
-        byte[] grayData = gray.getData();
+        Byte[] grayData = gray.getData();
         if (colorChosen.equals(RED)) {
             for (int i=0; i<image.getWidth() * image.getHeight(); i++) {
                 /* get individual color value, unmasking it from the

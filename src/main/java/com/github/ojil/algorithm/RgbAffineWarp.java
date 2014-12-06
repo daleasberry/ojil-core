@@ -31,7 +31,7 @@ public class RgbAffineWarp extends PipelineStage {
     private Gray8AffineWarp grayWarp;
     private RgbSelectGray selectRed, selectGreen, selectBlue;
     
-    public RgbAffineWarp(int[][] warp) throws Error {
+    public RgbAffineWarp(Integer[][] warp) throws Error {
         this.grayWarp = new Gray8AffineWarp(warp);
         this.selectRed = new RgbSelectGray(RgbSelectGray.RED);
         this.selectGreen = new RgbSelectGray(RgbSelectGray.GREEN);
@@ -63,7 +63,7 @@ public class RgbAffineWarp extends PipelineStage {
                 warpedRed.getYOffset()));
     }
 
-    public void setWarp(int[][] warp) throws Error {
+    public void setWarp(Integer[][] warp) throws Error {
         this.grayWarp.setWarp(warp);
     }
     

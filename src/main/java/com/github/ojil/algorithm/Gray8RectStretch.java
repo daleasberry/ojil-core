@@ -146,8 +146,8 @@ public class Gray8RectStretch extends PipelineStage {
     private Gray8Image stretchHoriz(Gray8Image input) {
         /* horizontal stretch */
         Gray8Image horiz = new Gray8Image(this.cWidth, input.getHeight());
-        byte[] inData = input.getData();
-        byte[] outData = horiz.getData();
+        Byte[] inData = input.getData();
+        Byte[] outData = horiz.getData();
         for (int j=0; j<this.cWidth; j++) {
             /* the interpolated position is
              * j*input.getWidth()/this.cWidth.
@@ -191,9 +191,9 @@ public class Gray8RectStretch extends PipelineStage {
      * @returns the stretched image.
      */
     private Gray8Image stretchVert(Gray8Image input) {
-        byte[] inData = input.getData();
+        Byte[] inData = input.getData();
         Gray8Image vert = new Gray8Image(this.cWidth, this.cHeight);
-        byte[] outData = vert.getData();
+        Byte[] outData = vert.getData();
         for (int i=0; i<this.cHeight; i++) {
             /* remainder */
             int cMod = (i*input.getHeight()) % this.cHeight;

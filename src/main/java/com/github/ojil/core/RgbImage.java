@@ -37,7 +37,7 @@ package com.github.ojil.core;
 public class RgbImage extends Image {
     /** A pointer to the image data
      */
-    private final int[] wImage;
+    private final Integer[] wImage;
     
     /** Creates a new instance of RgbImage
      *
@@ -46,10 +46,10 @@ public class RgbImage extends Image {
      */
     public RgbImage(int cWidth, int cHeight) {
         super(cWidth, cHeight);
-        this.wImage = new int[getWidth()*getHeight()];
+        this.wImage = new Integer[getWidth()*getHeight()];
     }
     
-    public RgbImage(int cWidth, int cHeight, int[] rnData) {
+    public RgbImage(int cWidth, int cHeight, Integer[] rnData) {
         super(cWidth, cHeight);
         this.wImage = rnData;
     }
@@ -64,7 +64,7 @@ public class RgbImage extends Image {
      */
     public RgbImage(int cWidth, int cHeight, byte bR, byte bG, byte bB) {
         super(cWidth, cHeight);
-        this.wImage = new int[getWidth()*getHeight()];
+        this.wImage = new Integer[getWidth()*getHeight()];
         int nRgb = RgbVal.toRgb(bR, bG, bB); 
         for (int i=0; i<this.getWidth()*this.getHeight();i++) {
             this.wImage[i] = nRgb;
@@ -79,7 +79,7 @@ public class RgbImage extends Image {
      */
     public RgbImage(int cWidth, int cHeight, int nRgb) {
         super(cWidth, cHeight);
-        this.wImage = new int[getWidth()*getHeight()];
+        this.wImage = new Integer[getWidth()*getHeight()];
         for (int i=0; i<this.getWidth()*this.getHeight();i++) {
             this.wImage[i] = nRgb;
         }
@@ -130,7 +130,7 @@ public class RgbImage extends Image {
      *
      * @return the data pointer.
      */
-    public int[] getData()
+    public Integer[] getData()
     {
         return this.wImage;
     }

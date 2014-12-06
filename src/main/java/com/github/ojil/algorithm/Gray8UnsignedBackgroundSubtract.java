@@ -62,8 +62,8 @@ public class Gray8UnsignedBackgroundSubtract extends PipelineStage {
         			imageInput.getWidth(), imageInput.getHeight());
         }
         Gray8Image gray = (Gray8Image) imageInput;
-        byte[] grayData = gray.getData();
-        int[] gray32Data = this.mg32.getData();
+        Byte[] grayData = gray.getData();
+        Integer[] gray32Data = this.mg32.getData();
         // First row
         int nSum = 0;
         for (int j=0; j<gray.getWidth(); j++) {

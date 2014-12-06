@@ -54,7 +54,7 @@ public class Gray8CannyVert extends PipelineStage {
      * was determined by generating them out to the point at which the
      * unscaled coefficient was less than a threshold, here 0.05.
      */
-    private int[][] nCoeff = {
+    private Integer[][] nCoeff = {
         {0},
         {-127, 21, 21, 21},
         {-127, 21, 21, 21},
@@ -187,9 +187,9 @@ public class Gray8CannyVert extends PipelineStage {
         }
         Gray8Image input = (Gray8Image) image;
         Gray8Image result = new Gray8Image(image.getWidth(), image.getHeight());
-        byte[] bIn = input.getData();
-        byte[] bResult = result.getData();
-        int[] wCoeff = this.nCoeff[this.cSigma];
+        Byte[] bIn = input.getData();
+        Byte[] bResult = result.getData();
+        Integer[] wCoeff = this.nCoeff[this.cSigma];
         int cWidth = input.getWidth();
         for (int j=0; j<cWidth; j++) {
             for (int i=0; i<input.getHeight(); i++) {

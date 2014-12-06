@@ -96,8 +96,8 @@ public class RgbCrop extends PipelineStage {
                             null);
         }
         RgbImage imageResult = new RgbImage(this.cWidth,this.cHeight);
-        int[] src = imageInput.getData();
-        int[] dst = imageResult.getData();
+        Integer[] src = imageInput.getData();
+        Integer[] dst = imageResult.getData();
         for (int i=0; i<this.cHeight; i++) {
             System.arraycopy(
                     src, 

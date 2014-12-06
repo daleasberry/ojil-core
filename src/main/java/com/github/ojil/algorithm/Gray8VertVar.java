@@ -75,10 +75,10 @@ public class Gray8VertVar extends PipelineStage {
         			image.getHeight());
         }
         Gray8Image input = (Gray8Image) image;
-        byte[] bIn = input.getData();
+        Byte[] bIn = input.getData();
         int cHeight = input.getHeight();
         int cWidth = input.getWidth();
-        short[] sOut = g16.getData();
+        Short[] sOut = g16.getData();
         for (int i=0; i<cWidth; i++) {
 	        int nSum = 0;
 	        int nSumSq = 0;

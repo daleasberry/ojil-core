@@ -120,7 +120,7 @@ public class Gray32MaskedImage extends Gray32Image {
      *
      * @return the data pointer.
      */
-    public byte[] getMaskData()
+    public Byte[] getMaskData()
     {
         return this.imMask.getData();
     }

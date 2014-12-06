@@ -36,7 +36,7 @@ public class RgbMaskPoly extends PipelineStage {
     private boolean bInside;
     private Point points[];
     private BinaryHeap hx[];
-    private int rnX[][];
+    private Integer[][] rnX;
     
     /**
      * Initialize class, setting polygon to mask and
@@ -99,18 +99,18 @@ public class RgbMaskPoly extends PipelineStage {
         }
         drawLine(this.points[this.points.length-1],this.points[0]);
 
-        this.rnX = new int[nHeight][];
+        this.rnX = new Integer[nHeight][];
         for (int i=0; i<nHeight; i++) {
             int j = 0;
             if (!this.bInside) {
-                    this.rnX[i] = new int[this.hx[i].size()+2];
+                    this.rnX[i] = new Integer[this.hx[i].size()+2];
                     this.rnX[i][0] = 0;
                     j = 1;
                 
             }
             if (this.hx[i].size() > 0) {
                 if (this.bInside) {
-                    this.rnX[i] = new int[this.hx[i].size()];
+                    this.rnX[i] = new Integer[this.hx[i].size()];
                 }
                 while (!this.hx[i].isEmpty()) {
                     this.rnX[i][j++] = ((BinaryHeap.ComparableInt)

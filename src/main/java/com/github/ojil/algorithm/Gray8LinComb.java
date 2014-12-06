@@ -102,8 +102,8 @@ public class Gray8LinComb implements Ladder.Join {
        }
         Gray8Image gray1 = (Gray8Image) imageFirst;
         Gray8Image gray2 = (Gray8Image) imageSecond;
-        byte[] data1 = gray1.getData();
-        byte[] data2 = gray2.getData();
+        Byte[] data1 = gray1.getData();
+        Byte[] data2 = gray2.getData();
         for (int i=0; i<data1.length; i++) {
             int nD1 = data1[i] - Byte.MIN_VALUE;
             int nD2 = data2[i] - Byte.MIN_VALUE;

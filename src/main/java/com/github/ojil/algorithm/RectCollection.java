@@ -20,7 +20,6 @@ package com.github.ojil.algorithm;
 import java.util.Enumeration;
 import java.util.Vector;
 
-import com.github.ojil.core.Error;
 import com.github.ojil.core.Point;
 import com.github.ojil.core.Rect;
 
@@ -35,7 +34,7 @@ public class RectCollection {
     /**
      * Vector of all rectangles in the collection.
      */
-    private Vector vAllRect = new Vector();
+    private Vector<Rect> vAllRect = new Vector<>();
     
     /**
      * treeHoriz is a collection of all the rectangles, projected horizontally.
@@ -98,7 +97,8 @@ public class RectCollection {
      * @throws com.github.ojil.core.Error in the case of type error (key wrong
      * type)
      */
-    private ThreadedBinaryTree addRect(
+    @SuppressWarnings({ "unchecked", "rawtypes" })
+	private ThreadedBinaryTree addRect(
             Rect r, 
             int start, 
             int end, 
@@ -110,16 +110,16 @@ public class RectCollection {
         if (tbtRoot != null) {
             tbtFind = tbtRoot.findNearest(new BinaryHeap.ComparableInt(start));
         }
-        Vector vExistingStart = null;
+        Vector<Rect> vExistingStart = null;
         if (tbtFind != null) {
-            vExistingStart = (Vector) tbtFind.getValue();
+            vExistingStart = (Vector<Rect>) tbtFind.getValue();
         }
-        Vector vExistingEnd = null;
+        Vector<Rect> vExistingEnd = null;
         if (tbtRoot != null) {
             tbtFind = tbtRoot.findNearest(new BinaryHeap.ComparableInt(end));
         }
         if (tbtFind != null) {
-            vExistingEnd = (Vector) tbtFind.getValue();
+            vExistingEnd = (Vector<Rect>) tbtFind.getValue();
         }
         // now add the new points to the tree
         ThreadedBinaryTree tbtStart = null;
@@ -134,8 +134,8 @@ public class RectCollection {
             // if it doesn't already exist
             if (vExistingStart != null) {
                 if (tbtStart.getValue() == null) {
-                    Vector v = new Vector();
-                    for (Enumeration e = vExistingStart.elements();
+                    Vector<Rect> v = new Vector<>();
+                    for (Enumeration<Rect> e = vExistingStart.elements();
                         e.hasMoreElements();) {
                         v.addElement(e.nextElement());
                     }
@@ -150,8 +150,8 @@ public class RectCollection {
         // if it doesn't already exist
         if (vExistingEnd != null) {
             if (tbtEnd.getValue() == null) {
-                Vector v = new Vector();
-                for (Enumeration e = vExistingEnd.elements();
+                Vector<Rect> v = new Vector<>();
+                for (Enumeration<Rect> e = vExistingEnd.elements();
                     e.hasMoreElements();) {
                     v.addElement(e.nextElement());
                 }
@@ -160,17 +160,17 @@ public class RectCollection {
         }
         // now traverse the path from tbtStart to tbtEnd and add r to all 
         // rectangle lists
-        Vector vTrav = 
+        Vector<Rect> vTrav = 
                 tbtStart.inorderTraverse(tbtEnd);
         // for eacn node in the inorder traversal, create the Vector of 
         // rectangles if necessary, and put this rectangle on it
-        for (Enumeration e = 
+        for (Enumeration<?> e = 
                 vTrav.elements(); e.hasMoreElements();) {
             ThreadedBinaryTree tbt = 
                     (ThreadedBinaryTree) e.nextElement();
             // Vector doesn't exist
             if (tbt.getValue() == null) {
-                Vector v = new Vector();
+				Vector v = new Vector();
                 v.addElement(r);
                 // set value
                 tbt.setValue(v);
@@ -187,7 +187,7 @@ public class RectCollection {
      * Clear collection.
      */
     public void clear() {
-    	this.vAllRect = new Vector();
+    	this.vAllRect = new Vector<>();
     	this.treeHoriz = null;
     	this.treeVert = null;
     }
@@ -220,11 +220,11 @@ public class RectCollection {
         }
         // check for intersection between two lists; if non-empty check
         // for contains
-        Vector vHoriz = (Vector) tbtHorizProj.getValue();
-        Vector vVert = (Vector) tbtVertProj.getValue();
-        for (Enumeration e = vHoriz.elements(); e.hasMoreElements();) {
+        Vector<?> vHoriz = (Vector<?>) tbtHorizProj.getValue();
+        Vector<?> vVert = (Vector<?>) tbtVertProj.getValue();
+        for (Enumeration<?> e = vHoriz.elements(); e.hasMoreElements();) {
             Rect r = (Rect) e.nextElement();
-            for (Enumeration f = vVert.elements(); f.hasMoreElements();) {
+            for (Enumeration<?> f = vVert.elements(); f.hasMoreElements();) {
                 Rect s = (Rect) f.nextElement();
                 if (r == s) {
                     if (s.contains(p)) {
@@ -241,7 +241,7 @@ public class RectCollection {
      * @return Enumeration of all rectangles in order they were added to
      * the collection.
      */
-    public Enumeration elements() {
+    public Enumeration<Rect> elements() {
         return this.vAllRect.elements();
     }
     

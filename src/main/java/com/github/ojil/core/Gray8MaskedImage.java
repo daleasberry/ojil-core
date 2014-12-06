@@ -143,7 +143,7 @@ public class Gray8MaskedImage extends Gray8Image {
      *
      * @return the data pointer.
      */
-    public byte[] getMaskData()
+    public Byte[] getMaskData()
     {
         return this.imMask.getData();
     }

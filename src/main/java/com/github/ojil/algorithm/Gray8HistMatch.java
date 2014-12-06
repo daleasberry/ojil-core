@@ -40,7 +40,7 @@ public class Gray8HistMatch extends PipelineStage {
     /* We use the cumulative pixel count in computation, not
      * the input histogram.
      */
-    private int[] histCumTarget;
+    private Integer[] histCumTarget;
     
     /** Creates a new instance of Gray8HistMatch 
      *
@@ -48,12 +48,12 @@ public class Gray8HistMatch extends PipelineStage {
      * @throws com.github.ojil.core.Error if the input histogram does not have
      * 256 elements.
      */
-    public Gray8HistMatch(int[] histTarget) throws com.github.ojil.core.Error {
+    public Gray8HistMatch(Integer[] histTarget) throws com.github.ojil.core.Error {
         setHistogram(histTarget);
     }
     
-    private byte[] createLookup(int[] histCumTarget, int[] histCumSource) {
-        byte[] lookup = new byte[256];
+    private Byte[] createLookup(Integer[] histCumTarget, Integer[] histCumSource) {
+        Byte[] lookup = new Byte[256];
         int j=0;
         for (int i=0; i<256; i++) {
             while (histCumTarget[j] < histCumSource[i]) {
@@ -74,8 +74,8 @@ public class Gray8HistMatch extends PipelineStage {
      *
      * @return the target histogram
      */
-    public int[] getHistogram() {
-        int[] result = new int[256];
+    public Integer[] getHistogram() {
+        Integer[] result = new Integer[256];
         /* since we store the cumulative histogram, not the original,
          * we have to recover it by taking the differences.
          */
@@ -112,7 +112,7 @@ public class Gray8HistMatch extends PipelineStage {
          */
         Gray8Image input = (Gray8Image) image;
         // get the input histogram
-        int[] histCum = Gray8Hist.computeHistogram(input);
+        Integer[] histCum = Gray8Hist.computeHistogram(input);
         // for the purposes of computation below we need a cumulative
         // pixel count, not a histogram
         for (int i=1; i<256; i++) {
@@ -120,7 +120,7 @@ public class Gray8HistMatch extends PipelineStage {
         }
         // create a lookkup table to map the input cumulative histogram
         // to the target cumulative histogram.
-        byte[] lookup = createLookup(this.histCumTarget, histCum);
+        Byte[] lookup = createLookup(this.histCumTarget, histCum);
         // apply the lookup table
         Gray8Lookup modify = new Gray8Lookup(lookup);
         modify.push(input);
@@ -133,7 +133,7 @@ public class Gray8HistMatch extends PipelineStage {
      * @throws com.github.ojil.core.Error if histTarget does not have 256
      * elements.
      */
-    public void setHistogram(int[] histTarget) throws com.github.ojil.core.Error {
+    public void setHistogram(Integer[] histTarget) throws com.github.ojil.core.Error {
         if (histTarget.length != 256) {
             throw new Error(
     				Error.PACKAGE.ALGORITHM,
@@ -142,7 +142,7 @@ public class Gray8HistMatch extends PipelineStage {
     				null,
     				null);
         }
-        this.histCumTarget = new int[256];
+        this.histCumTarget = new Integer[256];
         /* We actually store the cumulative histogram, not the original.
          */
         histCumTarget[0] = histTarget[0];

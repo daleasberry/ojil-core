@@ -16,7 +16,6 @@
 
 package com.github.ojil.algorithm;
 
-import com.github.ojil.core.Error;
 import com.github.ojil.core.Point;
 import com.github.ojil.core.Quad;
 import com.github.ojil.core.Triangle;
@@ -41,12 +40,10 @@ public class QuadMap {
     public QuadMap(Quad q1, Quad q2) throws com.github.ojil.core.Error {
         // initialize the triangle maps. 
         this.t = new TriangleMap[2];
-        this.t[0] = new TriangleMap(
-                this.t1 = new Triangle(q1.getCorner(0), q1.getCorner(1), q1.getCorner(2)),
-                new Triangle(q2.getCorner(0), q2.getCorner(1), q2.getCorner(2)));
-        this.t[1] = new TriangleMap(
-                this.t2 = new Triangle(q1.getCorner(2), q1.getCorner(3), q1.getCorner(0)),
-                new Triangle(q2.getCorner(2), q2.getCorner(3), q2.getCorner(0)));
+        this.t1 = new Triangle(q1.getCorner(0), q1.getCorner(1), q1.getCorner(2));
+        this.t[0] = new TriangleMap(t1, new Triangle(q2.getCorner(0), q2.getCorner(1), q2.getCorner(2)));
+        this.t2 = new Triangle(q1.getCorner(2), q1.getCorner(3), q1.getCorner(0));
+        this.t[1] = new TriangleMap(t2, new Triangle(q2.getCorner(2), q2.getCorner(3), q2.getCorner(0)));
     }
     
     /**

@@ -56,8 +56,8 @@ public class Gray16Gray8 extends PipelineStage {
         }
         Gray16Image gray = (Gray16Image) image;
         Gray8Image gray8 = new Gray8Image(image.getWidth(), image.getHeight());
-        short[] grayData = gray.getData();
-        byte[] gray8Data = gray8.getData();
+        Short[] grayData = gray.getData();
+        Byte[] gray8Data = gray8.getData();
         for (int i=0; i<gray.getWidth() * gray.getHeight(); i++) {
             /* Convert from 16-bit value to 8-bit value, discarding
              * most significant bits.

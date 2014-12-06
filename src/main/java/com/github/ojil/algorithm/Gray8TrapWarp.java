@@ -161,8 +161,8 @@ public class Gray8TrapWarp extends PipelineStage {
         int nWidth = imageOutput.getWidth();
         int fLeftIncr = ((this.nColLeftEnd - this.nColLeftStart) * 256) / nHeight;
         int fRightIncr = ((this.nColRightEnd - this.nColRightStart) * 256) / nHeight;
-        byte[] in = ((Gray8Image) image).getData();
-        byte[] out = imageOutput.getData();
+        Byte[] in = ((Gray8Image) image).getData();
+        Byte[] out = imageOutput.getData();
         for (int i=0; i<nHeight; i++) {
             // we scale everything by 8 bits for accurate computation without
             // floating point

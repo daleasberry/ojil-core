@@ -42,7 +42,7 @@ public class PsfGray8 {
      */
     public static Gray8Image horizBar(int nImageWidth, int nBarHalfWidth) {
         Gray8Image imResult = new Gray8Image(nImageWidth, nImageWidth, Byte.MIN_VALUE);
-        byte bData[] = imResult.getData();
+        Byte[] bData = imResult.getData();
         int nC = nImageWidth / 2;
         int nArea = 2 * nBarHalfWidth + 1;
         int nRow = nC * nImageWidth;
@@ -63,7 +63,7 @@ public class PsfGray8 {
      */
     public static Gray8Image disk(int nImageWidth, int nRadius) {
         Gray8Image imResult = new Gray8Image(nImageWidth, nImageWidth, Byte.MIN_VALUE);
-        byte bData[] = imResult.getData();
+        Byte[] bData = imResult.getData();
         int nC = nImageWidth / 2;
         int nRadiusSq = nRadius * nRadius;
         int nArea = 0;

@@ -221,7 +221,8 @@ public class ThreadedBinaryTree {
      * @return a Vector containing all the nodes traversed, in
      * the order of traversal, or null if there is no path.
      */
-    public Vector inorderTraverse(
+    @SuppressWarnings("rawtypes")
+	public Vector inorderTraverse(
             ThreadedBinaryTree end) {
         Vector v = new Vector();
         // Start traversal with empty Vector. The traversal
@@ -243,7 +244,8 @@ public class ThreadedBinaryTree {
      * this to end appended to it, if there is a path; otherwise,
      * null.
      */
-    private Vector inorderTraverse(
+    @SuppressWarnings({ "rawtypes", "unchecked" })
+	private Vector inorderTraverse(
             Vector v,
             boolean bFollowedThread,
             ThreadedBinaryTree end) {
@@ -358,12 +360,12 @@ public class ThreadedBinaryTree {
 //                                    t.add(new ComparableInt(n));
 //                                    ThreadedBinaryTree tbt0 = t.find(new ComparableInt(0));
 //                                    ThreadedBinaryTree tbt5 = t.find(new ComparableInt(5));
-//                                    Vector v = tbt0.inorderTraverse(tbt5);
+//                                    Vector<?> v = tbt0.inorderTraverse(tbt5);
 //                                    for (int o = 0; o<6; o++) {
 //                                        ThreadedBinaryTree tbt = (ThreadedBinaryTree)v.elementAt(o);
 //                                        ComparableInt ci = (ComparableInt)tbt.getKey();
 //                                        if (ci.valueOf() != o) {
-//                                            Vector u = tbt0.inorderTraverse(tbt5);
+//                                            Vector<?> u = tbt0.inorderTraverse(tbt5);
 //                                            int error = 1;
 //                                        }
 //                                        

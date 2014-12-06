@@ -64,9 +64,9 @@ public class RgbDimMask extends PipelineStage {
                             null);
         }
         RgbMaskedImage rgbImage = (RgbMaskedImage) image;
-        int[] src = rgbImage.getData();
+        Integer[] src = rgbImage.getData();
         RgbImage rgbOutput = new RgbImage(rgbImage.getWidth(), rgbImage.getHeight());
-        int[] dst = rgbOutput.getData();
+        Integer[] dst = rgbOutput.getData();
         for (int i=0; i<rgbImage.getHeight(); i++) {
             for (int j=0; j<rgbImage.getWidth(); j++) {
                 int nColorPixel = src[i*rgbImage.getWidth() + j];

@@ -147,9 +147,9 @@ public class Gray8Shrink extends PipelineStage {
     private Gray32Image shrinkHoriz(Gray8Image input) {
         /* horizontal shrink */
         Gray32Image horiz = new Gray32Image(this.cWidth, input.getHeight());
-        byte[] inData = input.getData();
-        int[] outData = horiz.getData();
-        int[] nPixelSum = new int[input.getHeight()];
+        Byte[] inData = input.getData();
+        Integer[] outData = horiz.getData();
+        Integer[] nPixelSum = new Integer[input.getHeight()];
         for (int i=0; i<input.getHeight(); i++) {
             nPixelSum[i] = 0;
         }
@@ -186,9 +186,9 @@ public class Gray8Shrink extends PipelineStage {
     private Gray8Image shrinkVert(Gray32Image input) {
         /* vertical shrink */
         Gray8Image vert = new Gray8Image(input.getWidth(), this.cHeight);
-        int[] inData = input.getData();
-        byte[] outData = vert.getData();
-        int[] nPixelSum = new int[input.getWidth()];
+        Integer[] inData = input.getData();
+        Byte[] outData = vert.getData();
+        Integer[] nPixelSum = new Integer[input.getWidth()];
         for (int i=0; i<input.getWidth(); i++) {
             nPixelSum[i] = 0;
         }

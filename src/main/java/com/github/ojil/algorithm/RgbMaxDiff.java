@@ -62,12 +62,12 @@ public class RgbMaxDiff extends PipelineStage {
         
         }
 
-        int wInput[] = ((RgbImage)imInput).getData();
-        int wBack[] = this.rgbBack.getData();
+        Integer[] wInput = ((RgbImage)imInput).getData();
+        Integer[] wBack = this.rgbBack.getData();
         Gray8Image grayOut = new Gray8Image(
                 this.rgbBack.getWidth(), 
                 this.rgbBack.getHeight());        
-        byte bGray[] = grayOut.getData();
+        Byte[] bGray = grayOut.getData();
         for (int i=0; i<imInput.getWidth() * imInput.getHeight(); i++) {
             int rIn = RgbVal.getR(wInput[i]);
             int gIn = RgbVal.getG(wInput[i]);

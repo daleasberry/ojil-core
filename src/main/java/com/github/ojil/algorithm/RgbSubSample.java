@@ -93,11 +93,11 @@ public class RgbSubSample extends PipelineStage {
         int cReduceWidth = image.getWidth() / this.cTargetWidth;
         int cReduceHeight = image.getHeight() / this.cTargetHeight;
         RgbImage rgb = (RgbImage) image;
-        int[] rnIn = rgb.getData();
+        Integer[] rnIn = rgb.getData();
         RgbImage result = new RgbImage(
         		this.cTargetWidth, 
         		this.cTargetHeight);
-        int[] rnOut = result.getData();
+        Integer[] rnOut = result.getData();
         for (int i=0; i<this.cTargetHeight; i++) {
             for (int j=0; j<this.cTargetWidth; j++) {
                 rnOut[i*this.cTargetWidth + j] = 

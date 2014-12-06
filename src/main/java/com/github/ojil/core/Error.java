@@ -19,8 +19,9 @@ package com.github.ojil.core;
  *
  */
 public class Error extends Throwable {
-	
-        /**
+	private static final long serialVersionUID = 5624201930901954089L;
+
+		/**
          * J2ME's Java is only 1.4 so no enums. We must simulate them...
          */
 	public static class PACKAGE {

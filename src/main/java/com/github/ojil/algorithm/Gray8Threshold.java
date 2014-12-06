@@ -68,7 +68,7 @@ public class Gray8Threshold extends PipelineStage {
             				null);
         }
         Gray8Image gray = (Gray8Image) image;
-        byte[] data = gray.getData();
+        Byte[] data = gray.getData();
         for (int i=0; i<data.length; i++) {
             data[i] = (((data[i]) < this.nThreshold)==this.bWithin) ?
             		Byte.MAX_VALUE : Byte.MIN_VALUE;

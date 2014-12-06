@@ -62,7 +62,7 @@ public class Gray32Div extends PipelineStage {
             		null);
         }
         Gray32Image gray = (Gray32Image) image;
-        int[] data = gray.getData();
+        Integer[] data = gray.getData();
         for (int i=0; i<data.length; i++) {
             data[i] = data[i] / this.nDivisor;
         }

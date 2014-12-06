@@ -169,7 +169,7 @@ public class MaskedGray8SubImgGen extends PipelineStage {
                             null);
         }
         
-        byte[] dataIn = this.imageInput.getData();
+        Byte[] dataIn = this.imageInput.getData();
         // offset of first pixel of the subimage within the
         // larget image.
         int nHOffset = this.nXOffset * this.nHorizIndex;
@@ -177,7 +177,7 @@ public class MaskedGray8SubImgGen extends PipelineStage {
         Gray8OffsetImage imageResult = (Gray8OffsetImage) super.imageOutput;
         imageResult.setXOffset(nHOffset);
         imageResult.setYOffset(nVOffset);
-        byte[] dataOut = imageResult.getData();
+        Byte[] dataOut = imageResult.getData();
         // don't access outside the image
         int nLimitY = Math.min(this.imageInput.getHeight() - nVOffset, this.nHeight);
         int nLimitX = Math.min(this.imageInput.getWidth() - nHOffset, this.nWidth);

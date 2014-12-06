@@ -97,8 +97,8 @@ public class Gray8Crop extends PipelineStage {
                             null);
         }
         Gray8Image imageResult = new Gray8Image(this.cWidth,this.cHeight);
-        byte[] src = imageInput.getData();
-        byte[] dst = imageResult.getData();
+        Byte[] src = imageInput.getData();
+        Byte[] dst = imageResult.getData();
         for (int i=0; i<this.cHeight; i++) {
             System.arraycopy(
                     src, 

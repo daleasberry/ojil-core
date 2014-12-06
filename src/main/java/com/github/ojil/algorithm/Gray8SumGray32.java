@@ -70,9 +70,9 @@ public class Gray8SumGray32 extends PipelineStage {
             imageResult = 
                     new Gray32Image(image.getWidth(), image.getHeight());
         }
-        byte[] inData = ((Gray8Image) image).getData();
+        Byte[] inData = ((Gray8Image) image).getData();
         // pointer to output data area, whether Gray32Image or Gray32OffsetImage
-        int[] outData = imageResult.getData();
+        Integer[] outData = imageResult.getData();
         // initialize first row
         int prevPixel = 0;
         for (int i=0; i<image.getWidth(); i++) {

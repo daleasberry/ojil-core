@@ -31,7 +31,7 @@ import com.github.ojil.core.MathPlus;
  * Computes 1-dimensional FFT of a complex array.
  */
 public class Fft1d {
-    private Vector cxCoeffs = new Vector();
+    private Vector<Complex[]> cxCoeffs = new Vector<>();
     private int nMaxWidth = 0;
     
     /**
@@ -175,7 +175,7 @@ public class Fft1d {
             // length
             if (cxCoeffs.size() < nLog) {
                 // we didn't fill it in, add it now
-                Complex cx[] = new Complex[nTwoExp/2];
+                Complex[] cx = new Complex[nTwoExp/2];
                 for (int k=0; k<nTwoExp/2; k++) {
                     // kth is scaled by 2**16 because of the use of MathPlus.PI
                     int kth = (-2 * k * MathPlus.PI) / nTwoExp;
@@ -198,6 +198,3 @@ public class Fft1d {
         return super.toString() + "(" + this.nMaxWidth + ")"; //$NON-NLS-1$ //$NON-NLS-2$
     }
 }
-
-
-

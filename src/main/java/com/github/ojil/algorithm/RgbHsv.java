@@ -45,7 +45,7 @@ public class RgbHsv extends PipelineStage {
                 			null);
         }
         RgbImage rgbInput = (RgbImage) imageInput;
-        int[] rgbData = rgbInput.getData();
+        Integer[] rgbData = rgbInput.getData();
         for (int i=0; i<rgbInput.getWidth()*rgbInput.getHeight(); i++) {
             int nR = RgbVal.getR(rgbData[i]);
             int nG = RgbVal.getG(rgbData[i]);

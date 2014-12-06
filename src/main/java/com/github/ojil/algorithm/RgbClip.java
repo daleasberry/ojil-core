@@ -108,7 +108,7 @@ public class RgbClip extends PipelineStage {
                 			null);
         }
         RgbImage rgbImage = (RgbImage) image;
-        int[] src = rgbImage.getData();
+        Integer[] src = rgbImage.getData();
         int nWidth = rgbImage.getWidth();
         for (int i=0; i<rgbImage.getHeight(); i++) {
             for (int j=0; j<rgbImage.getWidth(); j++) {

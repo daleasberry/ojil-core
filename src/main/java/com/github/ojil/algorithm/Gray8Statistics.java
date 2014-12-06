@@ -62,7 +62,7 @@ public class Gray8Statistics {
         }
         Gray8Image gray = (Gray8Image) image;
         int nSum = 0, nSumSq = 0;
-        byte[] data = gray.getData();
+        Byte[] data = gray.getData();
         for (int i=0; i<gray.getHeight(); i++) {
             for (int j=0; j<gray.getWidth(); j++) {
                 int pixel = (data[i*image.getWidth()+j]) - Byte.MIN_VALUE;

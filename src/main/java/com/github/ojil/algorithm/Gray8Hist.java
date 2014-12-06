@@ -43,12 +43,12 @@ public class Gray8Hist {
      * array is offset so element 0 corresponds to signed byte value
      * Byte.MIN_VALUE.
      */
-    public static int[] computeHistogram(Gray8Image image) {
-        int[] result = new int[256];
+    public static Integer[] computeHistogram(Gray8Image image) {
+        Integer[] result = new Integer[256];
         for (int i=0; i<256; i++) {
             result[i] = 0;
         }
-        byte[] data = image.getData();
+        Byte[] data = image.getData();
         for (int i=0; i<image.getHeight(); i++) {
             for (int j=0; j<image.getWidth(); j++) {
                 result[data[i*image.getWidth()+j]-Byte.MIN_VALUE] ++;

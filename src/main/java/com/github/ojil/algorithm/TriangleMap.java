@@ -27,7 +27,7 @@ import com.github.ojil.core.Vec2;
  */
 public class TriangleMap {
     int detB;
-    int A[][];
+    Integer[][] A;
     Point p1, p2;
     
     /**
@@ -66,13 +66,13 @@ public class TriangleMap {
         }
         // Note: Binv is implicitly divided by detB. We delay the division
         // because we're doing everything in integer
-        int Binv[][] = new int[2][2];
+        Integer[][] Binv = new Integer[2][2];
         Binv[0][0] = s13.getY();
         Binv[0][1] = -s13.getX();
         Binv[1][0] = -s12.getY();
         Binv[1][1] = s12.getX();
         // finally form A. Once again, A is divided by detB later.
-        this.A = new int[2][2];
+        this.A = new Integer[2][2];
         this.A[0][0] = s22.getX() * Binv[0][0] + s23.getX() * Binv[1][0];
         this.A[0][1] = s22.getX() * Binv[0][1] + s23.getX() * Binv[1][1];
         this.A[1][0] = s22.getY() * Binv[0][0] + s23.getY() * Binv[1][0];

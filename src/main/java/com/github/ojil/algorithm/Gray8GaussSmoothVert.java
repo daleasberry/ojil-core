@@ -59,7 +59,7 @@ public class Gray8GaussSmoothVert extends PipelineStage {
      * To compute the value shown below:
      *      =ROUND(B2/SUM($B2:$AM2)*256,0)
      */
-    private int[][] nCoeff = {
+    private Integer[][] nCoeff = {
 	{0},  // unused, inserted to make lookup simpler
 	{256},
 	{256},
@@ -193,9 +193,9 @@ public class Gray8GaussSmoothVert extends PipelineStage {
         }
         Gray8Image input = (Gray8Image) image;
         Gray8Image result = new Gray8Image(image.getWidth(), image.getHeight());
-        byte[] bIn = input.getData();
-        byte[] bResult = result.getData();
-        int[] wCoeff = this.nCoeff[this.cSigma];
+        Byte[] bIn = input.getData();
+        Byte[] bResult = result.getData();
+        Integer[] wCoeff = this.nCoeff[this.cSigma];
         int cHeight = input.getHeight();
         for (int j=0; j<input.getWidth(); j++) {
             for (int i=0; i<cHeight; i++) {

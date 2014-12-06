@@ -42,7 +42,7 @@ import com.github.ojil.core.Point;
  */
 public class LinefitHoughVert {
     /** @var cHoughAccum the Hough accumulator array */
-    int[][] cHoughAccum;
+    Integer[][] cHoughAccum;
     /** @var cCount the number of points on the line that was found */
     int cCount = 0;
     /** @var cMaxSlope the maximum allowable slope, times 256 */
@@ -186,13 +186,13 @@ public class LinefitHoughVert {
      * @throws com.github.ojil.core.Error if points is not a Vector of 
      * point objects.
      */
-    public void push(Vector points) throws com.github.ojil.core.Error {
+    public void push(Vector<?> points) throws com.github.ojil.core.Error {
         /* create Hough accumulator */
         this.cHoughAccum = 
-                new int[this.cSteps][this.cMaxX-this.cMinX];
+                new Integer[this.cSteps][this.cMaxX-this.cMinX];
         /* fill the Hough accumulator
          */
-        for (Enumeration e = points.elements(); e.hasMoreElements();) {
+        for (Enumeration<?> e = points.elements(); e.hasMoreElements();) {
             Object o = e.nextElement(); 
             if (!(o instanceof Point)) {
                 throw new Error(

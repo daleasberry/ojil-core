@@ -58,8 +58,8 @@ public class Gray8Rgb extends PipelineStage {
         }
         Gray8Image gray = (Gray8Image) image;
         RgbImage rgb = new RgbImage(image.getWidth(), image.getHeight());
-        byte[] grayData = gray.getData();
-        int[] rgbData = rgb.getData();
+        Byte[] grayData = gray.getData();
+        Integer[] rgbData = rgb.getData();
         for (int i=0; i<gray.getWidth() * gray.getHeight(); i++) {
             /* Convert from signed byte value to unsigned byte for storage
              * in the RGB image.

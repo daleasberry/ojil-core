@@ -53,8 +53,7 @@ public class Gray8ConnComp extends PipelineStage {
     private PriorityQueue pqLabels = null;
     Random random = new Random();
     private EquivalenceClass reClasses[];
-    private int rnFinalLabels[];
-    private int rnPerimeters[];
+    private Integer[] rnPerimeters;
     private short sClasses = 0;
     private Label rSortedLabels[] = null;
 
@@ -124,11 +123,11 @@ public class Gray8ConnComp extends PipelineStage {
         if (this.rnPerimeters != null) {
             return;
         }
-        this.rnPerimeters = new int[EquivalenceClass.getLabels()];
+        this.rnPerimeters = new Integer[EquivalenceClass.getLabels()];
         for (int i = 0; i < this.rnPerimeters.length; i++) {
             this.rnPerimeters[i] = 0;
         }
-        short[] sData = this.imLabeled.getData();
+        Short[] sData = this.imLabeled.getData();
         for (int i = 0; i < this.imLabeled.getHeight(); i++) {
             for (int j = 0; j < this.imLabeled.getWidth(); j++) {
                 short sCurr = sData[i * this.imLabeled.getWidth() + j];
@@ -209,7 +208,7 @@ public class Gray8ConnComp extends PipelineStage {
         // no, we need to calculate it.
         // determine the pixel count and bounding rectangle
         // of all the components in the image
-        short sData[] = this.imLabeled.getData();
+        Short sData[] = this.imLabeled.getData();
         Label vLabels[] = new Label[this.sClasses+1];
         int nComponents = 0;
         for (int i = 0; i < this.imLabeled.getHeight(); i++) {
@@ -252,11 +251,11 @@ public class Gray8ConnComp extends PipelineStage {
         return this.rSortedLabels[n].getLabel();
     }
 
-    public Enumeration getComponentPixels(int n) throws Error {
+    public Enumeration<Point> getComponentPixels(int n) throws Error {
         Rect r = getComponent(n);
         // build a Vector of all points in the component
-        Vector vPoints = new Vector();
-        short[] sData = this.imLabeled.getData();
+        Vector<Point> vPoints = new Vector<>();
+        Short[] sData = this.imLabeled.getData();
         int nLabel = this.rSortedLabels[n].nLabel;
         for (int i=r.getTop(); i<=r.getBottom(); i++) {
             for (int j=r.getLeft(); j<=r.getRight(); j++) {
@@ -291,10 +290,10 @@ public class Gray8ConnComp extends PipelineStage {
             RgbImage rgbOutput = new RgbImage(
                     this.imLabeled.getWidth(),
                     this.imLabeled.getHeight());
-            int[] rgbData = rgbOutput.getData();
+            Integer[] rgbData = rgbOutput.getData();
             int nMaxLabel = EquivalenceClass.getLabels();
-            short[] grayData = this.imLabeled.getData();
-            int[] rgbLabels = new int[nMaxLabel + 1];
+            Short[] grayData = this.imLabeled.getData();
+            Integer[] rgbLabels = new Integer[nMaxLabel + 1];
             for (int i = 0; i < rgbLabels.length; i++) {
                 rgbLabels[i] = RgbVal.toRgb(
                         (byte) ((this.random.nextInt() & 0xff) + Byte.MIN_VALUE),
@@ -384,7 +383,7 @@ public class Gray8ConnComp extends PipelineStage {
         this.bComponents = false;
 
         Gray8Image gray = (Gray8Image) image;
-        byte[] bData = gray.getData();
+        Byte[] bData = gray.getData();
         // for each pixel in the input image assign a label,
         // performing equivalence operations when two labels
         // are adjacent (8-connected)
@@ -542,7 +541,7 @@ public class Gray8ConnComp extends PipelineStage {
         // initialize the labeled image
         this.imLabeled = new Gray16Image(gray.getWidth(), gray.getHeight(),
                 (short) 0);
-        short[] sLabels = this.imLabeled.getData();
+        Short[] sLabels = this.imLabeled.getData();
         // assign label pixels their final values
         for (int i = 0; i < sLabels.length; i++) {
             if (reClasses[i] != null) {

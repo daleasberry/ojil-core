@@ -56,8 +56,8 @@ public class Gray82Gray32 extends PipelineStage {
         }
         Gray8Image gray = (Gray8Image) image;
         Gray32Image gray32 = new Gray32Image(image.getWidth(), image.getHeight());
-        byte[] grayData = gray.getData();
-        int[] gray32Data = gray32.getData();
+        Byte[] grayData = gray.getData();
+        Integer[] gray32Data = gray32.getData();
         for (int i=0; i<gray.getWidth() * gray.getHeight(); i++) {
             /* Convert from signed byte value to unsigned byte for storage
              * in the 32-bit image.

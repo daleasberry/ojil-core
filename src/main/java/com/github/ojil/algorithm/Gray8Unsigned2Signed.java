@@ -14,7 +14,7 @@ public class Gray8Unsigned2Signed extends PipelineStage {
 					null, null);
 		}
 		Gray8Image gray = (Gray8Image) imageInput;
-		byte[] rb = gray.getData();
+		Byte[] rb = gray.getData();
 		for (int i=0; i<gray.getWidth()*gray.getHeight(); i++) {
 			rb[i] = (byte) ((0xff&rb[i]) + Byte.MIN_VALUE);
 		}
