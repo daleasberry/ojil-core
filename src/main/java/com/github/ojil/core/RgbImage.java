@@ -25,123 +25,132 @@
 package com.github.ojil.core;
 
 /**
- * RgbImage is the type used to hold an RGB image, which
- * is stored as an ARGB image type (32-bits) with the
- * A byte ignored. 
+ * RgbImage is the type used to hold an RGB image, which is stored as an ARGB
+ * image type (32-bits) with the A byte ignored.
  * <p>
- * Implementation-specific libraries define methods that allow the creation
- * of an RgbImage from a native image type. RgbImage is therefore the first and
+ * Implementation-specific libraries define methods that allow the creation of
+ * an RgbImage from a native image type. RgbImage is therefore the first and
  * last jjil.core object used after capture and before display of an image.
+ * 
  * @author webb
  */
 public class RgbImage extends Image {
-    /** A pointer to the image data
+    /**
+     * A pointer to the image data
      */
-    private final Integer[] wImage;
+    protected Integer[] imageData;
     
-    /** Creates a new instance of RgbImage
+    /**
+     * Creates a new instance of RgbImage
      *
-     * @param cWidth   the image width
-     * @param cHeight  the image height 
+     * @param cWidth
+     *            the image width
+     * @param cHeight
+     *            the image height
      */
-    public RgbImage(int cWidth, int cHeight) {
+    public RgbImage(final int cWidth, final int cHeight) {
         super(cWidth, cHeight);
-        this.wImage = new Integer[getWidth()*getHeight()];
+        imageData = new Integer[getWidth() * getHeight()];
     }
     
-    public RgbImage(int cWidth, int cHeight, Integer[] rnData) {
+    public RgbImage(final int cWidth, final int cHeight, final Integer[] rnData) {
         super(cWidth, cHeight);
-        this.wImage = rnData;
+        imageData = rnData;
     }
     
     /**
      * Creates a new instance of RgbImage, assigning a constant value
-     * @param bR the red color value to be assigned.
-     * @param bG the green color value to be assigned.
-     * @param bB the blue color value to be assigned.
-     * @param cWidth the image width
-     * @param cHeight the image height
+     * 
+     * @param bR
+     *            the red color value to be assigned.
+     * @param bG
+     *            the green color value to be assigned.
+     * @param bB
+     *            the blue color value to be assigned.
+     * @param cWidth
+     *            the image width
+     * @param cHeight
+     *            the image height
      */
-    public RgbImage(int cWidth, int cHeight, byte bR, byte bG, byte bB) {
+    public RgbImage(final int cWidth, final int cHeight, final byte bR, final byte bG, final byte bB) {
         super(cWidth, cHeight);
-        this.wImage = new Integer[getWidth()*getHeight()];
-        int nRgb = RgbVal.toRgb(bR, bG, bB); 
-        for (int i=0; i<this.getWidth()*this.getHeight();i++) {
-            this.wImage[i] = nRgb;
+        imageData = new Integer[getWidth() * getHeight()];
+        final int nRgb = RgbVal.toRgb(bR, bG, bB);
+        for (int i = 0; i < (getWidth() * getHeight()); i++) {
+            imageData[i] = nRgb;
         }
     }
     
     /**
      * Creates a new instance of RgbImage, assigning a constant value
-     * @param nRgb the packed RGB value to assign
-     * @param cWidth the image width
-     * @param cHeight the image height
+     * 
+     * @param nRgb
+     *            the packed RGB value to assign
+     * @param cWidth
+     *            the image width
+     * @param cHeight
+     *            the image height
      */
-    public RgbImage(int cWidth, int cHeight, int nRgb) {
+    public RgbImage(final int cWidth, final int cHeight, final int nRgb) {
         super(cWidth, cHeight);
-        this.wImage = new Integer[getWidth()*getHeight()];
-        for (int i=0; i<this.getWidth()*this.getHeight();i++) {
-            this.wImage[i] = nRgb;
+        imageData = new Integer[getWidth() * getHeight()];
+        for (int i = 0; i < (getWidth() * getHeight()); i++) {
+            imageData[i] = nRgb;
         }
     }
-        
-    /** Creates a shallow copy of this image
+    
+    /**
+     * Creates a shallow copy of this image
      *
      * @return the image copy.
      */
-    public Object clone()
-    {
-        RgbImage image = new RgbImage(getWidth(), getHeight());
-        System.arraycopy(
-                this.getData(), 
-                0, 
-                image.getData(), 
-                0, 
-                getWidth()*getHeight());
+    @Override
+    public Object clone() {
+        final RgbImage image = new RgbImage(getWidth(), getHeight());
+        System.arraycopy(getData(), 0, image.getData(), 0, getWidth() * getHeight());
         return image;
     }
     
     /**
      * Fill a rectangle in an RgbImage with a given value
-     * @param r the Rect to fill
-     * @param nRgb the color to assign
+     * 
+     * @param r
+     *            the Rect to fill
+     * @param nRgb
+     *            the color to assign
      * @return the modified RgbImage (i.e., this)
-     * @throws Error if the bounds are outside the image
+     * @throws Error
+     *             if the bounds are outside the image
      */
-    public RgbImage fill(Rect r, int nRgb) throws Error
-    {
-        if (r.getTop() < 0 || r.getBottom() > this.getHeight() ||
-                r.getLeft() < 0 || r.getRight() > this.getWidth()) {
-            throw new Error(Error.PACKAGE.CORE, 
-                    ErrorCodes.BOUNDS_OUTSIDE_IMAGE,
-                    r.toString(),
-                    null,
-                    null);
+    public RgbImage fill(final Rect r, final int nRgb) throws Error {
+        if ((r.getTop() < 0) || (r.getBottom() > getHeight()) || (r.getLeft() < 0) || (r.getRight() > getWidth())) {
+            throw new Error(Error.PACKAGE.CORE, ErrorCodes.BOUNDS_OUTSIDE_IMAGE, r.toString(), null, null);
         }
-        for (int i=r.getTop(); i<r.getBottom(); i++) {
-            for (int j=r.getLeft(); j<r.getRight(); j++) {
-                this.wImage[i*this.getWidth()+j] = nRgb;
+        for (int i = r.getTop(); i < r.getBottom(); i++) {
+            for (int j = r.getLeft(); j < r.getRight(); j++) {
+                imageData[(i * getWidth()) + j] = nRgb;
             }
         }
         return this;
     }
     
-    /** Get a pointer to the image data.
+    /**
+     * Get a pointer to the image data.
      *
      * @return the data pointer.
      */
-    public Integer[] getData()
-    {
-        return this.wImage;
+    @Override
+    public Integer[] getData() {
+        return imageData;
     }
     
-    
-    /** Return a string describing the image.
+    /**
+     * Return a string describing the image.
      *
      * @return the string.
      */
-    public String toString()
-    {
+    @Override
+    public String toString() {
         return super.toString() + " (" + getWidth() + "x" + getHeight() + //$NON-NLS-1$ //$NON-NLS-2$
                 ")"; //$NON-NLS-1$
     }

@@ -25,64 +25,70 @@
 package com.github.ojil.core;
 
 /**
- * Image is the fundamental abstract class for holding images.
- * It is used for passing images between pipeline stages.
- * The image dimensions are stored here; the image format
- * and the actual image data are defined in the derived classes.
+ * Image is the fundamental abstract class for holding images. It is used for
+ * passing images between pipeline stages. The image dimensions are stored here;
+ * the image format and the actual image data are defined in the derived
+ * classes.
+ * 
  * @author webb
  */
 public abstract class Image {
-	
+    
     /**
      * The image height.
      */
-    private final int mnHeight;
+    protected int height;
     /**
      * The image width.
      */
-    private final int mnWidth;
+    protected int width;
     
-    /** Creates a new instance of Image 
+    /**
+     * Creates a new instance of Image
      *
-     * @param mnWidth   the image width
-     * @param mnHeight  the image height
+     * @param mnWidth
+     *            the image width
+     * @param mnHeight
+     *            the image height
      */
-    public Image(int mnWidth, int mnHeight) {
-        this.mnWidth = mnWidth;
-        this.mnHeight = mnHeight;
+    public Image(final int mnWidth, final int mnHeight) {
+        width = mnWidth;
+        height = mnHeight;
     }
     
     /**
      * Makes a copy of the image
+     * 
      * @return the image copy
      */
+    @Override
     public abstract Object clone();
     
-    /** Returns the image height 
+    /**
+     * Returns the image height
      *
      * @return the image height (rows)
      */
-    public int getHeight()
-    {
-        return this.mnHeight;
+    public int getHeight() {
+        return height;
     }
     
     /**
-     * Returns a Point object giving the size of this image
-     * (width x height)
+     * Returns a Point object giving the size of this image (width x height)
+     * 
      * @return a Point indicating the image size
      */
     public Point getSize() {
-    	return new Point(this.mnWidth, this.mnHeight);
+        return new Point(width, height);
     }
     
-    /** Returns the image width
+    /**
+     * Returns the image width
      *
      * @return the image width (columns)
      */
-    public int getWidth()
-    {
-        return this.mnWidth;
+    public int getWidth() {
+        return width;
     }
     
     public abstract Number[] getData();
