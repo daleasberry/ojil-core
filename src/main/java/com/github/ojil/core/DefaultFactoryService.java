@@ -6,4 +6,9 @@ public class DefaultFactoryService implements OjilFactories {
     public ImageFactory getImageFactory() {
         return new DefaultImageFactory();
     }
+
+    @Override
+    public IoFactory getIoFactory() {
+        return new DefaultIoFactory();
+    }
 }

@@ -43,6 +43,8 @@ public abstract class Image {
      */
     protected int width;
     
+    protected ImageType imageType;
+    
     /**
      * Creates a new instance of Image
      *
@@ -89,6 +91,10 @@ public abstract class Image {
      */
     public int getWidth() {
         return width;
+    }
+    
+    public ImageType getType() {
+        return imageType;
     }
     
     public abstract Number[] getData();

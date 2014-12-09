@@ -23,4 +23,9 @@ public class FactoryService implements OjilFactories {
     public ImageFactory getImageFactory() {
         return factoryServiceSpi.getImageFactory();
     }
+
+    @Override
+    public IoFactory getIoFactory() {
+        return factoryServiceSpi.getIoFactory();
+    }
 }
