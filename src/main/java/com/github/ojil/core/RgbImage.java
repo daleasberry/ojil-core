@@ -49,12 +49,12 @@ public class RgbImage extends Image {
      *            the image height
      */
     public RgbImage(final int cWidth, final int cHeight) {
-        super(cWidth, cHeight);
+        super(cWidth, cHeight, ImageType.INT_RGB);
         imageData = new Integer[getWidth() * getHeight()];
     }
     
     public RgbImage(final int cWidth, final int cHeight, final Integer[] rnData) {
-        super(cWidth, cHeight);
+        super(cWidth, cHeight, ImageType.INT_RGB);
         imageData = rnData;
     }
     
@@ -73,7 +73,7 @@ public class RgbImage extends Image {
      *            the image height
      */
     public RgbImage(final int cWidth, final int cHeight, final byte bR, final byte bG, final byte bB) {
-        super(cWidth, cHeight);
+        super(cWidth, cHeight, ImageType.INT_RGB);
         imageData = new Integer[getWidth() * getHeight()];
         final int nRgb = RgbVal.toRgb(bR, bG, bB);
         for (int i = 0; i < (getWidth() * getHeight()); i++) {
@@ -92,7 +92,7 @@ public class RgbImage extends Image {
      *            the image height
      */
     public RgbImage(final int cWidth, final int cHeight, final int nRgb) {
-        super(cWidth, cHeight);
+        super(cWidth, cHeight, ImageType.INT_RGB);
         imageData = new Integer[getWidth() * getHeight()];
         for (int i = 0; i < (getWidth() * getHeight()); i++) {
             imageData[i] = nRgb;
@@ -116,19 +116,19 @@ public class RgbImage extends Image {
      * 
      * @param r
      *            the Rect to fill
-     * @param nRgb
+     * @param rgb
      *            the color to assign
      * @return the modified RgbImage (i.e., this)
      * @throws Error
      *             if the bounds are outside the image
      */
-    public RgbImage fill(final Rect r, final int nRgb) throws Error {
+    public RgbImage fill(final Rect r, final int rgb) throws Error {
         if ((r.getTop() < 0) || (r.getBottom() > getHeight()) || (r.getLeft() < 0) || (r.getRight() > getWidth())) {
             throw new Error(Error.PACKAGE.CORE, ErrorCodes.BOUNDS_OUTSIDE_IMAGE, r.toString(), null, null);
         }
         for (int i = r.getTop(); i < r.getBottom(); i++) {
             for (int j = r.getLeft(); j < r.getRight(); j++) {
-                imageData[(i * getWidth()) + j] = nRgb;
+                imageData[(i * getWidth()) + j] = rgb;
             }
         }
         return this;
@@ -151,7 +151,6 @@ public class RgbImage extends Image {
      */
     @Override
     public String toString() {
-        return super.toString() + " (" + getWidth() + "x" + getHeight() + //$NON-NLS-1$ //$NON-NLS-2$
-                ")"; //$NON-NLS-1$
+        return super.toString() + " (" + getWidth() + "x" + getHeight() + ")";
     }
 }

@@ -48,14 +48,28 @@ public abstract class Image {
     /**
      * Creates a new instance of Image
      *
-     * @param mnWidth
+     * @param theWidth
      *            the image width
-     * @param mnHeight
+     * @param theHeight
      *            the image height
      */
-    public Image(final int mnWidth, final int mnHeight) {
-        width = mnWidth;
-        height = mnHeight;
+    public Image(final int theWidth, final int theHeight) {
+        width = theWidth;
+        height = theHeight;
+    }
+    
+    /**
+     * Creates a new instance of Image
+     *
+     * @param theWidth
+     *            the image width
+     * @param theHeight
+     *            the image height
+     */
+    public Image(final int theWidth, final int theHeight, final ImageType theImageType) {
+        width = theWidth;
+        height = theHeight;
+        imageType = theImageType;
     }
     
     /**
