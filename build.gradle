@@ -1,29 +1,91 @@
 apply plugin: 'java'
 apply plugin: 'maven'
+apply plugin: 'signing'
 apply plugin: 'eclipse'
 
 sourceCompatibility=1.7
 targetCompatibility=1.7
 
 repositories { mavenCentral() }
-dependencies { testCompile group:'junit', name: 'junit', version: '4.+' }
+
+dependencies {
+    testCompile group:'junit', name: 'junit', version: '4.+'
+}
 
 if (JavaVersion.current().isJava8Compatible()) {
-	allprojects {
-		tasks.withType(Javadoc) {
-			options.addStringOption('Xdoclint:none', '-quiet')
-		}
-	}
+    allprojects {
+        tasks.withType(Javadoc) {
+            options.addStringOption('Xdoclint:none', '-quiet')
+        }
+    }
 }
 
 task sourcesJar(type: Jar, dependsOn:classes) {
+    description 'Jars all source files for deployment into the Maven repository.'
     classifier = 'sources'
     from sourceSets.main.allSource
 }
 
 task javadocJar(type: Jar, dependsOn:javadoc) {
+    description 'Jars all javadoc files for deployment into the Maven repository.'
     classifier = 'javadoc'
     from javadoc.destinationDir
+}
+
+artifacts {
+    archives javadocJar
+    archives sourcesJar
+}
+
+signing {
+    description 'Sign all artifacts for deployment into the Maven repository.'
+    sign configurations.archives
+}
+
+uploadArchives {
+    repositories {
+        mavenDeployer {
+            beforeDeployment { MavenDeployment deployment -> signing.signPom(deployment) }
+            repository(url: this.properties['maven.repository.url']) {
+                authentication(userName: this.properties['maven.repository.user'], password: this.properties['maven.repository.password'])
+            }
+            println this.properties['maven.repository.user']+this.properties['maven.repository.password']
+            
+            snapshotRepository(url: this.properties['maven.snapshot.repository.url']) {
+                authentication(userName: this.properties['maven.repository.user'], password:this. properties['maven.repository.password'])
+            }
+            pom.project {
+                name 'OJIL Core'
+                packaging 'jar'
+                description 'Open Java Imaging Library.'
+                url 'http://www.github.com/daleasberry/ojil-core'
+                
+                scm {
+                    url 'https://www.github.com/daleasberry/ojil-core'
+                    connection 'scm:git:git:git@github.com/daleasberry/ojil-core.git'
+                    developerConnection 'scm:git:git@github.com:daleasberry/ojil-core.git'
+                }
+                
+                licenses {
+                    license {
+                        name 'GNU Lesser General Public License'
+                        url 'https://www.gnu.org/licenses/lgpl.html'
+                        distribution 'repo'
+                    }
+                }
+                
+                developers {
+                    developer {
+                        id 'daleasberry'
+                        name 'Dale Asberry'
+                        email 'dale.asberry@gmail.com'
+                        organization 'Github'
+                        organizationUrl 'https://www.github.com/daleasberry'
+                    }
+                }
+            }
+        }
+    }
 }
 
 task createWrapper(type: Wrapper) { gradleVersion = '2.2.1' }

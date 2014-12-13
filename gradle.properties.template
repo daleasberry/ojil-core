@@ -1,0 +1,12 @@
+#cp local.properties.template local.properties
+#edit to needs
+group=com.github.daleasberry
+version=0.0.1
+
+maven.repository.url=
+maven.repository.user=
+maven.repository.password=
+
+signing.keyId=
+signing.password=
+signing.secretKeyRingFile=
