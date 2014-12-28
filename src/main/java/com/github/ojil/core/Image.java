@@ -112,4 +112,12 @@ public abstract class Image {
     }
     
     public abstract Number[] getData();
+    
+    public static final int[] arraycopy(final Integer[] data) {
+        final int[] copy = new int[data.length];
+        for (int i = 0; i < copy.length; i++) {
+            copy[i] = data[i].intValue();
+        }
+        return copy;
+    }
 }

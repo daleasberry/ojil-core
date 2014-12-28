@@ -34,7 +34,7 @@ Author(s) of this POM file: daleasberry
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>com.github.daleasberry</groupId>
 	<artifactId>ojil-core</artifactId>
-	<version>0.0.1</version>
+	<version>0.0.3</version>
 	<packaging>jar</packaging>
 	<name>OJIL Core</name>
 	<description>Open Java Imaging Library.</description>
