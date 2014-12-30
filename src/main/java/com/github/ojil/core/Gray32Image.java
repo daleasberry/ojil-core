@@ -34,63 +34,66 @@ public class Gray32Image extends Image<Object> {
     
     /**
      * Creates a new instance of Gray32Image
-     * @param cWidth Width of the image (columns).
-     * @param cHeight Height of the image (rows)
+     * 
+     * @param cWidth
+     *            Width of the image (columns).
+     * @param cHeight
+     *            Height of the image (rows)
      */
-    public Gray32Image(Integer cWidth, Integer cHeight) {
+    public Gray32Image(final Integer cWidth, final Integer cHeight) {
         super(cWidth, cHeight);
-        this.nImage = new Integer[getWidth()*getHeight()];
+        nImage = new Integer[getWidth() * getHeight()];
     }
     
     /**
      * Creates a new instance of Gray32Image, assigning a constant value.
-     * @param cWidth Width of the image (columns).
-     * @param cHeight Height of the image (rows)
-     * @param nValue constant value to be assigned to the image
+     * 
+     * @param cWidth
+     *            Width of the image (columns).
+     * @param cHeight
+     *            Height of the image (rows)
+     * @param nValue
+     *            constant value to be assigned to the image
      */
-    public Gray32Image(Integer cWidth, Integer cHeight, Integer nValue) {
+    public Gray32Image(final Integer cWidth, final Integer cHeight, final Integer nValue) {
         super(cWidth, cHeight);
-        this.nImage = new Integer[getWidth()*getHeight()];
-        for (Integer i=0; i<this.getWidth()*this.getHeight();i++) {
-            this.nImage[i] = nValue;
+        nImage = new Integer[getWidth() * getHeight()];
+        for (Integer i = 0; i < (getWidth() * getHeight()); i++) {
+            nImage[i] = nValue;
         }
     }
-
+    
     /**
      * Copy this image
+     * 
      * @return the image copy.
      */
-    public Object clone()
-    {
-        Gray32Image image = new Gray32Image(getWidth(),getHeight());
-        System.arraycopy(
-                this.getData(),
-                0,
-                image.getData(),
-                0,
-                getWidth()*getHeight());
+    @Override
+    public Object clone() {
+        final Gray32Image image = new Gray32Image(getWidth(), getHeight());
+        System.arraycopy(getData(), 0, image.getData(), 0, getWidth() * getHeight());
         return image;
     }
     
-    
-    /** Return a poIntegerer to the image data.
+    /**
+     * Return a poIntegerer to the image data.
      *
      * @return the data poIntegerer.
      */
-    public Integer[] getData()
-    {
-        return this.nImage;
+    @Override
+    public Integer[] getData() {
+        return nImage;
     }
-
     
-    /** Return a string describing the image.
+    /**
+     * Return a string describing the image.
      *
      * @return the string.
      */
-    public String toString()
-    {
+    @Override
+    public String toString() {
         return super.toString() + " (" + getWidth() + "x" + getHeight() + //$NON-NLS-1$ //$NON-NLS-2$
                 ")"; //$NON-NLS-1$
     }
-
+    
 }

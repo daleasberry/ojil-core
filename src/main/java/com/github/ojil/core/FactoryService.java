@@ -4,12 +4,11 @@ public class FactoryService {
     private OjilFactories factoryServiceSpi;
     private static FactoryService factoryService;
     
-    @SuppressWarnings("unchecked")
     private FactoryService() {
         Class<?> factoryServiceClass = null;
         try {
-            factoryServiceClass = (Class<OjilFactories>) ClassLoader.getSystemClassLoader().loadClass("com.github.ojil.platform.FactoryServiceSpi");
-        } catch (ClassNotFoundException e) {
+            factoryServiceClass = ClassLoader.getSystemClassLoader().loadClass("com.github.ojil.platform.FactoryServiceSpi");
+        } catch (final ClassNotFoundException e) {
             System.out.println("No platform library available, loading DefaultFactoryService. FOR TESTING PURPOSES ONLY.");
             factoryServiceClass = DefaultFactoryService.class;
         }
@@ -21,16 +20,16 @@ public class FactoryService {
     }
     
     public static synchronized ImageFactory getImageFactory() {
-        if(null == factoryService) {
-            factoryService = new FactoryService();
+        if (null == FactoryService.factoryService) {
+            FactoryService.factoryService = new FactoryService();
         }
-        return factoryService.factoryServiceSpi.getImageFactory();
+        return FactoryService.factoryService.factoryServiceSpi.getImageFactory();
     }
-
+    
     public static synchronized IoFactory getIoFactory() {
-        if(null == factoryService) {
-            factoryService = new FactoryService();
+        if (null == FactoryService.factoryService) {
+            FactoryService.factoryService = new FactoryService();
         }
-        return factoryService.factoryServiceSpi.getIoFactory();
+        return FactoryService.factoryService.factoryServiceSpi.getIoFactory();
     }
 }

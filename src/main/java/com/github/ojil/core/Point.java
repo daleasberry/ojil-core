@@ -26,120 +26,138 @@ package com.github.ojil.core;
 
 import java.io.Serializable;
 
-
 /**
  * Point: an object holding a 2-dimensional point coordinate
+ * 
  * @author webb
  */
 public class Point implements Serializable {
-	private static final long serialVersionUID = 2890838604858533735L;
-	
-	private int mnX;
+    private static final long serialVersionUID = 2890838604858533735L;
+    
+    private int mnX;
     private int mnY;
     
-    /** Creates a new instance of Point 
+    /**
+     * Creates a new instance of Point
      *
-     * @param mnX the Point's x position (column)
-     * @param mnY the Point's y position (row)
+     * @param mnX
+     *            the Point's x position (column)
+     * @param mnY
+     *            the Point's y position (row)
      */
-    public Point(int nX, int nY) {
-        this.mnX = nX;
-        this.mnY = nY;
+    public Point(final int nX, final int nY) {
+        mnX = nX;
+        mnY = nY;
     }
     
     /**
      * Offset a point by a 2-dimensional vector Vec2, returning modified point.
-     * @param v Vec2 to offset this point by
+     * 
+     * @param v
+     *            Vec2 to offset this point by
      * @return modified Point
      */
-    public Point add(Vec2 v) {
-        this.mnX += v.getX();
-        this.mnY += v.getY();
+    public Point add(final Vec2 v) {
+        mnX += v.getX();
+        mnY += v.getY();
         return this;
     }
     
     /**
-     * Make a copy of this Point, so that modifications by other
-     * operations don't affect the original.
+     * Make a copy of this Point, so that modifications by other operations
+     * don't affect the original.
      */
+    @Override
     public Point clone() {
-        return new Point(this.mnX, this.mnY);
+        return new Point(mnX, mnY);
     }
-
+    
     /**
      * Compute a vector from another Point to this
-     * @param pos starting point
+     * 
+     * @param pos
+     *            starting point
      * @return a Vec2 which, when added to pos, will give this
      */
-    public Vec2 diff(Point pos) {
-        return new Vec2(this.mnX-pos.mnX, this.mnY-pos.mnY);
+    public Vec2 diff(final Point pos) {
+        return new Vec2(mnX - pos.mnX, mnY - pos.mnY);
     }
     
     /**
      * Returns true iff this Point equals the first parameter.
      */
-    public boolean equals(Object o) {
+    @Override
+    public boolean equals(final Object o) {
         if (!(o instanceof Point)) {
             return false;
         }
-        Point p = (Point) o;
-        return this.mnX == p.mnX && this.mnY == p.mnY;
+        final Point p = (Point) o;
+        return (mnX == p.mnX) && (mnY == p.mnY);
     }
-
+    
     /**
      * Return the point's x-coordinate.
+     * 
      * @return the horizontal position of the point.
      */
     public int getX() {
-        return this.mnX;
-    } 
+        return mnX;
+    }
     
     /**
      * Return the point's y-coordinate.
+     * 
      * @return the vertical position of the point.
      */
     public int getY() {
-        return this.mnY;
+        return mnY;
     }
     
+    @Override
     public int hashCode() {
         int hash = 5;
-        hash = 67 * hash + this.mnX;
-        hash = 67 * hash + this.mnY;
+        hash = (67 * hash) + mnX;
+        hash = (67 * hash) + mnY;
         return hash;
     }
-
+    
     /**
      * Offset a point by a certain x,y
-     * @param x x offset
-     * @param y y offset
+     * 
+     * @param x
+     *            x offset
+     * @param y
+     *            y offset
      * @return modified Point
      */
-    public Point offset(int nX, int nY) {
-        this.mnX += nX;
-        this.mnY += nY;
+    public Point offset(final int nX, final int nY) {
+        mnX += nX;
+        mnY += nY;
         return this;
     }
     
     /**
      * Change the (x,y) coordinates of this Point
-     * @param nX new X coordinate
-     * @param nY new Y coordinate
+     * 
+     * @param nX
+     *            new X coordinate
+     * @param nY
+     *            new Y coordinate
      * @return the modified Point
      */
-    public Point setXY(int nX, int nY) {
-    	this.mnX = nX;
-    	this.mnY = nY;
-    	return this;
+    public Point setXY(final int nX, final int nY) {
+        mnX = nX;
+        mnY = nY;
+        return this;
     }
     
     /**
      * Implement toString
+     * 
      * @return Object address + (x,y)
      */
+    @Override
     public String toString() {
-        return super.toString() + "(" +
-                new Integer(this.mnX).toString() + "," +
-                new Integer(this.mnY).toString() + ")";
+        return super.toString() + "(" + new Integer(mnX).toString() + "," + new Integer(mnY).toString() + ")";
     }
 }

@@ -8,6 +8,7 @@ package com.github.ojil.core;
 /**
  * Class for managing regtangular regions in an RgbImage and their color mean
  * and variance values.
+ * 
  * @author webb
  */
 public class RgbRegion {
@@ -17,15 +18,21 @@ public class RgbRegion {
     public static class MeanVar {
         int nRgbMean;
         int nR, nG, nB;
+        
         /**
          * Create a new MeanVar value, specifying color mean as a packed RGB
          * word and variance as int variables.
-         * @param nRgbMean the packed RGB mean
-         * @param nR red variance
-         * @param nG green variance
-         * @param nB blue variance
+         * 
+         * @param nRgbMean
+         *            the packed RGB mean
+         * @param nR
+         *            red variance
+         * @param nG
+         *            green variance
+         * @param nB
+         *            blue variance
          */
-        public MeanVar(int nRgbMean, int nR, int nG, int nB) {
+        public MeanVar(final int nRgbMean, final int nR, final int nG, final int nB) {
             this.nRgbMean = nRgbMean;
             this.nR = nR;
             this.nG = nG;
@@ -34,80 +41,87 @@ public class RgbRegion {
         
         /**
          * Return packed RGB mean color.
+         * 
          * @return mean RGB color, packed in int
          */
         public int getMean() {
-            return this.nRgbMean;
+            return nRgbMean;
         }
         
         /**
          * Return red variance.
+         * 
          * @return red variance
          */
         public int getRVar() {
-            return this.nR;
+            return nR;
         }
         
         /**
          * Return green variance
+         * 
          * @return green variance
          */
         public int getGVar() {
-            return this.nG;
+            return nG;
         }
         
         /**
          * Return blue variance
+         * 
          * @return blue variance
          */
         public int getB() {
-            return this.nB;
+            return nB;
         }
         
+        @Override
         public String toString() {
-            return super.toString() + "(Mean=" +
-                    RgbVal.toString(this.nRgbMean) + ",Var=[" +
-                    new Integer(this.nR).toString() + "," +
-                    new Integer(this.nG).toString() + "," +
-                    new Integer(this.nB).toString() + "])";
+            return super.toString() + "(Mean=" + RgbVal.toString(nRgbMean) + ",Var=[" + new Integer(nR).toString() + "," + new Integer(nG).toString() + "," + new Integer(nB).toString() + "])";
         }
     }
     
-    private MeanVar var;
-    private Rect r;
-
+    private final MeanVar var;
+    private final Rect r;
+    
     /**
      * Construct a new RgbRegion
-     * @param r Rect boundaries of the region
-     * @param var MeanVar mean and variance of the region
+     * 
+     * @param r
+     *            Rect boundaries of the region
+     * @param var
+     *            MeanVar mean and variance of the region
      */
-    public RgbRegion(Rect r, MeanVar var) {
+    public RgbRegion(final Rect r, final MeanVar var) {
         this.r = r;
         this.var = var;
     }
-
+    
     /**
      * Return mean color of the region
+     * 
      * @return packed RGB word giving color of region
      */
     public int getColor() {
-        return this.var.getMean();
+        return var.getMean();
     }
-
+    
     /**
      * Return boundaries of region
+     * 
      * @return Rect boundary of region
      */
     public Rect getRect() {
-        return this.r;
+        return r;
     }
     
     /**
      * Implement toString
+     * 
      * @return the class name, rectangle, and mean/variance.
      */
+    @Override
     public String toString() {
-        return super.toString() + "," + this.r.toString() + "," +
-                this.var.toString();
+        return super.toString() + "," + r.toString() + "," + var.toString();
     }
 }

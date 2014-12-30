@@ -34,48 +34,48 @@ public class Complex32Image extends Image<Object> {
     
     /**
      * Creates a new instance of Complex32Image
-     * @param cWidth Width of the image (columns).
-     * @param cHeight Height of the image (rows)
+     * 
+     * @param cWidth
+     *            Width of the image (columns).
+     * @param cHeight
+     *            Height of the image (rows)
      */
-    public Complex32Image(int cWidth, int cHeight) {
+    public Complex32Image(final int cWidth, final int cHeight) {
         super(cWidth, cHeight);
-        this.cxImage = new Complex[getWidth()*getHeight()];
+        cxImage = new Complex[getWidth() * getHeight()];
     }
-        
-    /** Copy this image
+    
+    /**
+     * Copy this image
      *
      * @return the image copy.
      */
-    public Object clone()
-    {
-        Complex32Image image = new Complex32Image(getWidth(),getHeight());
-        System.arraycopy(
-                this.getData(),
-                0,
-                image.getData(),
-                0,
-                getWidth()*getHeight());
+    @Override
+    public Object clone() {
+        final Complex32Image image = new Complex32Image(getWidth(), getHeight());
+        System.arraycopy(getData(), 0, image.getData(), 0, getWidth() * getHeight());
         return image;
     }
     
-    /** Return a pointer to the image data.
+    /**
+     * Return a pointer to the image data.
      *
      * @return the data pointer.
      */
-    public Complex[] getData()
-    {
-        return this.cxImage;
+    @Override
+    public Complex[] getData() {
+        return cxImage;
     }
-
     
-    /** Return a string describing the image.
+    /**
+     * Return a string describing the image.
      *
      * @return the string.
      */
-    public String toString()
-    {
+    @Override
+    public String toString() {
         return super.toString() + " (" + getWidth() + "x" + getHeight() + //$NON-NLS-1$ //$NON-NLS-2$
                 ")"; //$NON-NLS-1$
     }
-
+    
 }

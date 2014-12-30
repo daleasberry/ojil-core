@@ -25,9 +25,9 @@
 package com.github.ojil.core;
 
 /**
- * Gray8Image is the image type used to store a signed
- * 8-bit image. Note that Java limitations (no unsigned Byte) make it necessary
- * to treat alll 8-bit images as signed.
+ * Gray8Image is the image type used to store a signed 8-bit image. Note that
+ * Java limitations (no unsigned Byte) make it necessary to treat alll 8-bit
+ * images as signed.
  *
  * @author webb
  */
@@ -36,83 +36,90 @@ public class Gray8Image extends Image<Object> {
     
     /**
      * Creates a new instance of Gray8Image
-     * @param cWidth Width of the image (columns).
-     * @param cHeight Height of the image (rows)
+     * 
+     * @param cWidth
+     *            Width of the image (columns).
+     * @param cHeight
+     *            Height of the image (rows)
      */
-    public Gray8Image(int cWidth, int cHeight) {
+    public Gray8Image(final int cWidth, final int cHeight) {
         super(cWidth, cHeight);
-        this.bImage = new Byte[getWidth()*getHeight()];
+        bImage = new Byte[getWidth() * getHeight()];
     }
     
-    public Gray8Image(int cWidth, int cHeight, Byte[] rbData) {
+    public Gray8Image(final int cWidth, final int cHeight, final Byte[] rbData) {
         super(cWidth, cHeight);
-        this.bImage = rbData;
+        bImage = rbData;
     }
     
     /**
      * Creates a new instance of Gray8Image
-     * @param cWidth Width of the image (columns).
-     * @param cHeight Height of the image (rows)
-     * @param bValue constant value to be assigned to the image
+     * 
+     * @param cWidth
+     *            Width of the image (columns).
+     * @param cHeight
+     *            Height of the image (rows)
+     * @param bValue
+     *            constant value to be assigned to the image
      */
-    public Gray8Image(int cWidth, int cHeight, Byte bValue) {
+    public Gray8Image(final int cWidth, final int cHeight, final Byte bValue) {
         super(cWidth, cHeight);
-        this.bImage = new Byte[getWidth()*getHeight()];
-        for (int i=0; i<this.getWidth()*this.getHeight();i++) {
-            this.bImage[i] = bValue;
+        bImage = new Byte[getWidth() * getHeight()];
+        for (int i = 0; i < (getWidth() * getHeight()); i++) {
+            bImage[i] = bValue;
         }
     }
     
     /**
      * Copy this image
+     * 
      * @return the image copy.
      */
-    public Object clone()
-    {
-        Gray8Image image = new Gray8Image(getWidth(),getHeight());
-        System.arraycopy(
-                this.getData(),
-                0,
-                image.getData(),
-                0,
-                getWidth()*getHeight());
+    @Override
+    public Object clone() {
+        final Gray8Image image = new Gray8Image(getWidth(), getHeight());
+        System.arraycopy(getData(), 0, image.getData(), 0, getWidth() * getHeight());
         return image;
     }
     
     /**
-     * Fill a rectangle in a Gray8Image with a specific value. Rect is filled
-     * up to but not including bottom and right edge
-     * @param r the Rect to fill
-     * @param bVal the value to assign
+     * Fill a rectangle in a Gray8Image with a specific value. Rect is filled up
+     * to but not including bottom and right edge
+     * 
+     * @param r
+     *            the Rect to fill
+     * @param bVal
+     *            the value to assign
      * @return modified Gray8Image (this)
      */
-    public Gray8Image fill(Rect r, Byte bVal) {
-        for (int i=r.getTop(); i<r.getBottom(); i++) {
-            for (int j=r.getLeft(); j<r.getRight(); j++) {
-                this.bImage[i*this.getWidth()+j] = bVal;
+    public Gray8Image fill(final Rect r, final Byte bVal) {
+        for (int i = r.getTop(); i < r.getBottom(); i++) {
+            for (int j = r.getLeft(); j < r.getRight(); j++) {
+                bImage[(i * getWidth()) + j] = bVal;
             }
         }
         return this;
     }
-
-    /** Return a pointer to the Byte image data.
+    
+    /**
+     * Return a pointer to the Byte image data.
      *
      * @return the data pointer.
      */
-    public Byte[] getData()
-    {
-        return this.bImage;
+    @Override
+    public Byte[] getData() {
+        return bImage;
     }
-
     
-    /** Return a string describing the image.
+    /**
+     * Return a string describing the image.
      *
      * @return the string.
      */
-    public String toString()
-    {
+    @Override
+    public String toString() {
         return super.toString() + " (" + getWidth() + "x" + getHeight() + //$NON-NLS-1$ //$NON-NLS-2$
                 ")"; //$NON-NLS-1$
     }
-
+    
 }

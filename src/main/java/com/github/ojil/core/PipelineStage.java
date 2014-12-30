@@ -25,76 +25,74 @@
 package com.github.ojil.core;
 
 /**
- * PipelineStage is the class from which all image to image
- * processing operations must derive. It holds the output image
- * (in imageOutput) and notes whether there is an image available
- * or not (in fReady). It is intended to be used as a single-level
- * stack element.
+ * PipelineStage is the class from which all image to image processing
+ * operations must derive. It holds the output image (in imageOutput) and notes
+ * whether there is an image available or not (in fReady). It is intended to be
+ * used as a single-level stack element.
  *
  *
  * @author webb
  */
-public abstract class PipelineStage 
-{
-    /** An image is available iff fReady is true 
+public abstract class PipelineStage {
+    /**
+     * An image is available iff fReady is true
      */
     protected boolean fReady = false;
-    /** The output image from this stage.
+    /**
+     * The output image from this stage.
      */
     protected Image<?> imageOutput = null;
-   
-    /** Class constructor
+    
+    /**
+     * Class constructor
      */
-    protected PipelineStage()
-    {
+    protected PipelineStage() {
     }
     
-    /** Returns true iff this pipeline stage does not have an
-     * output available.
+    /**
+     * Returns true iff this pipeline stage does not have an output available.
      *
      * @return true iff the pipeline stage does not have an image available.
      */
-    public boolean isEmpty()
-    {
-        return !this.fReady;
+    public boolean isEmpty() {
+        return !fReady;
     }
     
     /**
      * Returns the current output, and pops it off the stack.
+     * 
      * @return the current output
-     * @throws com.github.ojil.core.ImageError if no output is available
+     * @throws ImageError
+     *             if no output is available
      */
-    public Image<?> getFront() throws com.github.ojil.core.ImageError
-    {
-        if (!this.fReady) {
-            throw new ImageError(
-                            ImageError.PACKAGE.CORE,
-                            ErrorCodes.NO_RESULT_AVAILABLE,
-                            this.toString(),
-                            null,
-                            null);
+    public Image<?> getFront() throws ImageError {
+        if (!fReady) {
+            throw new ImageError(ImageError.PACKAGE.CORE, ErrorCodes.NO_RESULT_AVAILABLE, toString(), null, null);
         }
-        Image<?> imageResult = this.imageOutput;
-        this.imageOutput = null;
-        this.fReady = false;
+        final Image<?> imageResult = imageOutput;
+        imageOutput = null;
+        fReady = false;
         return imageResult;
     }
-       
+    
     /**
      * Actual processing is done in the derived class here.
-     * @param imageInput the input image
-     * @throws com.github.ojil.core.ImageError typically, when the image is not of the expected type.
+     * 
+     * @param imageInput
+     *            the input image
+     * @throws ImageError
+     *             typically, when the image is not of the expected type.
      */
-    public abstract void push(Image<?> imageInput) throws com.github.ojil.core.ImageError;
+    public abstract void push(Image<?> imageInput) throws ImageError;
     
-    /** Derived classes use setOutput to pass their result back
-     * here.
+    /**
+     * Derived classes use setOutput to pass their result back here.
      *
-     * @param imageResult the output image
+     * @param imageResult
+     *            the output image
      */
-    protected void setOutput(Image<?> imageResult)
-    {
-        this.imageOutput = imageResult;
-        this.fReady = true;
+    protected void setOutput(final Image<?> imageResult) {
+        imageOutput = imageResult;
+        fReady = true;
     }
 }

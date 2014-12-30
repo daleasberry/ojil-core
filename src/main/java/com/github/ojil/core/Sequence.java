@@ -25,14 +25,14 @@
 package com.github.ojil.core;
 
 /**
- * Sequence is used to construct a sequence of image processing pipeline
- * stages.
+ * Sequence is used to construct a sequence of image processing pipeline stages.
  *
- * Each Sequence object contains a PipelineStage, which can be null,
- * and a Sequence object, which can also be null. The PipelineStage
- * is the head of the list of PipelineStage's starting here, and
- * the Sequence object is the rest of the list. The Sequence object
- * can be non-null only if the PipelineStage object is non-null.
+ * Each Sequence object contains a PipelineStage, which can be null, and a
+ * Sequence object, which can also be null. The PipelineStage is the head of the
+ * list of PipelineStage's starting here, and the Sequence object is the rest of
+ * the list. The Sequence object can be non-null only if the PipelineStage
+ * object is non-null.
+ * 
  * @author webb
  */
 public class Sequence extends PipelineStage {
@@ -43,39 +43,41 @@ public class Sequence extends PipelineStage {
     public Sequence() {
     }
     
-    /** Creates a new instance of Sequence with a single 
-     *  PipelineStage.
+    /**
+     * Creates a new instance of Sequence with a single PipelineStage.
      *
-     * @param p the PipelineStage.
+     * @param p
+     *            the PipelineStage.
      */
-    public Sequence(PipelineStage p) {
-        this.pFirst = p;
+    public Sequence(final PipelineStage p) {
+        pFirst = p;
     }
     
-    /** add an additional PipelineStage at the end of the
-     * current Sequence.
+    /**
+     * add an additional PipelineStage at the end of the current Sequence.
      *
-     * @param p the PipelineStage to be added.
+     * @param p
+     *            the PipelineStage to be added.
      */
-    public void add(PipelineStage p)
-    {
-        if (this.pFirst == null) {
-            this.pFirst = p;
+    public void add(final PipelineStage p) {
+        if (pFirst == null) {
+            pFirst = p;
         } else {
-            if (this.pNext == null) {
-                this.pNext = new Sequence(p);
+            if (pNext == null) {
+                pNext = new Sequence(p);
             } else {
-                this.pNext.add(p);
+                pNext.add(p);
             }
-        } 
+        }
     }
     
-    /** Returns true iff the pipeline has no image available
+    /**
+     * Returns true iff the pipeline has no image available
      *
      * @return true iff the pipeline has no image available.
      */
-    public boolean isEmpty()
-    {
+    @Override
+    public boolean isEmpty() {
         if (pNext == null) {
             return pFirst.isEmpty();
         } else {
@@ -84,13 +86,15 @@ public class Sequence extends PipelineStage {
     }
     
     /**
-     * Returns the Image produced by the last stage
-     * in the pipeline. Overrides PipelineStage.getFront.
+     * Returns the Image produced by the last stage in the pipeline. Overrides
+     * PipelineStage.getFront.
+     * 
      * @return the Image produced by the pipeline.
-     * @throws com.github.ojil.core.ImageError if no image is available.
+     * @throws ImageError
+     *             if no image is available.
      */
-    public Image<?> getFront() throws com.github.ojil.core.ImageError
-    {
+    @Override
+    public Image<?> getFront() throws ImageError {
         if (pNext == null) {
             return pFirst.getFront();
         } else {
@@ -99,55 +103,47 @@ public class Sequence extends PipelineStage {
     }
     
     /**
-     * Process an image by the pipeline.
-     * The image is pushed onto the beginning of the pipeline,
-     * and then each stage's output is passed to the next
-     * stage, until the end of the pipeline is reached.
-     * Overrides PipelineStage.push(Image).
-     * @param i the image to be pushed.
-     * @throws com.github.ojil.core.ImageError if the pipeline is empty.
+     * Process an image by the pipeline. The image is pushed onto the beginning
+     * of the pipeline, and then each stage's output is passed to the next
+     * stage, until the end of the pipeline is reached. Overrides
+     * PipelineStage.push(Image).
+     * 
+     * @param i
+     *            the image to be pushed.
+     * @throws ImageError
+     *             if the pipeline is empty.
      */
-    public void push(Image<?> i) throws com.github.ojil.core.ImageError
-    {
+    @Override
+    public void push(final Image<?> i) throws ImageError {
         if (pFirst == null) {
-            throw new ImageError(
-                            ImageError.PACKAGE.CORE,
-                            ErrorCodes.PIPELINE_EMPTY_PUSH,
-                            this.toString(),
-                            null,
-                            null);
+            throw new ImageError(ImageError.PACKAGE.CORE, ErrorCodes.PIPELINE_EMPTY_PUSH, toString(), null, null);
         }
         pFirst.push(i);
         if (pFirst.isEmpty()) {
-            throw new ImageError(
-                            ImageError.PACKAGE.CORE,
-                            ErrorCodes.NO_RESULT_AVAILABLE,
-                            pFirst.toString(),
-                            null,
-                            null);
+            throw new ImageError(ImageError.PACKAGE.CORE, ErrorCodes.NO_RESULT_AVAILABLE, pFirst.toString(), null, null);
         }
         if (pNext != null) {
             pNext.push(pFirst.getFront());
         }
     }
     
-    /** Return a string describing the pipeline
-     * in fully parenthesized list notation. E.g., a pipeline
-     * consisting of three stages A, B, and C will
-     * be represented as "(A (B C))".
+    /**
+     * Return a string describing the pipeline in fully parenthesized list
+     * notation. E.g., a pipeline consisting of three stages A, B, and C will be
+     * represented as "(A (B C))".
      *
      * @return the string describing the pipeline.
      */
-    public String toString()
-    {
-        if (this.pFirst == null) {
+    @Override
+    public String toString() {
+        if (pFirst == null) {
             return "(null)"; //$NON-NLS-1$
         } else {
-            if (this.pNext == null) {
-                return "(" + this.pFirst.toString() + ")"; //$NON-NLS-1$ //$NON-NLS-2$
+            if (pNext == null) {
+                return "(" + pFirst.toString() + ")"; //$NON-NLS-1$ //$NON-NLS-2$
             } else {
-                return "(" + this.pFirst.toString() + //$NON-NLS-1$
-                        " " + this.pNext.toString() + ")"; //$NON-NLS-1$ //$NON-NLS-2$
+                return "(" + pFirst.toString() + //$NON-NLS-1$
+                        " " + pNext.toString() + ")"; //$NON-NLS-1$ //$NON-NLS-2$
             }
         }
     }

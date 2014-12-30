@@ -73,7 +73,7 @@ public abstract class Image<T extends Object> {
         imageType = theImageType;
     }
     
-    public Image(T thePlatformImage) {
+    public Image(final T thePlatformImage) {
         platformImage = thePlatformImage;
     }
     

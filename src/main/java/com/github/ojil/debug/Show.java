@@ -19,29 +19,37 @@ package com.github.ojil.debug;
 import com.github.ojil.core.RgbImage;
 
 /**
- * An interface used to implement a level of indirection between a program
- * and debugging routines used for showing or saving images.<p>
- * The idea is that portions of a program can be written in an architecture-independent
- * fashion, so that the code that actually has to be architecture-dependent is
- * isolated in the main program only.<p>
+ * An interface used to implement a level of indirection between a program and
+ * debugging routines used for showing or saving images.
+ * <p>
+ * The idea is that portions of a program can be written in an
+ * architecture-independent fashion, so that the code that actually has to be
+ * architecture-dependent is isolated in the main program only.
+ * <p>
  * The main program creates an object implementing Show using the appropriate
  * architecture-dependent library and then passes that Show object to the
  * architecture-independent methods. The architecture-independent methods can
  * then call toDisplay or toFile without worrying about whether they're running
  * in J2SE, J2ME, etc.
+ * 
  * @author webb
  */
 public interface Show {
     /**
      * Send an RgbImage to the display
-     * @param rgb image to display.
+     * 
+     * @param rgb
+     *            image to display.
      */
     void toDisplay(RgbImage rgb);
-
+    
     /**
      * Save an RgbImage to a file.
-     * @param rgb image to save
-     * @param szFilename filname
+     * 
+     * @param rgb
+     *            image to save
+     * @param szFilename
+     *            filname
      */
     void toFile(RgbImage rgb, String szFilename);
 }

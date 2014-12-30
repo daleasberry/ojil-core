@@ -25,9 +25,10 @@
 package com.github.ojil.core;
 
 /**
- * Gray32OffsetImage is used to represent a rectangular region extracted from
- * a larger Gray32Image, retaining the x and y position where the image was
+ * Gray32OffsetImage is used to represent a rectangular region extracted from a
+ * larger Gray32Image, retaining the x and y position where the image was
  * extracted.
+ * 
  * @author webb
  */
 public class Gray32OffsetImage extends Gray32Image {
@@ -36,78 +37,81 @@ public class Gray32OffsetImage extends Gray32Image {
     
     /**
      * Creates a new instance of Gray32OffsetImage
-     * @param cWidth Image width.
-     * @param cHeight Image height.
-     * @param cX Horizontal position of top-left corner of subimage.
-     * @param cY Vertical position of top-left corner of subimage.
+     * 
+     * @param cWidth
+     *            Image width.
+     * @param cHeight
+     *            Image height.
+     * @param cX
+     *            Horizontal position of top-left corner of subimage.
+     * @param cY
+     *            Vertical position of top-left corner of subimage.
      */
-    public Gray32OffsetImage(int cWidth, int cHeight, int cX, int cY) {
+    public Gray32OffsetImage(final int cWidth, final int cHeight, final int cX, final int cY) {
         super(cWidth, cHeight);
         this.cX = cX;
         this.cY = cY;
     }
     
-    /** Copy this image
+    /**
+     * Copy this image
      *
      * @return the image copy.
      */
-    public Object clone()
-    {
-        Gray32Image image = new Gray32OffsetImage(getWidth(),getHeight(),getXOffset(),getYOffset());
-        System.arraycopy(
-                this.getData(),
-                0,
-                image.getData(),
-                0,
-                getWidth()*getHeight());
+    @Override
+    public Object clone() {
+        final Gray32Image image = new Gray32OffsetImage(getWidth(), getHeight(), getXOffset(), getYOffset());
+        System.arraycopy(getData(), 0, image.getData(), 0, getWidth() * getHeight());
         return image;
     }
     
     /**
      * Return horizontal position of top-left corner of subimage.
+     * 
      * @return the horizontal position of the top-left corner of the subimage.
      */
-    public int getXOffset()
-    {
-        return this.cX;
+    public int getXOffset() {
+        return cX;
     }
     
     /**
      * Return vertical position of top-left corner of subimage.
+     * 
      * @return vertical position of top-left corner of subimage.
      */
-    public int getYOffset()
-    {
-        return this.cY;
+    public int getYOffset() {
+        return cY;
     }
     
     /**
      * Change horizontal position of subimage.
-     * @param nX New horizontal position of top-left corner of subimage.
+     * 
+     * @param nX
+     *            New horizontal position of top-left corner of subimage.
      */
-    public void setXOffset(int nX)
-    {
-        this.cX = nX;
+    public void setXOffset(final int nX) {
+        cX = nX;
     }
     
     /**
      * Change vertical psotion of subimage.
-     * @param nY New vertical position of top-left corner of subimage.
+     * 
+     * @param nY
+     *            New vertical position of top-left corner of subimage.
      */
-    public void setYOffset(int nY)
-    {
-        this.cY = nY;
+    public void setYOffset(final int nY) {
+        cY = nY;
     }
     
-    /** Return a string describing the image.
+    /**
+     * Return a string describing the image.
      *
      * @return the string.
      */
-    public String toString()
-    {
+    @Override
+    public String toString() {
         return super.toString() + " (" + getWidth() + "x" + getHeight() + //$NON-NLS-1$ //$NON-NLS-2$
                 "," + getXOffset() + "," + getYOffset() + ")"; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
     }
-
-
+    
 }

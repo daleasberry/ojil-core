@@ -25,8 +25,9 @@
 package com.github.ojil.core;
 
 /**
- * RgbOffsetImage is used to represent an image with an implicit offset
- * from the top left.
+ * RgbOffsetImage is used to represent an image with an implicit offset from the
+ * top left.
+ * 
  * @author webb
  */
 public class RgbOffsetImage extends RgbImage {
@@ -35,12 +36,17 @@ public class RgbOffsetImage extends RgbImage {
     
     /**
      * Creates a new instance of RgbOffsetImage
-     * @param cWidth Image width.
-     * @param cHeight Image height.
-     * @param cX Horizontal position of top-left corner of subimage.
-     * @param cY Vertical position of top-left corner of subimage.
+     * 
+     * @param cWidth
+     *            Image width.
+     * @param cHeight
+     *            Image height.
+     * @param cX
+     *            Horizontal position of top-left corner of subimage.
+     * @param cY
+     *            Vertical position of top-left corner of subimage.
      */
-    public RgbOffsetImage(int cWidth, int cHeight, int cX, int cY) {
+    public RgbOffsetImage(final int cWidth, final int cHeight, final int cX, final int cY) {
         super(cWidth, cHeight);
         this.cX = cX;
         this.cY = cY;
@@ -48,13 +54,19 @@ public class RgbOffsetImage extends RgbImage {
     
     /**
      * Creates a new instance of RgbOffsetImage
-     * @param cWidth Image width.
-     * @param cHeight Image height.
-     * @param cX Horizontal position of top-left corner of subimage.
-     * @param cY Vertical position of top-left corner of subimage.
-     * @param bValue the value to assign to the image
+     * 
+     * @param cWidth
+     *            Image width.
+     * @param cHeight
+     *            Image height.
+     * @param cX
+     *            Horizontal position of top-left corner of subimage.
+     * @param cY
+     *            Vertical position of top-left corner of subimage.
+     * @param bValue
+     *            the value to assign to the image
      */
-    public RgbOffsetImage(int cWidth, int cHeight, int cX, int cY, int nValue) {
+    public RgbOffsetImage(final int cWidth, final int cHeight, final int cX, final int cY, final int nValue) {
         super(cWidth, cHeight, nValue);
         this.cX = cX;
         this.cY = cY;
@@ -62,82 +74,80 @@ public class RgbOffsetImage extends RgbImage {
     
     /**
      * Creates a new instance of RgbOffsetImage
-     * @param gray the input image providing the image data
-     * @param cX Horizontal position of top-left corner of subimage.
-     * @param cY Vertical position of top-left corner of subimage.
+     * 
+     * @param gray
+     *            the input image providing the image data
+     * @param cX
+     *            Horizontal position of top-left corner of subimage.
+     * @param cY
+     *            Vertical position of top-left corner of subimage.
      */
-    public RgbOffsetImage(RgbImage rgb, int cX, int cY) {
+    public RgbOffsetImage(final RgbImage rgb, final int cX, final int cY) {
         super(rgb.getWidth(), rgb.getHeight());
-        System.arraycopy(
-                rgb.getData(),
-                0,
-                this.getData(),
-                0,
-                getWidth()*getHeight());
+        System.arraycopy(rgb.getData(), 0, getData(), 0, getWidth() * getHeight());
         this.cX = cX;
         this.cY = cY;
     }
-    /** Copy this image
+    
+    /**
+     * Copy this image
      *
      * @return the image copy.
      */
-    public Object clone()
-    {
-        RgbOffsetImage image = new RgbOffsetImage(getWidth(),getHeight(),getXOffset(),getYOffset());
-        System.arraycopy(
-                this.getData(),
-                0,
-                image.getData(),
-                0,
-                getWidth()*getHeight());
+    @Override
+    public Object clone() {
+        final RgbOffsetImage image = new RgbOffsetImage(getWidth(), getHeight(), getXOffset(), getYOffset());
+        System.arraycopy(getData(), 0, image.getData(), 0, getWidth() * getHeight());
         return image;
     }
     
     /**
      * Return horizontal position of top-left corner of subimage.
+     * 
      * @return the horizontal position of the top-left corner of the subimage.
      */
-    public int getXOffset()
-    {
-        return this.cX;
+    public int getXOffset() {
+        return cX;
     }
     
     /**
      * Return vertical position of top-left corner of subimage.
+     * 
      * @return vertical position of top-left corner of subimage.
      */
-    public int getYOffset()
-    {
-        return this.cY;
+    public int getYOffset() {
+        return cY;
     }
     
     /**
      * Change horizontal position of subimage.
-     * @param nX New horizontal position of top-left corner of subimage.
+     * 
+     * @param nX
+     *            New horizontal position of top-left corner of subimage.
      */
-    public void setXOffset(int nX)
-    {
-        this.cX = nX;
+    public void setXOffset(final int nX) {
+        cX = nX;
     }
     
     /**
      * Change vertical psotion of subimage.
-     * @param nY New vertical position of top-left corner of subimage.
+     * 
+     * @param nY
+     *            New vertical position of top-left corner of subimage.
      */
-    public void setYOffset(int nY)
-    {
-        this.cY = nY;
+    public void setYOffset(final int nY) {
+        cY = nY;
     }
     
-    /** Return a string describing the image.
+    /**
+     * Return a string describing the image.
      *
      * @return the string.
      */
-    public String toString()
-    {
+    @Override
+    public String toString() {
         return super.toString() + " (" + getWidth() + "x" + getHeight() + //$NON-NLS-1$ //$NON-NLS-2$
                 "," + getXOffset() + "," + getYOffset() + ")"; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
     }
-
-
+    
 }
