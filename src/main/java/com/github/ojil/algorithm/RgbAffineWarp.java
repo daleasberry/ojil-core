@@ -53,8 +53,8 @@ public class RgbAffineWarp extends PipelineStage {
         selectBlue.push(imageInput);
         grayWarp.push(selectBlue.getFront());
         final Gray8OffsetImage warpedBlue = (Gray8OffsetImage) grayWarp.getFront();
-        final RgbImage rgb = Gray3Bands2Rgb.push(warpedRed, warpedGreen, warpedBlue);
-        super.setOutput(new RgbOffsetImage(rgb, warpedRed.getXOffset(), warpedRed.getYOffset()));
+        final RgbImage<?> rgb = Gray3Bands2Rgb.push(warpedRed, warpedGreen, warpedBlue);
+        super.setOutput(new RgbOffsetImage<>(rgb, warpedRed.getXOffset(), warpedRed.getYOffset()));
     }
     
     public void setWarp(final Integer[][] warp) throws ImageError {

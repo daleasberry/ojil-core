@@ -7,7 +7,7 @@ public class DefaultImageFactory implements ImageFactory {
         Image<?> newImage = null;
         switch (type) {
             case INT_RGB:
-                newImage = new RgbImage(width, height);
+                newImage = new RgbImage<>(width, height);
                 break;
             default:
                 throw new RuntimeException("Not yet implemented");

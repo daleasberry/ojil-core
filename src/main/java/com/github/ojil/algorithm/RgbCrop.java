@@ -89,11 +89,11 @@ public class RgbCrop extends PipelineStage {
         if (!(image instanceof RgbImage)) {
             throw new ImageError(ImageError.PACKAGE.ALGORITHM, AlgorithmErrorCodes.IMAGE_NOT_RGBIMAGE, image.toString(), null, null);
         }
-        final RgbImage imageInput = (RgbImage) image;
+        final RgbImage<?> imageInput = (RgbImage<?>) image;
         if (((cX + cWidth) > image.getWidth()) || ((cY + cHeight) > image.getHeight())) {
             throw new ImageError(ImageError.PACKAGE.CORE, ErrorCodes.BOUNDS_OUTSIDE_IMAGE, image.toString(), toString(), null);
         }
-        final RgbImage imageResult = new RgbImage(cWidth, cHeight);
+        final RgbImage<?> imageResult = new RgbImage<>(cWidth, cHeight);
         final Integer[] src = imageInput.getData();
         final Integer[] dst = imageResult.getData();
         for (int i = 0; i < cHeight; i++) {

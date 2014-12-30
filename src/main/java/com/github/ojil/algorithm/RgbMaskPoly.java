@@ -178,8 +178,8 @@ public class RgbMaskPoly extends PipelineStage {
         if (!(imageInput instanceof RgbImage)) {
             throw new ImageError(ImageError.PACKAGE.ALGORITHM, AlgorithmErrorCodes.IMAGE_NOT_RGBIMAGE, imageInput.toString(), null, null);
         }
-        final RgbImage rgbInput = (RgbImage) imageInput;
-        final RgbMaskedImage rgbOutput = new RgbMaskedImage(rgbInput);
+        final RgbImage<?> rgbInput = (RgbImage<?>) imageInput;
+        final RgbMaskedImage<?> rgbOutput = new RgbMaskedImage<>(rgbInput);
         buildVector(rgbInput.getWidth(), rgbInput.getHeight());
         for (int i = 0; i < rgbInput.getHeight(); i++) {
             if (rnX[i] != null) {

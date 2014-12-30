@@ -33,7 +33,7 @@ public class RgbMeanStdDev {
      * @param rgb
      *            the RgbImage to compute the mean and standard deviation of.
      */
-    public void push(final RgbImage rgb) {
+    public void push(final RgbImage<?> rgb) {
         int nSumR = 0, nSumG = 0, nSumB = 0;
         int nSumRSq = 0, nSumGSq = 0, nSumBSq = 0;
         final Integer[] nData = rgb.getData();

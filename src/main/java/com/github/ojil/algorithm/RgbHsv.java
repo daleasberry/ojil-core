@@ -43,7 +43,7 @@ public class RgbHsv extends PipelineStage {
         if (!(imageInput instanceof RgbImage)) {
             throw new ImageError(ImageError.PACKAGE.ALGORITHM, AlgorithmErrorCodes.IMAGE_NOT_RGBIMAGE, imageInput.toString(), null, null);
         }
-        final RgbImage rgbInput = (RgbImage) imageInput;
+        final RgbImage<?> rgbInput = (RgbImage<?>) imageInput;
         final Integer[] rgbData = rgbInput.getData();
         for (int i = 0; i < (rgbInput.getWidth() * rgbInput.getHeight()); i++) {
             final int nR = RgbVal.getR(rgbData[i]);

@@ -61,9 +61,9 @@ public class Rgb3x3Average extends PipelineStage {
         
         final int cWidth = imageInput.getWidth();
         final int cHeight = imageInput.getHeight();
-        final Integer[] rgbInput = ((RgbImage) imageInput).getData();
+        final Integer[] rgbInput = ((RgbImage<?>) imageInput).getData();
         
-        final RgbImage imageResult = new RgbImage(cWidth, cHeight);
+        final RgbImage<?> imageResult = new RgbImage<>(cWidth, cHeight);
         final Integer[] rgbOutput = imageResult.getData();
         
         for (int i = 0; i < cHeight; i++) {

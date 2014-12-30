@@ -68,7 +68,7 @@ public class RgbAbsDiffGray extends PipelineStage {
         if (!(image instanceof RgbImage)) {
             throw new ImageError(ImageError.PACKAGE.ALGORITHM, AlgorithmErrorCodes.IMAGE_NOT_RGBIMAGE, image.toString(), null, null);
         }
-        final RgbImage rgb = (RgbImage) image;
+        final RgbImage<?> rgb = (RgbImage<?>) image;
         final Integer[] rgbData = rgb.getData();
         final Gray8Image gray = new Gray8Image(image.getWidth(), image.getHeight());
         final Byte[] grayData = gray.getData();

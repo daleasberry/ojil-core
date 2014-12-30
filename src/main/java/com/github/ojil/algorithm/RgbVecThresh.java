@@ -80,7 +80,7 @@ public class RgbVecThresh extends PipelineStage {
         if (!(imageInput instanceof RgbImage)) {
             throw new ImageError(ImageError.PACKAGE.ALGORITHM, AlgorithmErrorCodes.IMAGE_NOT_RGBIMAGE, imageInput.toString(), null, null);
         }
-        final RgbImage rgb = (RgbImage) imageInput;
+        final RgbImage<?> rgb = (RgbImage<?>) imageInput;
         final Integer[] nData = rgb.getData();
         final Gray8Image imageResult = new Gray8Image(rgb.getWidth(), rgb.getHeight());
         final Byte[] bData = imageResult.getData();

@@ -107,7 +107,7 @@ public class RgbClip extends PipelineStage {
         if (!(image instanceof RgbImage)) {
             throw new ImageError(ImageError.PACKAGE.ALGORITHM, AlgorithmErrorCodes.IMAGE_NOT_RGBIMAGE, image.toString(), null, null);
         }
-        final RgbImage rgbImage = (RgbImage) image;
+        final RgbImage<?> rgbImage = (RgbImage<?>) image;
         final Integer[] src = rgbImage.getData();
         final int nWidth = rgbImage.getWidth();
         for (int i = 0; i < rgbImage.getHeight(); i++) {

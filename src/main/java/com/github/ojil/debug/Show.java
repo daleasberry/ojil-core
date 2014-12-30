@@ -41,7 +41,7 @@ public interface Show {
      * @param rgb
      *            image to display.
      */
-    void toDisplay(RgbImage rgb);
+    void toDisplay(RgbImage<?> rgb);
     
     /**
      * Save an RgbImage to a file.
@@ -51,5 +51,5 @@ public interface Show {
      * @param szFilename
      *            filname
      */
-    void toFile(RgbImage rgb, String szFilename);
+    void toFile(RgbImage<?> rgb, String szFilename);
 }

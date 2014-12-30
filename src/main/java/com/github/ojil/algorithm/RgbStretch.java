@@ -36,7 +36,7 @@ import com.github.ojil.core.RgbImage;
 import com.github.ojil.core.Sequence;
 
 /**
- * Stretches a color (RgbImage) to a given size. Each band is shrunk
+ * Stretches a color (RgbImage<?>) to a given size. Each band is shrunk
  * independently. The output image must be greater than or equal to the size of
  * the input.
  * 

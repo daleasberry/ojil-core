@@ -34,7 +34,7 @@ package com.github.ojil.core;
  * 
  * @author webb
  */
-public class RgbImage extends Image<Object> {
+public class RgbImage<T> extends Image<Object> {
     /**
      * A pointer to the image data
      */
@@ -106,7 +106,7 @@ public class RgbImage extends Image<Object> {
      */
     @Override
     public Object clone() {
-        final RgbImage image = new RgbImage(getWidth(), getHeight());
+        final RgbImage<?> image = new RgbImage<>(getWidth(), getHeight());
         System.arraycopy(getData(), 0, image.getData(), 0, getWidth() * getHeight());
         return image;
     }
@@ -122,7 +122,7 @@ public class RgbImage extends Image<Object> {
      * @throws ImageError
      *             if the bounds are outside the image
      */
-    public RgbImage fill(final Rect r, final int rgb) throws ImageError {
+    public RgbImage<?> fill(final Rect r, final int rgb) throws ImageError {
         if ((r.getTop() < 0) || (r.getBottom() > getHeight()) || (r.getLeft() < 0) || (r.getRight() > getWidth())) {
             throw new ImageError(ImageError.PACKAGE.CORE, ErrorCodes.BOUNDS_OUTSIDE_IMAGE, r.toString(), null, null);
         }

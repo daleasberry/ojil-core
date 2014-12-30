@@ -68,7 +68,7 @@ public class RgbAdjustBrightness extends PipelineStage {
         if (!(image instanceof RgbImage)) {
             throw new ImageError(ImageError.PACKAGE.ALGORITHM, AlgorithmErrorCodes.IMAGE_NOT_RGBIMAGE, image.toString(), null, null);
         }
-        final RgbImage imageInput = (RgbImage) image;
+        final RgbImage<?> imageInput = (RgbImage<?>) image;
         final Integer[] rgb = imageInput.getData();
         for (int i = 0; i < (imageInput.getHeight() * imageInput.getWidth()); i++) {
             // the scaling has to be done on unsigned values.

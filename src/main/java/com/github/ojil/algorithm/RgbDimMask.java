@@ -65,9 +65,9 @@ public class RgbDimMask extends PipelineStage {
         if (!(image instanceof RgbMaskedImage)) {
             throw new ImageError(ImageError.PACKAGE.ALGORITHM, AlgorithmErrorCodes.OBJECT_NOT_EXPECTED_TYPE, image.toString(), "RgbMaskedImage", null);
         }
-        final RgbMaskedImage rgbImage = (RgbMaskedImage) image;
+        final RgbMaskedImage<?> rgbImage = (RgbMaskedImage<?>) image;
         final Integer[] src = rgbImage.getData();
-        final RgbImage rgbOutput = new RgbImage(rgbImage.getWidth(), rgbImage.getHeight());
+        final RgbImage<?> rgbOutput = new RgbImage<>(rgbImage.getWidth(), rgbImage.getHeight());
         final Integer[] dst = rgbOutput.getData();
         for (int i = 0; i < rgbImage.getHeight(); i++) {
             for (int j = 0; j < rgbImage.getWidth(); j++) {

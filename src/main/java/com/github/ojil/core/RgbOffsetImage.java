@@ -30,7 +30,7 @@ package com.github.ojil.core;
  * 
  * @author webb
  */
-public class RgbOffsetImage extends RgbImage {
+public class RgbOffsetImage<T> extends RgbImage<Object> {
     int cX;
     int cY;
     
@@ -82,7 +82,7 @@ public class RgbOffsetImage extends RgbImage {
      * @param cY
      *            Vertical position of top-left corner of subimage.
      */
-    public RgbOffsetImage(final RgbImage rgb, final int cX, final int cY) {
+    public RgbOffsetImage(final RgbImage<?> rgb, final int cX, final int cY) {
         super(rgb.getWidth(), rgb.getHeight());
         System.arraycopy(rgb.getData(), 0, getData(), 0, getWidth() * getHeight());
         this.cX = cX;
@@ -96,7 +96,7 @@ public class RgbOffsetImage extends RgbImage {
      */
     @Override
     public Object clone() {
-        final RgbOffsetImage image = new RgbOffsetImage(getWidth(), getHeight(), getXOffset(), getYOffset());
+        final RgbOffsetImage<?> image = new RgbOffsetImage<>(getWidth(), getHeight(), getXOffset(), getYOffset());
         System.arraycopy(getData(), 0, image.getData(), 0, getWidth() * getHeight());
         return image;
     }

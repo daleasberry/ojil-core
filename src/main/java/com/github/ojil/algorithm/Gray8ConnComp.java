@@ -267,7 +267,7 @@ public class Gray8ConnComp extends PipelineStage {
      * to be used for debugging, to make it easy to see how the components of
      * the image are connected.
      * 
-     * @return an RgbImage with colors randomly assigned to the components
+     * @return an RgbImage<?> with colors randomly assigned to the components
      * @throws ImageError
      *             if no components were found in the input image
      */
@@ -277,7 +277,7 @@ public class Gray8ConnComp extends PipelineStage {
             throw new ImageError(ImageError.PACKAGE.CORE, ErrorCodes.NO_RESULT_AVAILABLE, null, null, null);
             
         } else {
-            final RgbImage rgbOutput = new RgbImage(imLabeled.getWidth(), imLabeled.getHeight());
+            final RgbImage<?> rgbOutput = new RgbImage<>(imLabeled.getWidth(), imLabeled.getHeight());
             final Integer[] rgbData = rgbOutput.getData();
             final int nMaxLabel = EquivalenceClass.getLabels();
             final Short[] grayData = imLabeled.getData();

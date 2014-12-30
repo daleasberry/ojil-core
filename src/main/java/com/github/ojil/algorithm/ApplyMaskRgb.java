@@ -57,7 +57,7 @@ public class ApplyMaskRgb {
      * @throws ImageError
      *             if the input sizes do not match
      */
-    public RgbImage push(final RgbImage imRgb, final Gray8Image imMask) throws ImageError {
+    public RgbImage<?> push(final RgbImage<?> imRgb, final Gray8Image imMask) throws ImageError {
         if ((imRgb.getWidth() != imMask.getWidth()) || (imRgb.getHeight() != imMask.getHeight())) {
             throw new ImageError(ImageError.PACKAGE.CORE, ErrorCodes.IMAGE_MASK_SIZE_MISMATCH, imRgb.toString(), imMask.toString(), null);
         }

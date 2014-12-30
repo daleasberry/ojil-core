@@ -36,7 +36,7 @@ import com.github.ojil.core.RgbVal;
  * @author webb
  */
 public class RgbMaskedMaxDiff extends PipelineStage {
-    private final RgbMaskedImage rgbBack;
+    private final RgbMaskedImage<?> rgbBack;
     
     /**
      * Set background image.
@@ -44,7 +44,7 @@ public class RgbMaskedMaxDiff extends PipelineStage {
      * @param rgbBack
      *            background RgbImage.
      */
-    public RgbMaskedMaxDiff(final RgbMaskedImage rgbBack) {
+    public RgbMaskedMaxDiff(final RgbMaskedImage<?> rgbBack) {
         this.rgbBack = rgbBack;
     }
     
@@ -71,7 +71,7 @@ public class RgbMaskedMaxDiff extends PipelineStage {
             throw new ImageError(ImageError.PACKAGE.ALGORITHM, AlgorithmErrorCodes.IMAGE_SIZES_DIFFER, imInput.toString(), rgbBack.toString(), null);
             
         }
-        final RgbImage rgbInput = (RgbImage) imInput;
+        final RgbImage<?> rgbInput = (RgbImage<?>) imInput;
         final Integer[] wInput = rgbInput.getData();
         final Integer[] wBack = rgbBack.getData();
         final Gray8Image grayOut = new Gray8Image(rgbBack.getWidth(), rgbBack.getHeight());

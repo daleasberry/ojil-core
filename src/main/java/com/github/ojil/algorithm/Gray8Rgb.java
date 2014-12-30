@@ -59,7 +59,7 @@ public class Gray8Rgb extends PipelineStage {
             throw new ImageError(ImageError.PACKAGE.ALGORITHM, AlgorithmErrorCodes.IMAGE_NOT_GRAY8IMAGE, image.toString(), null, null);
         }
         final Gray8Image gray = (Gray8Image) image;
-        final RgbImage rgb = new RgbImage(image.getWidth(), image.getHeight());
+        final RgbImage<?> rgb = new RgbImage<>(image.getWidth(), image.getHeight());
         final Byte[] grayData = gray.getData();
         final Integer[] rgbData = rgb.getData();
         for (int i = 0; i < (gray.getWidth() * gray.getHeight()); i++) {

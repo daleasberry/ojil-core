@@ -57,7 +57,7 @@ public class Debug implements Show {
      *            RgbImage to display.
      */
     @Override
-    public synchronized void toDisplay(final RgbImage rgb) {
+    public synchronized void toDisplay(final RgbImage<?> rgb) {
         if (Debug.show != null) {
             Debug.show.toDisplay(rgb);
         }
@@ -73,7 +73,7 @@ public class Debug implements Show {
      *            filename to save the image in.
      */
     @Override
-    public void toFile(final RgbImage rgb, final String szFilename) {
+    public void toFile(final RgbImage<?> rgb, final String szFilename) {
         if (Debug.show != null) {
             Debug.show.toFile(rgb, szFilename);
         }

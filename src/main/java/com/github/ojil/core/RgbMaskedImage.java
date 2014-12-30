@@ -23,7 +23,7 @@ package com.github.ojil.core;
  * to be masked.
  * 
  */
-public class RgbMaskedImage extends RgbImage {
+public class RgbMaskedImage<T> extends RgbImage<Object> {
     /**
      * Create a new RgbMaskedImage with the mask set to 0 (not masked)
      * 
@@ -45,7 +45,7 @@ public class RgbMaskedImage extends RgbImage {
      * @param rgb
      *            input RgbImage to use as a source.
      */
-    public RgbMaskedImage(final RgbImage rgb) {
+    public RgbMaskedImage(final RgbImage<?> rgb) {
         super(rgb.getWidth(), rgb.getHeight());
         // simply ocpy the RGB values into my array. The
         // A value will always be set to 0 in an RgbImage so
@@ -66,7 +66,7 @@ public class RgbMaskedImage extends RgbImage {
      * @param rgb
      *            input RgbImage to use as a source.
      */
-    public RgbMaskedImage(final RgbImage rgb, final Gray8Image grayMask) {
+    public RgbMaskedImage(final RgbImage<?> rgb, final Gray8Image grayMask) {
         super(rgb.getWidth(), rgb.getHeight());
         // simply ocpy the RGB values into my array. The
         // A value will always be set to 0 in an RgbImage so

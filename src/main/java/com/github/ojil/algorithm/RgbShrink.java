@@ -36,7 +36,7 @@ import com.github.ojil.core.RgbImage;
 import com.github.ojil.core.Sequence;
 
 /**
- * Shrinks a color (RgbImage) to a given size. Each band is shrunk
+ * Shrinks a color (RgbImage<?>) to a given size. Each band is shrunk
  * independently. The pixels that each pixel maps to are averaged. There is no
  * between-target-pixel smoothing. The output image must be smaller than or
  * equal to the size of the input.

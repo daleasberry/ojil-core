@@ -29,7 +29,7 @@ import com.github.ojil.core.RgbVal;
 public class RgbSplit extends PipelineStage {
     int nRVar, nGVar, nBVar;
     Random random = new Random();
-    RgbImage rgbInput;
+    RgbImage<?> rgbInput;
     Vector<RgbRegion> vecROk = null; // vector of RgbRegions
     
     /**
@@ -96,7 +96,7 @@ public class RgbSplit extends PipelineStage {
      * @param rgbImage
      *            the input RgbImage
      */
-    public void split(final RgbImage rgbImage) {
+    public void split(final RgbImage<?> rgbImage) {
         rgbInput = rgbImage;
         final Vector<Rect> vecRNotOk = new Vector<>();
         vecROk = new Vector<>();
@@ -142,15 +142,15 @@ public class RgbSplit extends PipelineStage {
      * used during debugging to see how the image has been split so that the
      * threshold can be adjusted.
      * 
-     * @return RgbImage with colors randomly assigned to regions.
+     * @return RgbImage<?> with colors randomly assigned to regions.
      * @throws ImageError
      *             if push() hasn't been called yet
      */
-    public RgbImage getRandomizedRgbImage() throws ImageError {
+    public RgbImage<?> getRandomizedRgbImage() throws ImageError {
         if (vecROk == null) {
             throw new ImageError(ImageError.PACKAGE.CORE, ErrorCodes.NO_RESULT_AVAILABLE, null, null, null);
         }
-        RgbImage rgbImage = new RgbImage(rgbInput.getWidth(), rgbInput.getHeight());
+        RgbImage<?> rgbImage = new RgbImage<>(rgbInput.getWidth(), rgbInput.getHeight());
         for (final RgbRegion rgbRegion : vecROk) {
             final RgbRegion r = rgbRegion;
             final int nRgb = RgbVal
@@ -186,11 +186,11 @@ public class RgbSplit extends PipelineStage {
      * @throws ImageError
      *             if push() hasn't been called yet
      */
-    public RgbImage getRgbImage() throws ImageError {
+    public RgbImage<?> getRgbImage() throws ImageError {
         if (vecROk == null) {
             throw new ImageError(ImageError.PACKAGE.CORE, ErrorCodes.NO_RESULT_AVAILABLE, null, null, null);
         }
-        RgbImage rgbImage = new RgbImage(rgbInput.getWidth(), rgbInput.getHeight());
+        RgbImage<?> rgbImage = new RgbImage<>(rgbInput.getWidth(), rgbInput.getHeight());
         for (final RgbRegion rgbRegion : vecROk) {
             final RgbRegion r = rgbRegion;
             final int nRgb = r.getColor();
@@ -220,7 +220,7 @@ public class RgbSplit extends PipelineStage {
         if (!(imageInput instanceof RgbImage)) {
             throw new ImageError(ImageError.PACKAGE.ALGORITHM, AlgorithmErrorCodes.IMAGE_NOT_RGBIMAGE, imageInput.toString(), null, null);
         }
-        split((RgbImage) imageInput);
+        split((RgbImage<?>) imageInput);
         super.setOutput(getRgbImage());
     }
 }
