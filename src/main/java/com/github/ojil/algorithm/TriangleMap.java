@@ -16,7 +16,7 @@
 
 package com.github.ojil.algorithm;
 
-import com.github.ojil.core.Error;
+import com.github.ojil.core.ImageError;
 import com.github.ojil.core.Point;
 import com.github.ojil.core.Triangle;
 import com.github.ojil.core.Vec2;
@@ -34,9 +34,9 @@ public class TriangleMap {
      * Create a new TriangleMap mapping points in one triangle into another.
      * @param t1 source triangle
      * @param t2 target triangle
-     * @throws com.github.ojil.core.Error if some of the edges in t1 are of length zero
+     * @throws com.github.ojil.core.ImageError if some of the edges in t1 are of length zero
      */
-    public TriangleMap(Triangle t1, Triangle t2) throws com.github.ojil.core.Error {
+    public TriangleMap(Triangle t1, Triangle t2) throws com.github.ojil.core.ImageError {
         this.p1 = t1.getP1();
         this.p2 = t2.getP1();
         Vec2 s12, s13, s22, s23;
@@ -57,9 +57,9 @@ public class TriangleMap {
         // First calculate the determinant of B above
         this.detB = s12.getX() * s13.getY() - s13.getX() * s12.getY();
         if (this.detB == 0) {
-            throw new Error(
-                            Error.PACKAGE.ALGORITHM,
-                            ErrorCodes.PARAMETER_OUT_OF_RANGE,
+            throw new ImageError(
+                            ImageError.PACKAGE.ALGORITHM,
+                            AlgorithmErrorCodes.PARAMETER_OUT_OF_RANGE,
                             t1.toString(),
                             null,
                             null);

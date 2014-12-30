@@ -30,7 +30,7 @@ package com.github.ojil.core;
  *
  * @author webb
  */
-public final class Gray16Image extends Image {
+public final class Gray16Image extends Image<Object> {
     /** A pointer to the image data
      */
     private final Short[] wImage;

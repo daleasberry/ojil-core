@@ -23,7 +23,7 @@
  */
 
 package com.github.ojil.algorithm;
-import com.github.ojil.core.Error;
+import com.github.ojil.core.ImageError;
 import com.github.ojil.core.Gray8Image;
 import com.github.ojil.core.Image;
 import com.github.ojil.core.PipelineStage;
@@ -62,7 +62,7 @@ public class Gray8TrapWarp extends PipelineStage {
      * past the actual last column processed in the input image. The row
      * referred to as the ending row is the one above the bounding row, i.e.,
      * nRowEnd.
-     * @throws com.github.ojil.core.Error if the trapezoid is empty or outside
+     * @throws com.github.ojil.core.ImageError if the trapezoid is empty or outside
      * the bounds of any image, i.e., if nRowStart < 0, or nRowEnd <= nRowStart,
      * or nColLeftStart <= nColRightStart, or nColLeftEnd <= nColRightEnd.
      */
@@ -72,7 +72,7 @@ public class Gray8TrapWarp extends PipelineStage {
 	    int nColLeftStart, 
 	    int nColRightStart,
 	    int nColLeftEnd, 
-	    int nColRightEnd) throws com.github.ojil.core.Error {
+	    int nColRightEnd) throws com.github.ojil.core.ImageError {
         setTrapezoid(nRowStart, nRowEnd, nColLeftStart, nColRightStart,
                 nColLeftEnd, nColRightEnd);
     }
@@ -133,14 +133,14 @@ public class Gray8TrapWarp extends PipelineStage {
      * to avoid floating point computation.
      *
      * @param image the input gray image.
-     * @throws com.github.ojil.core.Error if the input image is not gray,
+     * @throws com.github.ojil.core.ImageError if the input image is not gray,
      * or the trapezoid already specified extends outside its bounds.
      */
-    public void push(Image image) throws com.github.ojil.core.Error {
+    public void push(Image image) throws com.github.ojil.core.ImageError {
         if (!(image instanceof Gray8Image)) {
-            throw new Error(
-    				Error.PACKAGE.ALGORITHM,
-    				ErrorCodes.IMAGE_NOT_GRAY8IMAGE,
+            throw new ImageError(
+    				ImageError.PACKAGE.ALGORITHM,
+    				AlgorithmErrorCodes.IMAGE_NOT_GRAY8IMAGE,
     				image.toString(),
     				null,
     				null);
@@ -148,8 +148,8 @@ public class Gray8TrapWarp extends PipelineStage {
         if (this.nColRightStart > image.getWidth() ||
             this.nColRightEnd > image.getWidth() ||
             this.nRowEnd > image.getHeight()) {
-            throw new Error(
-    				Error.PACKAGE.CORE,
+            throw new ImageError(
+    				ImageError.PACKAGE.CORE,
     				com.github.ojil.core.ErrorCodes.BOUNDS_OUTSIDE_IMAGE,
     				image.toString(),
     				this.toString(),
@@ -195,7 +195,7 @@ public class Gray8TrapWarp extends PipelineStage {
      * @param nColRightStart right edge of trapezoid on starting row
      * @param nColLeftEnd left edge of trapezoid on ending row
      * @param nColRightEnd right edge of trapezoid on ending row
-     * @throws com.github.ojil.core.Error if the trapezoid is empty or outside
+     * @throws com.github.ojil.core.ImageError if the trapezoid is empty or outside
      * the bounds of any image, i.e., if nRowStart < 0, or nRowEnd &le; nRowStart,
      * or nColLeftStart &le; nColRightStart, or nColLeftEnd &le; nColRightEnd.
      */
@@ -205,28 +205,28 @@ public class Gray8TrapWarp extends PipelineStage {
 	    int nColLeftStart, 
 	    int nColRightStart,
 	    int nColLeftEnd, 
-	    int nColRightEnd) throws com.github.ojil.core.Error {
+	    int nColRightEnd) throws com.github.ojil.core.ImageError {
         if (nRowStart >= nRowEnd) {
-            throw new Error(
-            				Error.PACKAGE.ALGORITHM,
-            				ErrorCodes.WARP_START_ROW_GE_END_ROW,
+            throw new ImageError(
+            				ImageError.PACKAGE.ALGORITHM,
+            				AlgorithmErrorCodes.WARP_START_ROW_GE_END_ROW,
             				new Integer(nRowStart).toString(),
             				new Integer(nRowEnd).toString(),
             				null);
         }
         if (nColLeftStart >= nColRightStart) {
-            throw new Error(
-    				Error.PACKAGE.ALGORITHM,
-    				ErrorCodes.WARP_START_LEFT_COL_GE_START_RIGHT_COL,
+            throw new ImageError(
+    				ImageError.PACKAGE.ALGORITHM,
+    				AlgorithmErrorCodes.WARP_START_LEFT_COL_GE_START_RIGHT_COL,
     				new Integer(nColLeftStart).toString(),
     				new Integer(nColRightStart).toString(),
     				null);
 
         }
         if (nColLeftEnd >= nColRightEnd) {
-            throw new Error(
-                            Error.PACKAGE.ALGORITHM,
-                            ErrorCodes.WARP_END_LEFT_COL_GE_END_RIGHT_COL,
+            throw new ImageError(
+                            ImageError.PACKAGE.ALGORITHM,
+                            AlgorithmErrorCodes.WARP_END_LEFT_COL_GE_END_RIGHT_COL,
                             new Integer(nColLeftEnd).toString(),
                             new Integer(nColRightEnd).toString(),
                             null);
@@ -238,8 +238,8 @@ public class Gray8TrapWarp extends PipelineStage {
         this.nColLeftEnd = nColLeftEnd;
         this.nColRightEnd = nColRightEnd;
         if (this.nRowStart < 0 || this.nColLeftStart < 0 || this.nColRightStart < 0) {
-            throw new Error(
-                            Error.PACKAGE.CORE,
+            throw new ImageError(
+                            ImageError.PACKAGE.CORE,
                             com.github.ojil.core.ErrorCodes.BOUNDS_OUTSIDE_IMAGE,
                             this.toString(),
                             null,

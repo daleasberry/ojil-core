@@ -102,11 +102,11 @@ public class ThreadedBinaryTree {
      * and link it into the tree.
      * @param key the key for comparison.
      * @return the ThreadedBinaryTree node that matches key.
-     * @throws com.github.ojil.core.Error in the case of type error (key wrong
+     * @throws com.github.ojil.core.ImageError in the case of type error (key wrong
      * type)
      */
     public ThreadedBinaryTree add(ComparableJ2me key) 
-    	throws com.github.ojil.core.Error
+    	throws com.github.ojil.core.ImageError
     {
         int n = key.compareTo(this.key);
         if (n == 0) {
@@ -141,11 +141,11 @@ public class ThreadedBinaryTree {
      * @param key the key for comparison
      * @return the ThreadedBinaryTree node which matches key, or
      * null if nothing does.
-     * @throws com.github.ojil.core.Error in the case of type error (key wrong
+     * @throws com.github.ojil.core.ImageError in the case of type error (key wrong
      * type)
     */
     public ThreadedBinaryTree find(ComparableJ2me key) 
-    	throws com.github.ojil.core.Error
+    	throws com.github.ojil.core.ImageError
     {
         int n = this.key.compareTo(key);
         if (n == 0) {
@@ -175,11 +175,11 @@ public class ThreadedBinaryTree {
      * @param key the key to compare
      * @return the ThreadedBinaryTree node which matches key, or
      * null if nothing does.
-     * @throws com.github.ojil.core.Error in the case of type error (key wrong
+     * @throws com.github.ojil.core.ImageError in the case of type error (key wrong
      * type)
      */
     public ThreadedBinaryTree findNearest(ComparableJ2me key) 
-    	throws com.github.ojil.core.Error
+    	throws com.github.ojil.core.ImageError
     {
         int n = this.key.compareTo(key);
         if (n == 0) {

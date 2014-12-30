@@ -21,7 +21,7 @@
  */
 
 package com.github.ojil.algorithm;
-import com.github.ojil.core.Error;
+import com.github.ojil.core.ImageError;
 import com.github.ojil.core.Gray8Image;
 import com.github.ojil.core.Image;
 import com.github.ojil.core.PipelineStage;
@@ -42,9 +42,9 @@ public class RgbHorizGaussSmooth extends PipelineStage {
      * an RgbImage using a horizontal Gaussian blur. The red, green, and blue
      * values are smoothed independently.
      * @param nSigma the sigma value of window to blur over
-     * @throws com.github.ojil.core.Error if sigma out of range
+     * @throws com.github.ojil.core.ImageError if sigma out of range
      */
-    public RgbHorizGaussSmooth(int nSigma) throws com.github.ojil.core.Error {
+    public RgbHorizGaussSmooth(int nSigma) throws com.github.ojil.core.ImageError {
         setSigma(nSigma);
     }
     
@@ -52,13 +52,13 @@ public class RgbHorizGaussSmooth extends PipelineStage {
     /**
      * Smooth an RgbImage horizontally using a Gaussian blur.
      * @param image the input RgbImage.
-     * @throws com.github.ojil.core.Error if the input image is not an RgbImage
+     * @throws com.github.ojil.core.ImageError if the input image is not an RgbImage
      */
-    public void push(Image image) throws com.github.ojil.core.Error {
+    public void push(Image image) throws com.github.ojil.core.ImageError {
         if (!(image instanceof RgbImage)) {
-            throw new Error(
-    				Error.PACKAGE.ALGORITHM,
-    				ErrorCodes.IMAGE_NOT_RGBIMAGE,
+            throw new ImageError(
+    				ImageError.PACKAGE.ALGORITHM,
+    				AlgorithmErrorCodes.IMAGE_NOT_RGBIMAGE,
     				image.toString(),
     				null,
     				null);
@@ -75,9 +75,9 @@ public class RgbHorizGaussSmooth extends PipelineStage {
     /** Sets the Gaussian blur width. Constructs 3 pipelines to use for smoothing
      * each band of the RgbImage independently.
      * @param nSigma the sigma of the window to blur over
-     * @throws com.github.ojil.core.Error if sigma out of range
+     * @throws com.github.ojil.core.ImageError if sigma out of range
      */
-    public void setSigma(int nSigma) throws com.github.ojil.core.Error {
+    public void setSigma(int nSigma) throws com.github.ojil.core.ImageError {
         this.nSigma = nSigma;
         this.seqR = new Sequence(new RgbSelectGray(RgbSelectGray.RED));
         this.seqR.add(new Gray8GaussHoriz(nSigma));

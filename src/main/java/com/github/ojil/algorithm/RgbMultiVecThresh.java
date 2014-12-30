@@ -5,7 +5,7 @@
 
 package com.github.ojil.algorithm;
 
-import com.github.ojil.core.Error;
+import com.github.ojil.core.ImageError;
 import com.github.ojil.core.Gray8Image;
 import com.github.ojil.core.Image;
 import com.github.ojil.core.PipelineStage;
@@ -51,16 +51,16 @@ public class RgbMultiVecThresh extends PipelineStage {
      * @param rgbVals packed arry of target Rgb values
      * @param rgbVecs packed array of target Rgb vectors
      * @param nThreshold threshold value
-     * @throws Error if the input Rgb vectors are not the same
+     * @throws ImageError if the input Rgb vectors are not the same
      * length.
      */
     public RgbMultiVecThresh(Integer[] rgbVals, Integer[] rgbVecs, int nThreshold) 
-            throws Error
+            throws ImageError
     {
         if (rgbVals.length != rgbVecs.length) {
-            throw new Error(
-                            Error.PACKAGE.ALGORITHM,
-                            ErrorCodes.PARAMETER_SIZES_DIFFER,
+            throw new ImageError(
+                            ImageError.PACKAGE.ALGORITHM,
+                            AlgorithmErrorCodes.PARAMETER_SIZES_DIFFER,
                             rgbVals.toString(),
                             rgbVals.toString(),
                             null);
@@ -85,13 +85,13 @@ public class RgbMultiVecThresh extends PipelineStage {
      * the threshold value of any of the input colors. Other
      * pixels get Byte.MIN_VALUE.
      * @param imageInput input RgbImage
-     * @throws com.github.ojil.core.Error if input is not an RgbImage.
+     * @throws com.github.ojil.core.ImageError if input is not an RgbImage.
      */
-    public void push(Image imageInput) throws Error {
+    public void push(Image imageInput) throws ImageError {
         if (!(imageInput instanceof RgbImage)) {
-            throw new Error(
-                			Error.PACKAGE.ALGORITHM,
-                			ErrorCodes.IMAGE_NOT_RGBIMAGE,
+            throw new ImageError(
+                			ImageError.PACKAGE.ALGORITHM,
+                			AlgorithmErrorCodes.IMAGE_NOT_RGBIMAGE,
                 			imageInput.toString(),
                 			null,
                 			null);

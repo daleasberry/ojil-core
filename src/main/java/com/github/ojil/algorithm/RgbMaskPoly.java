@@ -16,7 +16,7 @@
 
 package com.github.ojil.algorithm;
 
-import com.github.ojil.core.Error;
+import com.github.ojil.core.ImageError;
 import com.github.ojil.core.Image;
 import com.github.ojil.core.PipelineStage;
 import com.github.ojil.core.Point;
@@ -56,9 +56,9 @@ public class RgbMaskPoly extends PipelineStage {
      * @param quad quadrilateral to mask
      * @param bInside if true interior of quadrilateral is masked, if false
      * exterior
-     * @throws com.github.ojil.core.Error if Error thrown from getCorner.
+     * @throws com.github.ojil.core.ImageError if Error thrown from getCorner.
      */
-    public RgbMaskPoly(Quad quad, boolean bInside) throws Error {
+    public RgbMaskPoly(Quad quad, boolean bInside) throws ImageError {
         this.points = new Point[4];
         this.points[0] = quad.getCorner(0);
         this.points[1] = quad.getCorner(1);
@@ -87,9 +87,9 @@ public class RgbMaskPoly extends PipelineStage {
      * row in the output image.
      * @param nWidth output image width
      * @param nHeight output image height
-     * @throws com.github.ojil.core.Error if the BinaryHeap code does.
+     * @throws com.github.ojil.core.ImageError if the BinaryHeap code does.
      */
-    private void buildVector(int nWidth, int nHeight) throws Error {
+    private void buildVector(int nWidth, int nHeight) throws ImageError {
         this.hx = new BinaryHeap[nHeight];
         for (int i=0; i<nHeight; i++) {
             this.hx[i] = new BinaryHeap();
@@ -128,9 +128,9 @@ public class RgbMaskPoly extends PipelineStage {
      * a scanline to the array hx.
      * @param p1 starting point
      * @param p2 ending point
-     * @throws com.github.ojil.core.Error if the BinaryHeap code does
+     * @throws com.github.ojil.core.ImageError if the BinaryHeap code does
      */
-    private void drawLine(Point p1, Point p2) throws Error {
+    private void drawLine(Point p1, Point p2) throws ImageError {
         if (p1.getY()>p2.getY()) {
             Point pSwap = p1;
             p1 = p2;
@@ -154,14 +154,14 @@ public class RgbMaskPoly extends PipelineStage {
      * at <a href="http://alienryderflex.com/polygon_fill/">
      * http://alienryderflex.com/polygon_fill/.</a>
      * @param imageInput input RgbImage
-     * @throws com.github.ojil.core.Error if input is not RgbImage or the BinaryHeap
+     * @throws com.github.ojil.core.ImageError if input is not RgbImage or the BinaryHeap
      * code used to do the sorting throws.
      */
-    public void push(Image imageInput) throws Error {
+    public void push(Image imageInput) throws ImageError {
         if (!(imageInput instanceof RgbImage)) {
-            throw new Error(
-                            Error.PACKAGE.ALGORITHM,
-                            ErrorCodes.IMAGE_NOT_RGBIMAGE,
+            throw new ImageError(
+                            ImageError.PACKAGE.ALGORITHM,
+                            AlgorithmErrorCodes.IMAGE_NOT_RGBIMAGE,
                             imageInput.toString(),
                             null,
                             null);

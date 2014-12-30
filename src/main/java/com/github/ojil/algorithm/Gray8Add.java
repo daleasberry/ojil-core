@@ -23,13 +23,15 @@
  */
 
 package com.github.ojil.algorithm;
-import com.github.ojil.core.Error;
+
 import com.github.ojil.core.Gray8Image;
 import com.github.ojil.core.Image;
+import com.github.ojil.core.ImageError;
 import com.github.ojil.core.Ladder;
 
 /**
  * Adds two gray images. To be used as a join operation in a Ladder operation.
+ * 
  * @author webb
  */
 public class Gray8Add implements Ladder.Join {
@@ -38,54 +40,39 @@ public class Gray8Add implements Ladder.Join {
     public Gray8Add() {
     }
     
-    /** Adds two Gray8Image's. Result is clamped between Byte.MIN_VALUE and 
-     *  Byte.MAX_VALUE. The first input image is replaced by the result.
+    /**
+     * Adds two Gray8Image's. Result is clamped between Byte.MIN_VALUE and
+     * Byte.MAX_VALUE. The first input image is replaced by the result.
      *
-     * @param imageFirst the first image (and output)
-     * @param imageSecond the second image
+     * @param imageFirst
+     *            the first image (and output)
+     * @param imageSecond
+     *            the second image
      * @return the sum of the two byte images, replacing the first
-     * @throws com.github.ojil.core.Error if either image is not a gray 8-bit
-     * image, or they are of different sizes.
+     * @throws ImageError
+     *             if either image is not a gray 8-bit image, or they are of
+     *             different sizes.
      */
-    public Image doJoin(Image imageFirst, Image imageSecond)
-        throws com.github.ojil.core.Error
-    {
+    @Override
+    public Image<?> doJoin(final Image<?> imageFirst, final Image<?> imageSecond) throws ImageError {
         if (!(imageFirst instanceof Gray8Image)) {
-                throw new Error(
-                				Error.PACKAGE.ALGORITHM,
-                				ErrorCodes.IMAGE_NOT_GRAY8IMAGE,
-                				imageFirst.toString(),
-                				null,
-                				null);
-            }
+            throw new ImageError(ImageError.PACKAGE.ALGORITHM, AlgorithmErrorCodes.IMAGE_NOT_GRAY8IMAGE, imageFirst.toString(), null, null);
+        }
         if (!(imageSecond instanceof Gray8Image)) {
-                throw new Error(
-                				Error.PACKAGE.ALGORITHM,
-                				ErrorCodes.IMAGE_NOT_GRAY8IMAGE,
-                				imageSecond.toString(),
-                				null,
-                				null);
-            }
-        if (imageFirst.getWidth() != imageSecond.getWidth() ||
-            imageSecond.getHeight() != imageSecond.getHeight()) {
-            throw new Error(
-            				Error.PACKAGE.ALGORITHM,
-            				ErrorCodes.IMAGE_SIZES_DIFFER,
-            				imageFirst.toString(),
-            				imageSecond.toString(),
-            				null);
+            throw new ImageError(ImageError.PACKAGE.ALGORITHM, AlgorithmErrorCodes.IMAGE_NOT_GRAY8IMAGE, imageSecond.toString(), null, null);
+        }
+        if ((imageFirst.getWidth() != imageSecond.getWidth()) || (imageSecond.getHeight() != imageSecond.getHeight())) {
+            throw new ImageError(ImageError.PACKAGE.ALGORITHM, AlgorithmErrorCodes.IMAGE_SIZES_DIFFER, imageFirst.toString(), imageSecond.toString(), null);
             
         }
-        Gray8Image gray1 = (Gray8Image) imageFirst;
-        Gray8Image gray2 = (Gray8Image) imageSecond;
-        Byte[] data1 = gray1.getData();
-        Byte[] data2 = gray2.getData();
-        for (int i=0; i<data1.length; i++) {
-            data1[i] = (byte) Math.min(
-                    Byte.MAX_VALUE, 
-                    Math.max(Byte.MIN_VALUE, (data1[i] + data2[i])));
+        final Gray8Image gray1 = (Gray8Image) imageFirst;
+        final Gray8Image gray2 = (Gray8Image) imageSecond;
+        final Byte[] data1 = gray1.getData();
+        final Byte[] data2 = gray2.getData();
+        for (int i = 0; i < data1.length; i++) {
+            data1[i] = (byte) Math.min(Byte.MAX_VALUE, Math.max(Byte.MIN_VALUE, (data1[i] + data2[i])));
         }
         return gray1;
     }
-
+    
 }

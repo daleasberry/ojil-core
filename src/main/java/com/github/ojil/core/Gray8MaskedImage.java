@@ -50,16 +50,16 @@ public class Gray8MaskedImage extends Gray8Image {
      * image and mask.
      * @param imData the data image.
      * @param imMask the mask
-     * @throws com.github.ojil.core.Error If either input is not a Gray8Image or the sizes are not the same.
+     * @throws com.github.ojil.core.ImageError If either input is not a Gray8Image or the sizes are not the same.
      */
     public Gray8MaskedImage(Gray8Image imData, Gray8Image imMask) 
-        throws com.github.ojil.core.Error
+        throws com.github.ojil.core.ImageError
     {
         super(imData.getWidth(), imData.getHeight());
         if (imData.getWidth() != imMask.getWidth() ||
             imData.getHeight() != imMask.getHeight()) {
-            throw new Error(
-            				Error.PACKAGE.CORE,
+            throw new ImageError(
+            				ImageError.PACKAGE.CORE,
             				ErrorCodes.IMAGE_MASK_SIZE_MISMATCH,
             				imData.toString(),
             				imMask.toString(),
@@ -79,10 +79,10 @@ public class Gray8MaskedImage extends Gray8Image {
      * image, setting everything unmasked.
      * @param imData the data image.
      * @param imMask the mask
-     * @throws com.github.ojil.core.Error If either input is not a Gray8Image or the sizes are not the same.
+     * @throws com.github.ojil.core.ImageError If either input is not a Gray8Image or the sizes are not the same.
      */
     public Gray8MaskedImage(Gray8Image imData) 
-        throws com.github.ojil.core.Error
+        throws com.github.ojil.core.ImageError
     {
         super(imData.getWidth(), imData.getHeight());
         System.arraycopy(

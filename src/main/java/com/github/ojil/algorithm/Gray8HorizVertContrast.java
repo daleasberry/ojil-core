@@ -55,9 +55,9 @@ public class Gray8HorizVertContrast extends PipelineStage {
     
     /** Apply the contrast measure to the input input image.
      * @param image the input Gray16Image
-     * @throws com.github.ojil.core.Error if image is not a Gray16Image
+     * @throws com.github.ojil.core.ImageError if image is not a Gray16Image
      */
-    public void push(Image image) throws com.github.ojil.core.Error {
+    public void push(Image image) throws com.github.ojil.core.ImageError {
     	this.pipe.push(image);
         super.setOutput(this.pipe.getFront());
     }

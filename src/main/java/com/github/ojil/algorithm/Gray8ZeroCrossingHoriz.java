@@ -26,7 +26,7 @@ package com.github.ojil.algorithm;
 import java.util.Enumeration;
 import java.util.Vector;
 
-import com.github.ojil.core.Error;
+import com.github.ojil.core.ImageError;
 import com.github.ojil.core.Gray8Image;
 
 /**
@@ -47,10 +47,10 @@ public class Gray8ZeroCrossingHoriz {
      *
      * @param wThreshold -- the minimum strength for a zero crossing to
      * be considered significant.
-     * @throws com.github.ojil.core.Error if the threshold is less than 0. Use
+     * @throws com.github.ojil.core.ImageError if the threshold is less than 0. Use
      * 0 if you want all zero crossings.
      */
-    public Gray8ZeroCrossingHoriz(int wThreshold) throws com.github.ojil.core.Error {
+    public Gray8ZeroCrossingHoriz(int wThreshold) throws com.github.ojil.core.ImageError {
         setThreshold(wThreshold);
     }
     
@@ -172,14 +172,14 @@ public class Gray8ZeroCrossingHoriz {
     /** Changes the zero crossing threshold.
      *
      * @param wThreshold the new threshold.
-     * @throws com.github.ojil.core.Error if wThreshold is less than 0. Use 0
+     * @throws com.github.ojil.core.ImageError if wThreshold is less than 0. Use 0
      * if you want all zero crossings.
      */
-    public void setThreshold(int wThreshold) throws com.github.ojil.core.Error {
+    public void setThreshold(int wThreshold) throws com.github.ojil.core.ImageError {
         if (wThreshold < 0) {
-            throw new Error(
-        			Error.PACKAGE.CORE,
-        			ErrorCodes.THRESHOLD_NEGATIVE,
+            throw new ImageError(
+        			ImageError.PACKAGE.CORE,
+        			AlgorithmErrorCodes.THRESHOLD_NEGATIVE,
         			new Integer(wThreshold).toString(),
         			null,
         			null);

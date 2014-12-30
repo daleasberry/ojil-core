@@ -23,15 +23,17 @@
  */
 
 package com.github.ojil.algorithm;
-import com.github.ojil.core.Error;
+
 import com.github.ojil.core.Gray32Image;
 import com.github.ojil.core.Gray8Image;
 import com.github.ojil.core.Image;
+import com.github.ojil.core.ImageError;
 import com.github.ojil.core.PipelineStage;
-/** Gray32Scale2Gray8 converts an 32-bit gray image to a 8-bit
- *  gray image. Input values are scaled so that the max value in
- *  the image maps to Byte.MAX_VALUE and the minimum value to
- *  Byte.MIN_VALUE.
+
+/**
+ * Gray32Scale2Gray8 converts an 32-bit gray image to a 8-bit gray image. Input
+ * values are scaled so that the max value in the image maps to Byte.MAX_VALUE
+ * and the minimum value to Byte.MIN_VALUE.
  *
  * @author webb
  */
@@ -41,28 +43,27 @@ public class Gray32Scale2Gray8 extends PipelineStage {
     public Gray32Scale2Gray8() {
     }
     
-    /** Converts a 32-bit gray image into an 8-bit gray image. 
+    /**
+     * Converts a 32-bit gray image into an 8-bit gray image.
      *
      *
-     * @param image the input image.
-     * @throws com.github.ojil.core.Error if the input is not a Gray8Image
+     * @param image
+     *            the input image.
+     * @throws ImageError
+     *             if the input is not a Gray8Image
      */
-    public void push(Image image) throws com.github.ojil.core.Error {
+    @Override
+    public void push(final Image<?> image) throws ImageError {
         if (!(image instanceof Gray32Image)) {
-            throw new Error(
-    				Error.PACKAGE.ALGORITHM,
-    				ErrorCodes.IMAGE_NOT_GRAY32IMAGE,
-    				image.toString(),
-    				null,
-    				null);
+            throw new ImageError(ImageError.PACKAGE.ALGORITHM, AlgorithmErrorCodes.IMAGE_NOT_GRAY32IMAGE, image.toString(), null, null);
         }
-        Gray32Image gray32 = (Gray32Image) image;
-        Gray8Image gray8 = new Gray8Image(image.getWidth(), image.getHeight());
-        Integer[] gray32Data = gray32.getData();
-        Byte[] gray8Data = gray8.getData();
+        final Gray32Image gray32 = (Gray32Image) image;
+        final Gray8Image gray8 = new Gray8Image(image.getWidth(), image.getHeight());
+        final Integer[] gray32Data = gray32.getData();
+        final Byte[] gray8Data = gray8.getData();
         int nMax = Integer.MIN_VALUE;
         int nMin = Integer.MAX_VALUE;
-        for (int i=0; i<gray32.getWidth() * gray32.getHeight(); i++) {
+        for (int i = 0; i < (gray32.getWidth() * gray32.getHeight()); i++) {
             nMax = Math.max(nMax, gray32Data[i]);
             nMin = Math.min(nMin, gray32Data[i]);
         }
@@ -72,15 +73,13 @@ public class Gray32Scale2Gray8 extends PipelineStage {
             nMax = 0;
             nMin = 0;
         }
-        for (int i=0; i<gray32.getWidth() * gray32.getHeight(); i++) {
-            /* Convert from signed byte value to unsigned byte for storage
-             * in the 32-bit image.
+        for (int i = 0; i < (gray32.getWidth() * gray32.getHeight()); i++) {
+            /*
+             * Convert from signed byte value to unsigned byte for storage in
+             * the 32-bit image.
              */
-             /* Assign 32-bit output */
-            gray8Data[i] = (byte)
-                    (Byte.MIN_VALUE + 
-                    ((Byte.MAX_VALUE) - (Byte.MIN_VALUE) * 
-                        (gray32Data[i] - nMin)) / nDiff);
+            /* Assign 32-bit output */
+            gray8Data[i] = (byte) (Byte.MIN_VALUE + (((Byte.MAX_VALUE) - ((Byte.MIN_VALUE) * (gray32Data[i] - nMin))) / nDiff));
         }
         super.setOutput(gray8);
     }

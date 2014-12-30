@@ -23,13 +23,16 @@
  */
 
 package com.github.ojil.algorithm;
-import com.github.ojil.core.Error;
+
+import com.github.ojil.core.ErrorCodes;
 import com.github.ojil.core.Gray32Image;
 import com.github.ojil.core.Image;
+import com.github.ojil.core.ImageError;
 import com.github.ojil.core.PipelineStage;
 
 /**
  * Divides a Gray32Image by a constant.
+ * 
  * @author webb
  */
 public class Gray32Div extends PipelineStage {
@@ -37,51 +40,48 @@ public class Gray32Div extends PipelineStage {
     
     /**
      * Creates a new instance of Gray32Div.
-     * @param nDivisor The number to divide the input image by.
-     * @throws com.github.ojil.core.Error if the divisor is 0.
+     * 
+     * @param nDivisor
+     *            The number to divide the input image by.
+     * @throws ImageError
+     *             if the divisor is 0.
      */
-    public Gray32Div(int nDivisor) throws com.github.ojil.core.Error {
+    public Gray32Div(final int nDivisor) throws ImageError {
         setDivisor(nDivisor);
     }
     
     /**
      * Divides a Gray32Image by a constant.
-     * @param image the image image (and output)
-     * @throws com.github.ojil.core.Error if the image is not a gray 32-bit
-     * image.
+     * 
+     * @param image
+     *            the image image (and output)
+     * @throws ImageError
+     *             if the image is not a gray 32-bit image.
      */
-    public void push(Image image)
-        throws com.github.ojil.core.Error
-    {
+    @Override
+    public void push(final Image<?> image) throws ImageError {
         if (!(image instanceof Gray32Image)) {
-            throw new Error(
-            		Error.PACKAGE.CORE,
-            		ErrorCodes.IMAGE_NOT_GRAY32IMAGE,
-            		image.toString(),
-            		null,
-            		null);
+            throw new ImageError(ImageError.PACKAGE.CORE, AlgorithmErrorCodes.IMAGE_NOT_GRAY32IMAGE, image.toString(), null, null);
         }
-        Gray32Image gray = (Gray32Image) image;
-        Integer[] data = gray.getData();
-        for (int i=0; i<data.length; i++) {
-            data[i] = data[i] / this.nDivisor;
+        final Gray32Image gray = (Gray32Image) image;
+        final Integer[] data = gray.getData();
+        for (int i = 0; i < data.length; i++) {
+            data[i] = data[i] / nDivisor;
         }
         super.setOutput(image);
     }
-
+    
     /**
      * Changes divisor.
-     * @param nDivisor The new divisor.
-     * @throws com.github.ojil.core.Error if the divisor is 0.
+     * 
+     * @param nDivisor
+     *            The new divisor.
+     * @throws ImageError
+     *             if the divisor is 0.
      */
-    public void setDivisor(int nDivisor) throws com.github.ojil.core.Error {
+    public void setDivisor(final int nDivisor) throws ImageError {
         if (nDivisor == 0) {
-            throw new Error(
-               		Error.PACKAGE.CORE,
-               		com.github.ojil.core.ErrorCodes.MATH_DIVISION_ZERO,
-               		null,
-               		null,
-               		null);
+            throw new ImageError(ImageError.PACKAGE.CORE, ErrorCodes.MATH_DIVISION_ZERO, null, null, null);
         }
         this.nDivisor = nDivisor;
     }

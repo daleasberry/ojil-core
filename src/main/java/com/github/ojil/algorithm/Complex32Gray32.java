@@ -23,15 +23,18 @@
  */
 
 package com.github.ojil.algorithm;
+
 import com.github.ojil.core.Complex;
 import com.github.ojil.core.Complex32Image;
-import com.github.ojil.core.Error;
 import com.github.ojil.core.Gray32Image;
 import com.github.ojil.core.Image;
+import com.github.ojil.core.ImageError;
 import com.github.ojil.core.PipelineStage;
+
 /**
  * Converts a Complex32Image to a Gray32Image by taking the complex magnitude of
  * each pixel.
+ * 
  * @author webb
  */
 public class Complex32Gray32 extends PipelineStage {
@@ -43,24 +46,23 @@ public class Complex32Gray32 extends PipelineStage {
     }
     
     /**
-     * Convert an input Complex32Image to an output Gray32Image by taking the 
+     * Convert an input Complex32Image to an output Gray32Image by taking the
      * complex magnitude of each pixel.
-     * @param im Input image. Must be a Complex32Image.
-     * @throws com.github.ojil.core.Error if the input is not of type Complex32Image.
+     * 
+     * @param im
+     *            Input image. Must be a Complex32Image.
+     * @throws com.github.ojil.core.ImageError
+     *             if the input is not of type Complex32Image.
      */
-    public void push(Image im) throws com.github.ojil.core.Error {
+    @Override
+    public void push(final Image<?> im) throws com.github.ojil.core.ImageError {
         if (!(im instanceof Complex32Image)) {
-            throw new Error(
-                			Error.PACKAGE.ALGORITHM,
-                			ErrorCodes.IMAGE_NOT_COMPLEX32IMAGE,
-                			im.toString(),
-                			null,
-                			null);
+            throw new ImageError(ImageError.PACKAGE.ALGORITHM, AlgorithmErrorCodes.IMAGE_NOT_COMPLEX32IMAGE, im.toString(), null, null);
         }
-        Gray32Image imResult = new Gray32Image(im.getWidth(), im.getHeight());
-        Complex cData[] = ((Complex32Image) im).getData();
-        Integer nData[] = imResult.getData();
-        for (int i=0; i<im.getWidth()*im.getHeight(); i++) {
+        final Gray32Image imResult = new Gray32Image(im.getWidth(), im.getHeight());
+        final Complex cData[] = ((Complex32Image) im).getData();
+        final Integer nData[] = imResult.getData();
+        for (int i = 0; i < (im.getWidth() * im.getHeight()); i++) {
             nData[i] = cData[i].magnitude();
         }
         super.setOutput(imResult);

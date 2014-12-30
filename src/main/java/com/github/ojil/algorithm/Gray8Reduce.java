@@ -23,7 +23,7 @@
  */
 
 package com.github.ojil.algorithm;
-import com.github.ojil.core.Error;
+import com.github.ojil.core.ImageError;
 import com.github.ojil.core.Gray8Image;
 import com.github.ojil.core.Image;
 import com.github.ojil.core.PipelineStage;
@@ -43,10 +43,10 @@ public class Gray8Reduce extends PipelineStage {
      * Creates a new instance of Gray8Reduce.
      * @param cReduceWidth amount to reduce the width by
      * @param cReduceHeight amount to reduce the height by
-     * @throws com.github.ojil.core.Error if the reduce width or height is less than or equal to zero.
+     * @throws com.github.ojil.core.ImageError if the reduce width or height is less than or equal to zero.
      */
     public Gray8Reduce(int cReduceWidth, int cReduceHeight) 
-    	throws com.github.ojil.core.Error {
+    	throws com.github.ojil.core.ImageError {
         setReductionFactor(cReduceWidth, cReduceHeight);
     }
     
@@ -55,30 +55,30 @@ public class Gray8Reduce extends PipelineStage {
      * size.
      *
      * @param image the input image.
-     * @throws com.github.ojil.core.Error if the input image is not gray, or
+     * @throws com.github.ojil.core.ImageError if the input image is not gray, or
      * the reduction factor does not evenly divide the image size.
      */
-    public void push(Image image) throws com.github.ojil.core.Error {
+    public void push(Image image) throws com.github.ojil.core.ImageError {
         if (!(image instanceof Gray8Image)) {
-            throw new Error(
-            				Error.PACKAGE.ALGORITHM,
-            				ErrorCodes.IMAGE_NOT_GRAY8IMAGE,
+            throw new ImageError(
+            				ImageError.PACKAGE.ALGORITHM,
+            				AlgorithmErrorCodes.IMAGE_NOT_GRAY8IMAGE,
             				image.toString(),
             				null,
             				null);
         }
         if (image.getWidth() % this.cReduceWidth != 0) {
-            throw new Error(
-            				Error.PACKAGE.ALGORITHM,
-            				ErrorCodes.IMAGE_NOT_GRAY8IMAGE,
+            throw new ImageError(
+            				ImageError.PACKAGE.ALGORITHM,
+            				AlgorithmErrorCodes.IMAGE_NOT_GRAY8IMAGE,
             				image.toString(),
             				null,
             				null);
         }
         if (image.getHeight() % this.cReduceHeight != 0) {
-            throw new Error(
-            		Error.PACKAGE.ALGORITHM,
-            		ErrorCodes.REDUCE_INPUT_IMAGE_NOT_MULTIPLE_OF_OUTPUT_SIZE,
+            throw new ImageError(
+            		ImageError.PACKAGE.ALGORITHM,
+            		AlgorithmErrorCodes.REDUCE_INPUT_IMAGE_NOT_MULTIPLE_OF_OUTPUT_SIZE,
             		image.toString(),
             		this.toString(),
             		null);
@@ -127,15 +127,15 @@ public class Gray8Reduce extends PipelineStage {
      *
      * @param cReduceWidth the amount by which to reduce the image width.
      * @param cReduceHeight the amount by which to reduce the image height.
-     * @throws com.github.ojil.core.Error if either cReduceWidth or cReduceHeight
+     * @throws com.github.ojil.core.ImageError if either cReduceWidth or cReduceHeight
      * is less than or equal to 0.
      */
     public void setReductionFactor(int cReduceWidth, int cReduceHeight) 
-        throws com.github.ojil.core.Error {
+        throws com.github.ojil.core.ImageError {
         if (cReduceWidth <= 0 || cReduceHeight <= 0) {
-            throw new Error(
-            				Error.PACKAGE.ALGORITHM,
-            				ErrorCodes.OUTPUT_IMAGE_SIZE_NEGATIVE,
+            throw new ImageError(
+            				ImageError.PACKAGE.ALGORITHM,
+            				AlgorithmErrorCodes.OUTPUT_IMAGE_SIZE_NEGATIVE,
             				new Integer(cReduceWidth).toString(),
             				new Integer(cReduceHeight).toString(),
             				null);

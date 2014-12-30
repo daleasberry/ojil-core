@@ -34,7 +34,7 @@ package com.github.ojil.core;
  * 
  * @author webb
  */
-public class RgbImage extends Image {
+public class RgbImage extends Image<Object> {
     /**
      * A pointer to the image data
      */
@@ -119,12 +119,12 @@ public class RgbImage extends Image {
      * @param rgb
      *            the color to assign
      * @return the modified RgbImage (i.e., this)
-     * @throws Error
+     * @throws ImageError
      *             if the bounds are outside the image
      */
-    public RgbImage fill(final Rect r, final int rgb) throws Error {
+    public RgbImage fill(final Rect r, final int rgb) throws ImageError {
         if ((r.getTop() < 0) || (r.getBottom() > getHeight()) || (r.getLeft() < 0) || (r.getRight() > getWidth())) {
-            throw new Error(Error.PACKAGE.CORE, ErrorCodes.BOUNDS_OUTSIDE_IMAGE, r.toString(), null, null);
+            throw new ImageError(ImageError.PACKAGE.CORE, ErrorCodes.BOUNDS_OUTSIDE_IMAGE, r.toString(), null, null);
         }
         for (int i = r.getTop(); i < r.getBottom(); i++) {
             for (int j = r.getLeft(); j < r.getRight(); j++) {

@@ -5,7 +5,7 @@
  */
 package com.github.ojil.algorithm;
 
-import com.github.ojil.core.Error;
+import com.github.ojil.core.ImageError;
 import com.github.ojil.core.MathPlus;
 import com.github.ojil.core.RgbImage;
 import com.github.ojil.core.RgbVal;
@@ -74,7 +74,7 @@ public class RgbMeanStdDev {
         if (nVarR > 0) {
             try {
                 nRStdDev = MathPlus.sqrt(nVarR);
-            } catch (Error ex) {
+            } catch (ImageError ex) {
                 // this should never happen. It can occur
                 // only when nVarR is < 0, which we test for
             }
@@ -82,13 +82,13 @@ public class RgbMeanStdDev {
         if (nVarG > 0) {
             try {
                 nGStdDev = MathPlus.sqrt(nVarG);
-            } catch (Error ex) {
+            } catch (ImageError ex) {
             }
         }
         if (nVarB > 0) {
             try {
                 nBStdDev = MathPlus.sqrt(nVarB);
-            } catch (Error ex) {
+            } catch (ImageError ex) {
             }
         }
         this.nRgbStdDev = RgbVal.toRgb(

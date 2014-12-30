@@ -51,16 +51,16 @@ public class Gray32MaskedImage extends Gray32Image {
      * image and mask.
      * @param imData the data image.
      * @param imMask the mask
-     * @throws com.github.ojil.core.Error If either input is not a Gray8Image or the sizes are not the same.
+     * @throws com.github.ojil.core.ImageError If either input is not a Gray8Image or the sizes are not the same.
      */
     public Gray32MaskedImage(Gray32Image imData, Gray8Image imMask) 
-        throws com.github.ojil.core.Error
+        throws com.github.ojil.core.ImageError
     {
         super(imData.getWidth(), imData.getHeight());
         if (imData.getWidth() != imMask.getWidth() ||
             imData.getHeight() != imMask.getHeight()) {
-            throw new Error(
-                            Error.PACKAGE.CORE,
+            throw new ImageError(
+                            ImageError.PACKAGE.CORE,
                             ErrorCodes.IMAGE_MASK_SIZE_MISMATCH,
                             imData.toString(),
                             imMask.toString(),

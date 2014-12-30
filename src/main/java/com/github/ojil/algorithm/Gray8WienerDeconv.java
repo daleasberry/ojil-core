@@ -25,7 +25,7 @@
 package com.github.ojil.algorithm;
 import com.github.ojil.core.Complex;
 import com.github.ojil.core.Complex32Image;
-import com.github.ojil.core.Error;
+import com.github.ojil.core.ImageError;
 import com.github.ojil.core.Gray32Image;
 import com.github.ojil.core.Gray8Image;
 import com.github.ojil.core.Image;
@@ -50,21 +50,21 @@ public class Gray8WienerDeconv extends PipelineStage {
      * @param psf the input point spread function. This is the expected blur
      * window, for example a disk or rectangle.
      * @param nNoise the noise level.
-     * @throws com.github.ojil.core.Error if the input point spread function is not a Gray8Image or not square.
+     * @throws com.github.ojil.core.ImageError if the input point spread function is not a Gray8Image or not square.
      */
-    public Gray8WienerDeconv(Gray8Image psf, int nNoise) throws com.github.ojil.core.Error {
+    public Gray8WienerDeconv(Gray8Image psf, int nNoise) throws com.github.ojil.core.ImageError {
         if (psf.getWidth() != psf.getHeight()) {
-            throw new Error(
-            				Error.PACKAGE.ALGORITHM,
-            				ErrorCodes.IMAGE_NOT_SQUARE,
+            throw new ImageError(
+            				ImageError.PACKAGE.ALGORITHM,
+            				AlgorithmErrorCodes.IMAGE_NOT_SQUARE,
             				psf.toString(),
             				null,
             				null);
         }
         if (!(psf instanceof Gray8Image)) {
-            throw new Error(
-            				Error.PACKAGE.ALGORITHM,
-            				ErrorCodes.IMAGE_NOT_GRAY8IMAGE,
+            throw new ImageError(
+            				ImageError.PACKAGE.ALGORITHM,
+            				AlgorithmErrorCodes.IMAGE_NOT_GRAY8IMAGE,
             				psf.toString(),
             				null,
             				null);
@@ -79,30 +79,30 @@ public class Gray8WienerDeconv extends PipelineStage {
     /**
      * Compute the deconvolution of the input Gray8Image, producing a Complex32Image.
      * @param im the input Gray8Image.
-     * @throws com.github.ojil.core.Error if the input image is not a Gray8Image or not square.
+     * @throws com.github.ojil.core.ImageError if the input image is not a Gray8Image or not square.
      */
-    public void push(Image im) throws com.github.ojil.core.Error {
+    public void push(Image im) throws com.github.ojil.core.ImageError {
         if (im.getWidth() != im.getHeight()) {
-            throw new Error(
-            				Error.PACKAGE.ALGORITHM,
-            				ErrorCodes.IMAGE_NOT_SQUARE,
+            throw new ImageError(
+            				ImageError.PACKAGE.ALGORITHM,
+            				AlgorithmErrorCodes.IMAGE_NOT_SQUARE,
             				im.toString(),
             				null,
             				null);
         }
         if (im.getWidth() != this.cxmPsfInv.getWidth() ||
         	im.getHeight() != this.cxmPsfInv.getHeight()) {
-            throw new Error(
-            				Error.PACKAGE.ALGORITHM,
-            				ErrorCodes.IMAGE_SIZES_DIFFER,
+            throw new ImageError(
+            				ImageError.PACKAGE.ALGORITHM,
+            				AlgorithmErrorCodes.IMAGE_SIZES_DIFFER,
             				im.toString(),
             				this.cxmPsfInv.toString(),
             				null);
         }
         if (!(im instanceof Gray8Image)) {
-            throw new Error(
-            				Error.PACKAGE.ALGORITHM,
-            				ErrorCodes.IMAGE_NOT_GRAY8IMAGE,
+            throw new ImageError(
+            				ImageError.PACKAGE.ALGORITHM,
+            				AlgorithmErrorCodes.IMAGE_NOT_GRAY8IMAGE,
             				im.toString(),
             				null,
             				null);
@@ -123,7 +123,7 @@ public class Gray8WienerDeconv extends PipelineStage {
         super.setOutput(cxmResult);
     }
     
-    private void invertPsf() throws com.github.ojil.core.Error {
+    private void invertPsf() throws com.github.ojil.core.ImageError {
         this.gPsfSq = new Gray32Image(this.cxmPsfInv.getWidth(), this.cxmPsfInv.getHeight());
         Complex cxPsf[] = this.cxmPsfInv.getData();
         Integer[] nData = this.gPsfSq.getData();

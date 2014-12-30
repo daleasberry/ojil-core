@@ -23,10 +23,11 @@
  */
 
 package com.github.ojil.algorithm;
+
 import com.github.ojil.core.Gray8Image;
 
 /**
- * Computes the histogram of a gray image. 
+ * Computes the histogram of a gray image.
  * 
  * @author webb
  */
@@ -36,22 +37,23 @@ public class Gray8Hist {
     private Gray8Hist() {
     }
     
-    /** Compute the histogram of the input gray image.
+    /**
+     * Compute the histogram of the input gray image.
      *
-     * @param image the input image
-     * @return the histogram, a 256-element int array. The
-     * array is offset so element 0 corresponds to signed byte value
-     * Byte.MIN_VALUE.
+     * @param image
+     *            the input image
+     * @return the histogram, a 256-element int array. The array is offset so
+     *         element 0 corresponds to signed byte value Byte.MIN_VALUE.
      */
-    public static Integer[] computeHistogram(Gray8Image image) {
-        Integer[] result = new Integer[256];
-        for (int i=0; i<256; i++) {
+    public static Integer[] computeHistogram(final Gray8Image image) {
+        final Integer[] result = new Integer[256];
+        for (int i = 0; i < 256; i++) {
             result[i] = 0;
         }
-        Byte[] data = image.getData();
-        for (int i=0; i<image.getHeight(); i++) {
-            for (int j=0; j<image.getWidth(); j++) {
-                result[data[i*image.getWidth()+j]-Byte.MIN_VALUE] ++;
+        final Byte[] data = image.getData();
+        for (int i = 0; i < image.getHeight(); i++) {
+            for (int j = 0; j < image.getWidth(); j++) {
+                result[data[(i * image.getWidth()) + j] - Byte.MIN_VALUE]++;
             }
         }
         return result;

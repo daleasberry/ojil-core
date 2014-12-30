@@ -26,7 +26,7 @@ package com.github.ojil.algorithm;
 import java.util.Enumeration;
 import java.util.Vector;
 
-import com.github.ojil.core.Error;
+import com.github.ojil.core.ImageError;
 import com.github.ojil.core.Point;
 
 /**
@@ -64,7 +64,7 @@ public class LinefitHoughHoriz {
      * @param cMaxSlope maximum slope (multiplied by 256)
      * @param cSteps steps taken in Hough accumulator between minimum and
      * maximum slope.
-     * @throws com.github.ojil.core.Error if Y or slope range is empty, or
+     * @throws com.github.ojil.core.ImageError if Y or slope range is empty, or
      * cSteps is not positive.
      */
     public LinefitHoughHoriz(
@@ -72,11 +72,11 @@ public class LinefitHoughHoriz {
             int cMaxY, 
             int cMinSlope, 
             int cMaxSlope, 
-            int cSteps) throws com.github.ojil.core.Error {
+            int cSteps) throws com.github.ojil.core.ImageError {
         if (cMaxY < cMinY) {
-            throw new Error(
-                			Error.PACKAGE.ALGORITHM,
-                			ErrorCodes.PARAMETER_RANGE_NULL_OR_NEGATIVE,
+            throw new ImageError(
+                			ImageError.PACKAGE.ALGORITHM,
+                			AlgorithmErrorCodes.PARAMETER_RANGE_NULL_OR_NEGATIVE,
                 			new Integer(cMinY).toString(),
                 			new Integer(cMaxY).toString(),
                 			null);
@@ -84,17 +84,17 @@ public class LinefitHoughHoriz {
         this.cMinY = cMinY;
         this.cMaxY = cMaxY;
         if (cMaxSlope < cMinSlope) {
-            throw new Error(
-                			Error.PACKAGE.ALGORITHM,
-                			ErrorCodes.PARAMETER_RANGE_NULL_OR_NEGATIVE,
+            throw new ImageError(
+                			ImageError.PACKAGE.ALGORITHM,
+                			AlgorithmErrorCodes.PARAMETER_RANGE_NULL_OR_NEGATIVE,
                 			new Integer(cMinSlope).toString(),
                 			new Integer(cMaxSlope).toString(),
                 			null);
         }
         if (cSteps <= 0) {
-            throw new Error(
-                			Error.PACKAGE.ALGORITHM,
-                			ErrorCodes.PARAMETER_OUT_OF_RANGE,
+            throw new ImageError(
+                			ImageError.PACKAGE.ALGORITHM,
+                			AlgorithmErrorCodes.PARAMETER_OUT_OF_RANGE,
                 			new Integer(cSteps).toString(),
                 			new Integer(1).toString(),
                 			new Integer(Integer.MAX_VALUE).toString());
@@ -174,10 +174,10 @@ public class LinefitHoughHoriz {
     /** Finds the most likely line passing through the points in the Vector.
      * 
      * @param points the input Vector of point positions
-     * @throws com.github.ojil.core.Error if points is not a Vector of 
+     * @throws com.github.ojil.core.ImageError if points is not a Vector of 
      * point objects.
      */
-    public void push(Vector<?> points) throws com.github.ojil.core.Error {
+    public void push(Vector<?> points) throws com.github.ojil.core.ImageError {
         /* create Hough accumulator */
         this.cHoughAccum = 
                 new Integer[this.cSteps][this.cMaxY-this.cMinY];
@@ -186,9 +186,9 @@ public class LinefitHoughHoriz {
         for (Enumeration<?> e = points.elements(); e.hasMoreElements();) {
             Object o = e.nextElement(); 
             if (!(o instanceof Point)) {
-                throw new Error(
-                    			Error.PACKAGE.ALGORITHM,
-                    			ErrorCodes.OBJECT_NOT_EXPECTED_TYPE,
+                throw new ImageError(
+                    			ImageError.PACKAGE.ALGORITHM,
+                    			AlgorithmErrorCodes.OBJECT_NOT_EXPECTED_TYPE,
                     			o.toString(),
                     			"Point",
                     			null);

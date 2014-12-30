@@ -23,15 +23,18 @@
  */
 
 package com.github.ojil.algorithm;
-import com.github.ojil.core.Error;
+
+import com.github.ojil.core.ErrorCodes;
 import com.github.ojil.core.Gray8Image;
 import com.github.ojil.core.Image;
+import com.github.ojil.core.ImageError;
 import com.github.ojil.core.PipelineStage;
 import com.github.ojil.core.Rect;
 
 /**
  * Pipeline stage crops a Gray8Image to a given rectangular cropping window.
  * <p>
+ * 
  * @author webb
  */
 public class Gray8Crop extends PipelineStage {
@@ -40,160 +43,153 @@ public class Gray8Crop extends PipelineStage {
     int cX; /* left edge of cropping window */
     int cY; /* top of cropping window */
     
-    /** Creates a new instance of Gray8Crop. The cropping window
-     * is specified here.
+    /**
+     * Creates a new instance of Gray8Crop. The cropping window is specified
+     * here.
      *
-     * @param x left edge of cropping window
-     * @param y top edge of cropping window
-     * @param width width of cropping window
-     * @param height height of cropping window
-     * @throws com.github.ojil.core.Error if the top left corner of the
-     * window is negative, or the window area is non-positive.
+     * @param x
+     *            left edge of cropping window
+     * @param y
+     *            top edge of cropping window
+     * @param width
+     *            width of cropping window
+     * @param height
+     *            height of cropping window
+     * @throws ImageError
+     *             if the top left corner of the window is negative, or the
+     *             window area is non-positive.
      */
-    public Gray8Crop(
-            int x,
-            int y,
-            int width,
-            int height) throws com.github.ojil.core.Error {
-    	setWindow(x, y, width, height);
+    public Gray8Crop(final int x, final int y, final int width, final int height) throws ImageError {
+        setWindow(x, y, width, height);
     }
     
-    /** Creates a new instance of Gray8Crop. The cropping window
-     * is specified here.
+    /**
+     * Creates a new instance of Gray8Crop. The cropping window is specified
+     * here.
      *
-     * @param r Rect to crop to.
-     * @throws com.github.ojil.core.Error if the top left corner of the
-     * window is negative, or the window area is non-positive.
+     * @param r
+     *            Rect to crop to.
+     * @throws ImageError
+     *             if the top left corner of the window is negative, or the
+     *             window area is non-positive.
      */
-    public Gray8Crop(Rect r) throws com.github.ojil.core.Error {
-    	setWindow(r.getLeft(), r.getTop(), r.getWidth(), r.getHeight());
+    public Gray8Crop(final Rect r) throws ImageError {
+        setWindow(r.getLeft(), r.getTop(), r.getWidth(), r.getHeight());
     }
     
-    /** Crops the input gray image to the cropping window that was
-     * specified in the constructor.
+    /**
+     * Crops the input gray image to the cropping window that was specified in
+     * the constructor.
      *
-     * @param image the input image.
-     * @throws com.github.ojil.core.Error if the cropping window
-     *    extends outside the input image, or the input image
-     *    is not a Gray8Image.
+     * @param image
+     *            the input image.
+     * @throws ImageError
+     *             if the cropping window extends outside the input image, or
+     *             the input image is not a Gray8Image.
      */
-    public void push(Image image) throws com.github.ojil.core.Error {
+    @Override
+    public void push(final Image<?> image) throws ImageError {
         if (!(image instanceof Gray8Image)) {
-            throw new Error(
-                			Error.PACKAGE.ALGORITHM,
-                			ErrorCodes.IMAGE_NOT_GRAY8IMAGE,
-                			image.toString(),
-                			null,
-                			null);
+            throw new ImageError(ImageError.PACKAGE.ALGORITHM, AlgorithmErrorCodes.IMAGE_NOT_GRAY8IMAGE, image.toString(), null, null);
         }
-        Gray8Image imageInput = (Gray8Image) image;
-        if (this.cX + this.cWidth > image.getWidth() ||
-            this.cY + this.cHeight > image.getHeight()) {
-            throw new Error(
-                            Error.PACKAGE.CORE,
-                            com.github.ojil.core.ErrorCodes.BOUNDS_OUTSIDE_IMAGE,
-                            image.toString(),
-                            this.toString(),
-                            null);
+        final Gray8Image imageInput = (Gray8Image) image;
+        if (((cX + cWidth) > image.getWidth()) || ((cY + cHeight) > image.getHeight())) {
+            throw new ImageError(ImageError.PACKAGE.CORE, ErrorCodes.BOUNDS_OUTSIDE_IMAGE, image.toString(), toString(), null);
         }
-        Gray8Image imageResult = new Gray8Image(this.cWidth,this.cHeight);
-        Byte[] src = imageInput.getData();
-        Byte[] dst = imageResult.getData();
-        for (int i=0; i<this.cHeight; i++) {
-            System.arraycopy(
-                    src, 
-                    (i+this.cY)*image.getWidth() + this.cX,
-                    dst,
-                    i*this.cWidth,
-                    this.cWidth);
+        final Gray8Image imageResult = new Gray8Image(cWidth, cHeight);
+        final Byte[] src = imageInput.getData();
+        final Byte[] dst = imageResult.getData();
+        for (int i = 0; i < cHeight; i++) {
+            System.arraycopy(src, ((i + cY) * image.getWidth()) + cX, dst, i * cWidth, cWidth);
         }
         super.setOutput(imageResult);
     }
     
     /**
      * Gets the cropping window height
+     * 
      * @return the cropping window height
      */
     public int getHeight() {
-        return this.cHeight;
+        return cHeight;
     }
     
     /**
      * Gets the cropping window left edge
+     * 
      * @return the cropping window left edge
-    */
+     */
     public int getLeft() {
-        return this.cX;
+        return cX;
     }
     
     /**
      * Gets the cropping window top
+     * 
      * @return the cropping window top
      */
     public int getTop() {
-        return this.cY;
+        return cY;
     }
     
     /**
      * Gets the cropping window width
+     * 
      * @return the cropping window width
      */
     public int getWidth() {
-        return this.cWidth;
-    }
-    
-    /** Change the cropping window. 
-     *
-     * @param x left edge of cropping window
-     * @param y top edge of cropping window
-     * @param width width of cropping window
-     * @param height height of cropping window
-     * @throws com.github.ojil.core.Error if the top left corner of the
-     * window is negative, or the window area is non-positive.
-     */
-    public void setWindow(
-            int x,
-            int y,
-            int width,
-            int height) throws com.github.ojil.core.Error {
-        if (x<0 || y<0) {
-            throw new Error(
-                            Error.PACKAGE.CORE,
-                            com.github.ojil.core.ErrorCodes.BOUNDS_OUTSIDE_IMAGE,
-                            new Integer(x).toString(),
-                            new Integer(y).toString(),
-                            null);
-        }
-        if (width<=0 || height<=0) {
-            throw new Error(
-                            Error.PACKAGE.ALGORITHM,
-                            ErrorCodes.INPUT_IMAGE_SIZE_NEGATIVE,
-                            new Integer(width).toString(),
-                            new Integer(height).toString(),
-                            null);
-        }
-        this.cX = x;
-        this.cY = y;
-        this.cWidth = width;
-        this.cHeight = height;
+        return cWidth;
     }
     
     /**
      * Change the cropping window.
-     * @param r new Rect to crop to
-     * @throws com.github.ojil.core.Error if the top left corner of the
-     * window is negative, or the window area is non-positive.
+     *
+     * @param x
+     *            left edge of cropping window
+     * @param y
+     *            top edge of cropping window
+     * @param width
+     *            width of cropping window
+     * @param height
+     *            height of cropping window
+     * @throws ImageError
+     *             if the top left corner of the window is negative, or the
+     *             window area is non-positive.
      */
-    public void setWindow(Rect r) throws com.github.ojil.core.Error {
-    	this.setWindow(r.getLeft(), r.getTop(), r.getWidth(), r.getHeight());
+    public void setWindow(final int x, final int y, final int width, final int height) throws ImageError {
+        if ((x < 0) || (y < 0)) {
+            throw new ImageError(ImageError.PACKAGE.CORE, ErrorCodes.BOUNDS_OUTSIDE_IMAGE, new Integer(x).toString(), new Integer(y).toString(), null);
+        }
+        if ((width <= 0) || (height <= 0)) {
+            throw new ImageError(ImageError.PACKAGE.ALGORITHM, AlgorithmErrorCodes.INPUT_IMAGE_SIZE_NEGATIVE, new Integer(width).toString(), new Integer(height).toString(), null);
+        }
+        cX = x;
+        cY = y;
+        cWidth = width;
+        cHeight = height;
     }
     
-    /** Return a string describing the cropping operation.
+    /**
+     * Change the cropping window.
+     * 
+     * @param r
+     *            new Rect to crop to
+     * @throws ImageError
+     *             if the top left corner of the window is negative, or the
+     *             window area is non-positive.
+     */
+    public void setWindow(final Rect r) throws ImageError {
+        this.setWindow(r.getLeft(), r.getTop(), r.getWidth(), r.getHeight());
+    }
+    
+    /**
+     * Return a string describing the cropping operation.
      *
      * @return the string describing the cropping operation.
      */
+    @Override
     public String toString() {
-        return super.toString() + " (" + this.cX + "," + this.cY +  //$NON-NLS-1$ //$NON-NLS-2$
-                "," + this.cWidth + "," + this.cHeight + ")"; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+        return super.toString() + " (" + cX + "," + cY + //$NON-NLS-1$ //$NON-NLS-2$
+                "," + cWidth + "," + cHeight + ")"; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
     }
 }

@@ -16,7 +16,7 @@
 
 package com.github.ojil.algorithm;
 
-import com.github.ojil.core.Error;
+import com.github.ojil.core.ImageError;
 import com.github.ojil.core.MathPlus;
 import com.github.ojil.core.Point;
 /**
@@ -107,9 +107,9 @@ public class Vec2 {
     /**
      * Calculate length of this Vec2.
      * @return sqrt(nX<sup>2</sup> + nY<sup>2</sup>)
-     * @throws com.github.ojil.core.Error if sqrt does, due to coding error
+     * @throws com.github.ojil.core.ImageError if sqrt does, due to coding error
      */
-    public int length() throws Error {
+    public int length() throws ImageError {
         return MathPlus.sqrt(nX * nX + nY * nY);
     }
       

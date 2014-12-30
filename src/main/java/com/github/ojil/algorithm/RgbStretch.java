@@ -27,7 +27,7 @@
  */
 
 package com.github.ojil.algorithm;
-import com.github.ojil.core.Error;
+import com.github.ojil.core.ImageError;
 import com.github.ojil.core.Gray8Image;
 import com.github.ojil.core.Image;
 import com.github.ojil.core.PipelineStage;
@@ -47,10 +47,10 @@ public class RgbStretch extends PipelineStage {
      *
      * @param cWidth new image width
      * @param cHeight new image height
-     * @throws com.github.ojil.core.Error if either is less than or equal to zero.
+     * @throws com.github.ojil.core.ImageError if either is less than or equal to zero.
      */
     public RgbStretch(int cWidth, int cHeight) 
-        throws com.github.ojil.core.Error {
+        throws com.github.ojil.core.ImageError {
         this.cWidth = cWidth;
         this.cHeight = cHeight;
         setupPipeline();
@@ -75,22 +75,22 @@ public class RgbStretch extends PipelineStage {
     /**
      * Process an image.
      * @param image the input RgbImage.
-     * @throws com.github.ojil.core.Error if the input is not an RgbImage, or is smaller than the target image either
+     * @throws com.github.ojil.core.ImageError if the input is not an RgbImage, or is smaller than the target image either
      * horizontally or vertically.
      */
-    public void push(Image image) throws com.github.ojil.core.Error {
+    public void push(Image image) throws com.github.ojil.core.ImageError {
         if (!(image instanceof RgbImage)) {
-            throw new Error(
-        			Error.PACKAGE.ALGORITHM,
-        			ErrorCodes.IMAGE_NOT_RGBIMAGE,
+            throw new ImageError(
+        			ImageError.PACKAGE.ALGORITHM,
+        			AlgorithmErrorCodes.IMAGE_NOT_RGBIMAGE,
         			image.toString(),
         			null,
         			null);
         }
         if (image.getWidth() > this.cWidth || image.getHeight() > this.cHeight) {
-            throw new Error(
-            			Error.PACKAGE.ALGORITHM,
-            			ErrorCodes.STRETCH_OUTPUT_SMALLER_THAN_INPUT,
+            throw new ImageError(
+            			ImageError.PACKAGE.ALGORITHM,
+            			AlgorithmErrorCodes.STRETCH_OUTPUT_SMALLER_THAN_INPUT,
             			image.toString(),
             			this.toString(),
             			null);
@@ -111,13 +111,13 @@ public class RgbStretch extends PipelineStage {
     /** Changes target height
      * 
      * @param cHeight the new target height.
-     * @throws com.github.ojil.core.Error if height is not positive
+     * @throws com.github.ojil.core.ImageError if height is not positive
      */
-    public void setHeight(int cHeight) throws com.github.ojil.core.Error {
+    public void setHeight(int cHeight) throws com.github.ojil.core.ImageError {
         if (cHeight <= 0) {
-            throw new Error(
-                			Error.PACKAGE.ALGORITHM,
-                			ErrorCodes.OUTPUT_IMAGE_SIZE_NEGATIVE,
+            throw new ImageError(
+                			ImageError.PACKAGE.ALGORITHM,
+                			AlgorithmErrorCodes.OUTPUT_IMAGE_SIZE_NEGATIVE,
                 			new Integer(cHeight).toString(),
                 			null,
                 			null);
@@ -126,7 +126,7 @@ public class RgbStretch extends PipelineStage {
         setupPipeline();
     }
     
-    private void setupPipeline() throws com.github.ojil.core.Error
+    private void setupPipeline() throws com.github.ojil.core.ImageError
     {
         RgbSelectGray sel = new RgbSelectGray(RgbSelectGray.RED);
         this.seqR = new Sequence(sel);
@@ -145,13 +145,13 @@ public class RgbStretch extends PipelineStage {
     /** Changes target width
      * 
      * @param cWidth the new target width.
-     * @throws com.github.ojil.core.Error if height is not positive
+     * @throws com.github.ojil.core.ImageError if height is not positive
      */
-    public void setWidth(int cWidth) throws com.github.ojil.core.Error {
+    public void setWidth(int cWidth) throws com.github.ojil.core.ImageError {
         if (cWidth <= 0) {
-            throw new Error(
-                			Error.PACKAGE.ALGORITHM,
-                			ErrorCodes.OUTPUT_IMAGE_SIZE_NEGATIVE,
+            throw new ImageError(
+                			ImageError.PACKAGE.ALGORITHM,
+                			AlgorithmErrorCodes.OUTPUT_IMAGE_SIZE_NEGATIVE,
                 			new Integer(cWidth).toString(),
                 			null,
                 			null);

@@ -15,7 +15,7 @@
 
 package com.github.ojil.algorithm;
 
-import com.github.ojil.core.Error;
+import com.github.ojil.core.ImageError;
 import com.github.ojil.core.Gray8OffsetImage;
 import com.github.ojil.core.Image;
 import com.github.ojil.core.PipelineStage;
@@ -31,18 +31,18 @@ public class RgbAffineWarp extends PipelineStage {
     private Gray8AffineWarp grayWarp;
     private RgbSelectGray selectRed, selectGreen, selectBlue;
     
-    public RgbAffineWarp(Integer[][] warp) throws Error {
+    public RgbAffineWarp(Integer[][] warp) throws ImageError {
         this.grayWarp = new Gray8AffineWarp(warp);
         this.selectRed = new RgbSelectGray(RgbSelectGray.RED);
         this.selectGreen = new RgbSelectGray(RgbSelectGray.GREEN);
         this.selectBlue = new RgbSelectGray(RgbSelectGray.BLUE);
     }
     
-    public void push(Image imageInput) throws Error {
+    public void push(Image imageInput) throws ImageError {
         if (!(imageInput instanceof RgbImage)) {
-            throw new Error(
-    				Error.PACKAGE.ALGORITHM,
-    				ErrorCodes.IMAGE_NOT_RGBIMAGE,
+            throw new ImageError(
+    				ImageError.PACKAGE.ALGORITHM,
+    				AlgorithmErrorCodes.IMAGE_NOT_RGBIMAGE,
     				imageInput.toString(),
     				null,
     				null);
@@ -63,7 +63,7 @@ public class RgbAffineWarp extends PipelineStage {
                 warpedRed.getYOffset()));
     }
 
-    public void setWarp(Integer[][] warp) throws Error {
+    public void setWarp(Integer[][] warp) throws ImageError {
         this.grayWarp.setWarp(warp);
     }
     

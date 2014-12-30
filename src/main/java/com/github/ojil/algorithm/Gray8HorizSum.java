@@ -17,15 +17,16 @@
 
 package com.github.ojil.algorithm;
 
-import com.github.ojil.core.Error;
 import com.github.ojil.core.Gray32Image;
 import com.github.ojil.core.Gray8Image;
 import com.github.ojil.core.Image;
+import com.github.ojil.core.ImageError;
 import com.github.ojil.core.PipelineStage;
 
 /**
- * Sum a Gray8Image in a horizontal window, with the width controllable, creating
- * a Gray32Image.
+ * Sum a Gray8Image in a horizontal window, with the width controllable,
+ * creating a Gray32Image.
+ * 
  * @author webb
  */
 public class Gray8HorizSum extends PipelineStage {
@@ -33,65 +34,58 @@ public class Gray8HorizSum extends PipelineStage {
     
     /**
      * Initialize Gray8HorizSum. The width is set here.
-     * @param nWidth width of the sum.
+     * 
+     * @param nWidth
+     *            width of the sum.
      */
-    public Gray8HorizSum(int nWidth) {
-        this.nSumWidth = nWidth;
+    public Gray8HorizSum(final int nWidth) {
+        nSumWidth = nWidth;
     }
-
+    
     /**
-     * Sum a Gray8Image horizontally, creating a Gray32Image. 
-     * The edges of the image (closer than width)
-     * are set to 0. The summing is done efficiently so that each pixel computation
-     * takes only 2 additions on average.<p>
+     * Sum a Gray8Image horizontally, creating a Gray32Image. The edges of the
+     * image (closer than width) are set to 0. The summing is done efficiently
+     * so that each pixel computation takes only 2 additions on average.
+     * <p>
      * This code uses Gray8QmSum to form a cumulative sum of the whole image.
      * Since the entire image is summed to a Gray32Image by Gray8QmSum overflow
-     * may occur if
-     * more thant 2**24 pixels are in the image (e.g., larger than 2**12x2**12 =
-     * 4096x4096).
-     * @param imageInput input Gray8Image.
-     * @throws com.github.ojil.core.Error if the input is not a Gray8Image.
+     * may occur if more thant 2**24 pixels are in the image (e.g., larger than
+     * 2**12x2**12 = 4096x4096).
+     * 
+     * @param imageInput
+     *            input Gray8Image.
+     * @throws ImageError
+     *             if the input is not a Gray8Image.
      */
-    public void push(Image imageInput) throws Error {
+    @Override
+    public void push(final Image<?> imageInput) throws ImageError {
         if (!(imageInput instanceof Gray8Image)) {
-            throw new Error(
-                            Error.PACKAGE.ALGORITHM,
-                            ErrorCodes.IMAGE_NOT_GRAY8IMAGE,
-                            imageInput.toString(),
-                            null,
-                            null);
+            throw new ImageError(ImageError.PACKAGE.ALGORITHM, AlgorithmErrorCodes.IMAGE_NOT_GRAY8IMAGE, imageInput.toString(), null, null);
         }
-        Gray8QmSum gqs = new Gray8QmSum();
+        final Gray8QmSum gqs = new Gray8QmSum();
         gqs.push(imageInput);
-        Gray32Image gSum = (Gray32Image) gqs.getFront();
-        Integer[] sData = gSum.getData();
-        Gray32Image gResult = new Gray32Image(
-                imageInput.getWidth(), 
-                imageInput.getHeight());
-        Integer[] gData = gResult.getData();
-        for (int i=1; i<imageInput.getHeight(); i++) {
-            for (int j=0; j<this.nSumWidth; j++) {
-                gData[i*imageInput.getWidth()+j] = 0;
+        final Gray32Image gSum = (Gray32Image) gqs.getFront();
+        final Integer[] sData = gSum.getData();
+        final Gray32Image gResult = new Gray32Image(imageInput.getWidth(), imageInput.getHeight());
+        final Integer[] gData = gResult.getData();
+        for (int i = 1; i < imageInput.getHeight(); i++) {
+            for (int j = 0; j < nSumWidth; j++) {
+                gData[(i * imageInput.getWidth()) + j] = 0;
             }
-            for (int j=nSumWidth; j<imageInput.getWidth(); j++) {
-                gData[i*imageInput.getWidth()+j] =
-                    sData[i*imageInput.getWidth()+j] -
-                        sData[i*imageInput.getWidth()+j-this.nSumWidth];
+            for (int j = nSumWidth; j < imageInput.getWidth(); j++) {
+                gData[(i * imageInput.getWidth()) + j] = sData[(i * imageInput.getWidth()) + j] - sData[((i * imageInput.getWidth()) + j) - nSumWidth];
             }
         }
-        for (int i=1; i<imageInput.getHeight(); i++) {
-            for (int j=0; j<this.nSumWidth; j++) {
-                gData[i*imageInput.getWidth()+j] = 0;
+        for (int i = 1; i < imageInput.getHeight(); i++) {
+            for (int j = 0; j < nSumWidth; j++) {
+                gData[(i * imageInput.getWidth()) + j] = 0;
             }
-            for (int j=nSumWidth; j<imageInput.getWidth(); j++) {
-                gData[i*imageInput.getWidth()+j] =
-                    sData[i*imageInput.getWidth()+j] -
-                        sData[i*imageInput.getWidth()+j-this.nSumWidth] -
-                    sData[(i-1)*imageInput.getWidth()+j] +
-                        sData[(i-1)*imageInput.getWidth()+j-this.nSumWidth];
+            for (int j = nSumWidth; j < imageInput.getWidth(); j++) {
+                gData[(i * imageInput.getWidth()) + j] = (sData[(i * imageInput.getWidth()) + j] - sData[((i * imageInput.getWidth()) + j) - nSumWidth] - sData[((i - 1) * imageInput.getWidth()) + j])
+                        + sData[(((i - 1) * imageInput.getWidth()) + j) - nSumWidth];
             }
         }
         super.setOutput(gResult);
     }
-
+    
 }

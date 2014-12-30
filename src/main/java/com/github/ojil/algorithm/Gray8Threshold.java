@@ -23,7 +23,7 @@
  */
 
 package com.github.ojil.algorithm;
-import com.github.ojil.core.Error;
+import com.github.ojil.core.ImageError;
 import com.github.ojil.core.Gray8Image;
 import com.github.ojil.core.Image;
 import com.github.ojil.core.PipelineStage;
@@ -53,16 +53,16 @@ public class Gray8Threshold extends PipelineStage {
      * Byte.MIN_VALUE under.
      *
      * @param image the input image (and output)
-     * @throws com.github.ojil.core.Error if the image is not a gray 8-bit
+     * @throws com.github.ojil.core.ImageError if the image is not a gray 8-bit
      * image.
      */
     public void push(Image image)
-        throws com.github.ojil.core.Error
+        throws com.github.ojil.core.ImageError
     {
         if (!(image instanceof Gray8Image)) {
-            throw new Error(
-            				Error.PACKAGE.ALGORITHM,
-            				ErrorCodes.IMAGE_NOT_GRAY8IMAGE,
+            throw new ImageError(
+            				ImageError.PACKAGE.ALGORITHM,
+            				AlgorithmErrorCodes.IMAGE_NOT_GRAY8IMAGE,
             				image.toString(),
             				null,
             				null);

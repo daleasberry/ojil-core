@@ -15,7 +15,7 @@
  */
 
 package com.github.ojil.algorithm;
-import com.github.ojil.core.Error;
+import com.github.ojil.core.ImageError;
 import com.github.ojil.core.Gray32Image;
 import com.github.ojil.core.Gray32OffsetImage;
 import com.github.ojil.core.Gray8Image;
@@ -45,14 +45,14 @@ public class Gray8SumGray32 extends PipelineStage {
      * Form the cumulative sum<p>
      * Output(i,j) = &sum;<sub>k &le; i, l &le; j</sub> Input(k,l)
      * @param image input image.
-     * @throws com.github.ojil.core.Error if the input is not a Gray8Image.
+     * @throws com.github.ojil.core.ImageError if the input is not a Gray8Image.
      */
-    public void push(Image image) throws com.github.ojil.core.Error
+    public void push(Image image) throws com.github.ojil.core.ImageError
     {
         if (!(image instanceof Gray8Image)) {
-            throw new Error(
-                			Error.PACKAGE.ALGORITHM,
-                			ErrorCodes.IMAGE_NOT_GRAY8IMAGE,
+            throw new ImageError(
+                			ImageError.PACKAGE.ALGORITHM,
+                			AlgorithmErrorCodes.IMAGE_NOT_GRAY8IMAGE,
                 			image.toString(),
                 			null,
                 			null);

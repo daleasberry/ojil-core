@@ -17,7 +17,7 @@
 
 package com.github.ojil.algorithm;
 
-import com.github.ojil.core.Error;
+import com.github.ojil.core.ImageError;
 import com.github.ojil.core.Gray8Image;
 import com.github.ojil.core.Image;
 import com.github.ojil.core.PipelineStage;
@@ -67,13 +67,13 @@ public class RgbVecThresh extends PipelineStage {
     /**
      * Perform thresholding operation. Output is a gray image.
      * @param imageInput input RgbImage to be thresholded.
-     * @throws com.github.ojil.core.Error if input is not an RgbImage.
+     * @throws com.github.ojil.core.ImageError if input is not an RgbImage.
      */
-    public void push(Image imageInput) throws Error {
+    public void push(Image imageInput) throws ImageError {
         if (!(imageInput instanceof RgbImage)) {
-            throw new Error(
-                            Error.PACKAGE.ALGORITHM,
-                            ErrorCodes.IMAGE_NOT_RGBIMAGE,
+            throw new ImageError(
+                            ImageError.PACKAGE.ALGORITHM,
+                            AlgorithmErrorCodes.IMAGE_NOT_RGBIMAGE,
                             imageInput.toString(),
                             null,
                             null);

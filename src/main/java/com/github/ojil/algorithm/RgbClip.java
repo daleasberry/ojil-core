@@ -23,7 +23,7 @@
  */
 
 package com.github.ojil.algorithm;
-import com.github.ojil.core.Error;
+import com.github.ojil.core.ImageError;
 import com.github.ojil.core.Image;
 import com.github.ojil.core.PipelineStage;
 import com.github.ojil.core.RgbImage;
@@ -94,15 +94,15 @@ public class RgbClip extends PipelineStage {
      * test (according to bDir) to 0.
      *
      * @param image the input image.
-     * @throws com.github.ojil.core.Error if the cropping window
+     * @throws com.github.ojil.core.ImageError if the cropping window
      *    extends outside the input image, or the input image
      *    is not an RgbImage.
      */
-    public void push(Image image) throws com.github.ojil.core.Error {
+    public void push(Image image) throws com.github.ojil.core.ImageError {
         if (!(image instanceof RgbImage)) {
-            throw new Error(
-                			Error.PACKAGE.ALGORITHM,
-                			ErrorCodes.IMAGE_NOT_RGBIMAGE,
+            throw new ImageError(
+                			ImageError.PACKAGE.ALGORITHM,
+                			AlgorithmErrorCodes.IMAGE_NOT_RGBIMAGE,
                 			image.toString(),
                 			null,
                 			null);

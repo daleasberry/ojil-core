@@ -29,7 +29,7 @@ package com.github.ojil.core;
  *
  * @author webb
  */
-public class Gray32Image extends Image {
+public class Gray32Image extends Image<Object> {
     private final Integer nImage[];
     
     /**

@@ -23,7 +23,7 @@
  */
 
 package com.github.ojil.algorithm;
-import com.github.ojil.core.Error;
+import com.github.ojil.core.ImageError;
 import com.github.ojil.core.Gray8Image;
 import com.github.ojil.core.Image;
 import com.github.ojil.core.PipelineStage;
@@ -41,9 +41,9 @@ public class Gray8Lookup extends PipelineStage {
     /**
      * Creates a new instance of Gray8Lookup.
      * @param table The mapping table. Element i maps gray value Byte.MinValue + i to table[i].
-     * @throws com.github.ojil.core.Error when table is not a 256-element array.
+     * @throws com.github.ojil.core.ImageError when table is not a 256-element array.
      */
-    public Gray8Lookup(Byte[] table) throws com.github.ojil.core.Error {
+    public Gray8Lookup(Byte[] table) throws com.github.ojil.core.ImageError {
         setTable(table);
     }
     
@@ -60,13 +60,13 @@ public class Gray8Lookup extends PipelineStage {
     /**
      * Maps input Gray8Image through the lookup table, replacing values in the image.
      * @param image the input image (output replaces input).
-     * @throws com.github.ojil.core.Error if image is not a Gray8Image.
+     * @throws com.github.ojil.core.ImageError if image is not a Gray8Image.
      */
-    public void push(Image image) throws com.github.ojil.core.Error {
+    public void push(Image image) throws com.github.ojil.core.ImageError {
         if (!(image instanceof Gray8Image)) {
-            throw new Error(
-            				Error.PACKAGE.ALGORITHM,
-            				ErrorCodes.IMAGE_NOT_GRAY8IMAGE,
+            throw new ImageError(
+            				ImageError.PACKAGE.ALGORITHM,
+            				AlgorithmErrorCodes.IMAGE_NOT_GRAY8IMAGE,
             				image.toString(),
             				null,
             				null);
@@ -83,13 +83,13 @@ public class Gray8Lookup extends PipelineStage {
      * Assign a new lookup table. Images passed to push() after setTable is called
      * will be mapped by the new image.
      * @param table The lookup table. Input image value g is mapped to table[g + Byte.MinValue]
-     * @throws com.github.ojil.core.Error if table is not a 256-element array.
+     * @throws com.github.ojil.core.ImageError if table is not a 256-element array.
      */
-    public void setTable(Byte[] table) throws com.github.ojil.core.Error {
+    public void setTable(Byte[] table) throws com.github.ojil.core.ImageError {
         if (table.length != 256) {
-            throw new Error(
-            				Error.PACKAGE.ALGORITHM,
-            				ErrorCodes.LOOKUP_TABLE_LENGTH_NOT_256,
+            throw new ImageError(
+            				ImageError.PACKAGE.ALGORITHM,
+            				AlgorithmErrorCodes.LOOKUP_TABLE_LENGTH_NOT_256,
             				table.toString(),
             				null,
             				null);

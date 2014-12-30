@@ -31,7 +31,7 @@ package com.github.ojil.core;
  *
  * @author webb
  */
-public class Gray8Image extends Image {
+public class Gray8Image extends Image<Object> {
     private final Byte bImage[];
     
     /**

@@ -23,42 +23,44 @@
  */
 
 package com.github.ojil.algorithm;
-import com.github.ojil.core.Error;
+
 import com.github.ojil.core.Gray8Image;
 import com.github.ojil.core.Image;
+import com.github.ojil.core.ImageError;
 import com.github.ojil.core.PipelineStage;
 
 /**
  * Computes absolute value of a Gray8Image, replacing the original.
+ * 
  * @author webb
  */
 public class Gray8Abs extends PipelineStage {
     
-    /** Creates a new instance of Gray8Abs 
+    /**
+     * Creates a new instance of Gray8Abs
      *
      */
     public Gray8Abs() {
     }
     
-    /** 
-     * Compute absolute value of the image. Input is range
-     * Byte.MIN_VALUE to Byte.MAX_VALUE; output is 0..Byte.MAX_VALUE
-     * @param image the input Gray8Image
-     * @throws com.github.ojil.core.Error if image is not a Gray8Image
+    /**
+     * Compute absolute value of the image. Input is range Byte.MIN_VALUE to
+     * Byte.MAX_VALUE; output is 0..Byte.MAX_VALUE
+     * 
+     * @param image
+     *            the input Gray8Image
+     * @throws ImageError
+     *             if image is not a Gray8Image
      */
-    public void push(Image image) throws com.github.ojil.core.Error {
+    @Override
+    public void push(final Image<?> image) throws ImageError {
         if (!(image instanceof Gray8Image)) {
-            throw new Error(
-            				Error.PACKAGE.ALGORITHM,
-            				ErrorCodes.IMAGE_NOT_GRAY8IMAGE,
-            				image.toString(),
-            				null,
-            				null);
+            throw new ImageError(ImageError.PACKAGE.ALGORITHM, AlgorithmErrorCodes.IMAGE_NOT_GRAY8IMAGE, image.toString(), null, null);
         }
-        Gray8Image input = (Gray8Image) image;
-        Byte[] bIn = input.getData();
-        for (int i=0; i<bIn.length; i++) {
-         	bIn[i] = (byte) Math.min(Byte.MAX_VALUE, Math.abs(bIn[i]));
+        final Gray8Image input = (Gray8Image) image;
+        final Byte[] bIn = input.getData();
+        for (int i = 0; i < bIn.length; i++) {
+            bIn[i] = (byte) Math.min(Byte.MAX_VALUE, Math.abs(bIn[i]));
         }
         super.setOutput(input);
     }

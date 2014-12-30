@@ -23,7 +23,7 @@
  */
 
 package com.github.ojil.algorithm;
-import com.github.ojil.core.Error;
+import com.github.ojil.core.ImageError;
 import com.github.ojil.core.Gray8Image;
 import com.github.ojil.core.Image;
 import com.github.ojil.core.PipelineStage;
@@ -128,9 +128,9 @@ public class RgbSelectGray extends PipelineStage {
     /**
      * Creates a new instance of RgbSelectGray.
      * @param color the color selected from the color image to create the gray image.
-     * @throws com.github.ojil.core.Error if color is not RED, GREEN, or BLUE.
+     * @throws com.github.ojil.core.ImageError if color is not RED, GREEN, or BLUE.
      */
-    public RgbSelectGray(ColorClass color) throws com.github.ojil.core.Error {
+    public RgbSelectGray(ColorClass color) throws com.github.ojil.core.ImageError {
         setColor(color);
     }
     
@@ -149,14 +149,14 @@ public class RgbSelectGray extends PipelineStage {
      * is from -128&rarr;127 instead of the 0-255 value in the ARGB word.
      *
      * @param image the input image
-     * @throws com.github.ojil.core.Error if the input image is not a color
+     * @throws com.github.ojil.core.ImageError if the input image is not a color
      *   image.
      */
-    public void push(Image image) throws com.github.ojil.core.Error {
+    public void push(Image image) throws com.github.ojil.core.ImageError {
         if (!(image instanceof RgbImage)) {
-            throw new Error(
-            			Error.PACKAGE.ALGORITHM,
-            			ErrorCodes.IMAGE_NOT_RGBIMAGE,
+            throw new ImageError(
+            			ImageError.PACKAGE.ALGORITHM,
+            			AlgorithmErrorCodes.IMAGE_NOT_RGBIMAGE,
             			image.toString(),
             			null,
             			null);
@@ -192,18 +192,18 @@ public class RgbSelectGray extends PipelineStage {
     /**
      * Changes the color selected.
      * @param color the new color selected
-     * @throws com.github.ojil.core.Error if the input color is not ColorClass.RED, GREEN, or BLUE.
+     * @throws com.github.ojil.core.ImageError if the input color is not ColorClass.RED, GREEN, or BLUE.
      */
-    public void setColor(ColorClass color) throws com.github.ojil.core.Error {
+    public void setColor(ColorClass color) throws com.github.ojil.core.ImageError {
         /* as I understand the language this can't happen, but just in
          * case...
          */
         if (!(color.equals(RgbSelectGray.RED) || 
                 color.equals(RgbSelectGray.GREEN) || 
                 color.equals(RgbSelectGray.BLUE))) {
-            throw new Error(
-        			Error.PACKAGE.ALGORITHM,
-        			ErrorCodes.ILLEGAL_COLOR_CHOICE,
+            throw new ImageError(
+        			ImageError.PACKAGE.ALGORITHM,
+        			AlgorithmErrorCodes.ILLEGAL_COLOR_CHOICE,
         			color.toString(),
         			null,
         			null);

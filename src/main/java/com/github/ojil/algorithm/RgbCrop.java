@@ -23,7 +23,7 @@
  */
 
 package com.github.ojil.algorithm;
-import com.github.ojil.core.Error;
+import com.github.ojil.core.ImageError;
 import com.github.ojil.core.Image;
 import com.github.ojil.core.PipelineStage;
 import com.github.ojil.core.Rect;
@@ -46,14 +46,14 @@ public class RgbCrop extends PipelineStage {
      * @param y top edge of cropping window
      * @param width width of cropping window
      * @param height height of cropping window
-     * @throws com.github.ojil.core.Error if the top left corner of the
+     * @throws com.github.ojil.core.ImageError if the top left corner of the
      * window is negative, or the window area is non-positive.
      */
     public RgbCrop(
             int x,
             int y,
             int width,
-            int height) throws com.github.ojil.core.Error {
+            int height) throws com.github.ojil.core.ImageError {
         setWindow(x, y, width, height);
     }
     
@@ -61,10 +61,10 @@ public class RgbCrop extends PipelineStage {
      * is specified here.
      *
      * @param r the rectangle to crop to
-     * @throws com.github.ojil.core.Error if the top left corner of the
+     * @throws com.github.ojil.core.ImageError if the top left corner of the
      * window is negative, or the window area is non-positive.
      */
-    public RgbCrop(Rect r) throws com.github.ojil.core.Error {
+    public RgbCrop(Rect r) throws com.github.ojil.core.ImageError {
         setWindow(r.getLeft(), r.getTop(), r.getWidth(), r.getHeight());
     }
     
@@ -72,15 +72,15 @@ public class RgbCrop extends PipelineStage {
      * specified in the constructor.
      *
      * @param image the input image.
-     * @throws com.github.ojil.core.Error if the cropping window
+     * @throws com.github.ojil.core.ImageError if the cropping window
      *    extends outside the input image, or the input image
      *    is not an RgbImage.
      */
-    public void push(Image image) throws com.github.ojil.core.Error {
+    public void push(Image image) throws com.github.ojil.core.ImageError {
         if (!(image instanceof RgbImage)) {
-            throw new Error(
-                			Error.PACKAGE.ALGORITHM,
-                			ErrorCodes.IMAGE_NOT_RGBIMAGE,
+            throw new ImageError(
+                			ImageError.PACKAGE.ALGORITHM,
+                			AlgorithmErrorCodes.IMAGE_NOT_RGBIMAGE,
                 			image.toString(),
                 			null,
                 			null);
@@ -88,8 +88,8 @@ public class RgbCrop extends PipelineStage {
         RgbImage imageInput = (RgbImage) image;
         if (this.cX + this.cWidth > image.getWidth() ||
             this.cY + this.cHeight > image.getHeight()) {
-            throw new Error(
-                            Error.PACKAGE.CORE,
+            throw new ImageError(
+                            ImageError.PACKAGE.CORE,
                             com.github.ojil.core.ErrorCodes.BOUNDS_OUTSIDE_IMAGE,
                             image.toString(),
                             this.toString(),
@@ -147,26 +147,26 @@ public class RgbCrop extends PipelineStage {
      * @param y top edge of cropping window
      * @param width width of cropping window
      * @param height height of cropping window
-     * @throws com.github.ojil.core.Error if the top left corner of the
+     * @throws com.github.ojil.core.ImageError if the top left corner of the
      * window is negative, or the window area is non-positive.
      */
     public void setWindow(
             int x,
             int y,
             int width,
-            int height) throws com.github.ojil.core.Error {
+            int height) throws com.github.ojil.core.ImageError {
         if (x<0 || y<0) {
-            throw new Error(
-                            Error.PACKAGE.CORE,
+            throw new ImageError(
+                            ImageError.PACKAGE.CORE,
                             com.github.ojil.core.ErrorCodes.BOUNDS_OUTSIDE_IMAGE,
                             new Integer(x).toString(),
                             new Integer(y).toString(),
                             null);
         }
         if (width<=0 || height<=0) {
-            throw new Error(
-                			Error.PACKAGE.ALGORITHM,
-                			ErrorCodes.INPUT_IMAGE_SIZE_NEGATIVE,
+            throw new ImageError(
+                			ImageError.PACKAGE.ALGORITHM,
+                			AlgorithmErrorCodes.INPUT_IMAGE_SIZE_NEGATIVE,
                 			new Integer(width).toString(),
                 			new Integer(height).toString(),
                 			null);
@@ -177,7 +177,7 @@ public class RgbCrop extends PipelineStage {
         this.cHeight = height;
     }
     
-    public void setWindow(Rect r) throws Error {
+    public void setWindow(Rect r) throws ImageError {
         this.setWindow(r.getLeft(), r.getTop(), r.getWidth(), r.getHeight());
     }
     

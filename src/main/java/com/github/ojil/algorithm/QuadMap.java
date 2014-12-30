@@ -35,9 +35,9 @@ public class QuadMap {
      * the two maps are not optimized.
      * @param q1 source map
      * @param q2 target map
-     * @throws com.github.ojil.core.Error if Triangle does, due to colinearity.
+     * @throws com.github.ojil.core.ImageError if Triangle does, due to colinearity.
      */
-    public QuadMap(Quad q1, Quad q2) throws com.github.ojil.core.Error {
+    public QuadMap(Quad q1, Quad q2) throws com.github.ojil.core.ImageError {
         // initialize the triangle maps. 
         this.t = new TriangleMap[2];
         this.t1 = new Triangle(q1.getCorner(0), q1.getCorner(1), q1.getCorner(2));

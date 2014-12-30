@@ -22,7 +22,7 @@
  */
 
 package com.github.ojil.algorithm;
-import com.github.ojil.core.Error;
+import com.github.ojil.core.ImageError;
 import com.github.ojil.core.Image;
 import com.github.ojil.core.PipelineStage;
 import com.github.ojil.core.RgbImage;
@@ -51,14 +51,14 @@ public class RgbDimMask extends PipelineStage {
     /** Dim the input RgbMaskedImage by the amount specified in the nDim
      * parameter in the constructor.
      * @param image the input image.
-     * @throws com.github.ojil.core.Error if  the input image
+     * @throws com.github.ojil.core.ImageError if  the input image
      *    is not an RgbImage.
      */
-    public void push(Image image) throws com.github.ojil.core.Error {
+    public void push(Image image) throws com.github.ojil.core.ImageError {
         if (!(image instanceof RgbMaskedImage)) {
-            throw new Error(
-                            Error.PACKAGE.ALGORITHM,
-                            ErrorCodes.OBJECT_NOT_EXPECTED_TYPE,
+            throw new ImageError(
+                            ImageError.PACKAGE.ALGORITHM,
+                            AlgorithmErrorCodes.OBJECT_NOT_EXPECTED_TYPE,
                             image.toString(),
                             "RgbMaskedImage",
                             null);

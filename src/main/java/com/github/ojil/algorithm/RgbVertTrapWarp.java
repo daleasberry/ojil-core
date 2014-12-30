@@ -23,7 +23,7 @@
  */
 
 package com.github.ojil.algorithm;
-import com.github.ojil.core.Error;
+import com.github.ojil.core.ImageError;
 import com.github.ojil.core.Gray8Image;
 import com.github.ojil.core.Image;
 import com.github.ojil.core.PipelineStage;
@@ -64,7 +64,7 @@ public class RgbVertTrapWarp extends PipelineStage {
      * past the actual last column processed in the input image. The column
      * referred to as the ending row is the one above the bounding row, i.e.,
      * nColEnd.
-     * @throws com.github.ojil.core.Error if the trapezoid is empty or outside
+     * @throws com.github.ojil.core.ImageError if the trapezoid is empty or outside
      * the bounds of any image, i.e., if nColStart &lt; 0, or nColEnd &le; nColStart,
      * or nRowTopStart &le; nRowBotStart, or nRowTopEnd &le; nRowBotEnd.
      */
@@ -74,7 +74,7 @@ public class RgbVertTrapWarp extends PipelineStage {
 	    int nRowTopStart, 
 	    int nRowBotStart,
 	    int nRowTopEnd, 
-	    int nRowBotEnd) throws com.github.ojil.core.Error {
+	    int nRowBotEnd) throws com.github.ojil.core.ImageError {
         setTrapezoid(nColStart, nColEnd, nRowTopStart, nRowBotStart,
                 nRowTopEnd, nRowBotEnd);
     }
@@ -135,14 +135,14 @@ public class RgbVertTrapWarp extends PipelineStage {
      * to avoid floating point computation.
      *
      * @param image the input gray image.
-     * @throws com.github.ojil.core.Error if the input image is not gray,
+     * @throws com.github.ojil.core.ImageError if the input image is not gray,
      * or the trapezoid already specified extends outside its bounds.
      */
-    public void push(Image image) throws com.github.ojil.core.Error {
+    public void push(Image image) throws com.github.ojil.core.ImageError {
         if (!(image instanceof RgbImage)) {
-            throw new Error(
-    				Error.PACKAGE.ALGORITHM,
-    				ErrorCodes.IMAGE_NOT_RGBIMAGE,
+            throw new ImageError(
+    				ImageError.PACKAGE.ALGORITHM,
+    				AlgorithmErrorCodes.IMAGE_NOT_RGBIMAGE,
     				image.toString(),
     				null,
     				null);
@@ -150,8 +150,8 @@ public class RgbVertTrapWarp extends PipelineStage {
         if (this.nRowBotStart > image.getHeight() ||
             this.nRowBotEnd > image.getHeight() ||
             this.nColEnd > image.getWidth()) {
-            throw new Error(
-    				Error.PACKAGE.CORE,
+            throw new ImageError(
+    				ImageError.PACKAGE.CORE,
     				com.github.ojil.core.ErrorCodes.BOUNDS_OUTSIDE_IMAGE,
     				image.toString(),
     				this.toString(),
@@ -177,7 +177,7 @@ public class RgbVertTrapWarp extends PipelineStage {
      * @param nRowBotStart right edge of trapezoid on starting row
      * @param nRowTopEnd left edge of trapezoid on ending row
      * @param nRowBotEnd right edge of trapezoid on ending row
-     * @throws com.github.ojil.core.Error if the trapezoid is empty or outside
+     * @throws com.github.ojil.core.ImageError if the trapezoid is empty or outside
      * the bounds of any image, i.e., if nColStart &lt; 0, or nColEnd &le; nColStart,
      * or nRowTopStart &le; nRowBotStart, or nRowTopEnd &le; nRowBotEnd.
      */
@@ -187,13 +187,13 @@ public class RgbVertTrapWarp extends PipelineStage {
 	    int nRowTopStart, 
 	    int nRowBotStart,
 	    int nRowTopEnd, 
-	    int nRowBotEnd) throws com.github.ojil.core.Error {
+	    int nRowBotEnd) throws com.github.ojil.core.ImageError {
         if (nColStart >= nColEnd || 
                 nRowTopStart >= nRowBotStart ||
                 nRowTopEnd >= nRowBotEnd) {
-            throw new Error(
-            				Error.PACKAGE.ALGORITHM,
-            				ErrorCodes.PARAMETER_OUT_OF_RANGE,
+            throw new ImageError(
+            				ImageError.PACKAGE.ALGORITHM,
+            				AlgorithmErrorCodes.PARAMETER_OUT_OF_RANGE,
             				new Integer(nColStart).toString(),
             				new Integer(nColEnd).toString(),
             				null);
@@ -207,8 +207,8 @@ public class RgbVertTrapWarp extends PipelineStage {
         if (this.nColStart < 0 || 
                 this.nRowTopStart < 0 || 
                 this.nRowBotStart < 0) {
-            throw new Error(
-                            Error.PACKAGE.CORE,
+            throw new ImageError(
+                            ImageError.PACKAGE.CORE,
                             com.github.ojil.core.ErrorCodes.BOUNDS_OUTSIDE_IMAGE,
                             this.toString(),
                             null,

@@ -32,7 +32,7 @@
  */
 
 package com.github.ojil.algorithm;
-import com.github.ojil.core.Error;
+import com.github.ojil.core.ImageError;
 import com.github.ojil.core.Gray32MaskedImage;
 import com.github.ojil.core.Gray32OffsetImage;
 import com.github.ojil.core.Gray8OffsetImage;
@@ -144,27 +144,27 @@ public class MaskedGray32SubImgGen extends PipelineStage {
      * set to indicate where it was generated in the input image.
      * @return a MaskedGray8SubImage that is the next subimage in the input Gray8Image to
      * be processed.
-     * @throws com.github.ojil.core.Error if no subimage is available (you have to call isEmpty() to determine if
+     * @throws com.github.ojil.core.ImageError if no subimage is available (you have to call isEmpty() to determine if
      * a subimage is available. As few as 0 subimage can be generated for a
      * given input if the entire image is masked.) Also throws if the output
      * image (stored in the superclass) has been changed in type.
      */
-     public Image getFront() throws com.github.ojil.core.Error
+     public Image getFront() throws com.github.ojil.core.ImageError
     {
         // reuse output image
         // check to make sure nobody damaged it somehow
         if (!(super.imageOutput instanceof Gray32OffsetImage)) {
-            throw new Error(
-                            Error.PACKAGE.ALGORITHM,
-                            ErrorCodes.OBJECT_NOT_EXPECTED_TYPE,
+            throw new ImageError(
+                            ImageError.PACKAGE.ALGORITHM,
+                            AlgorithmErrorCodes.OBJECT_NOT_EXPECTED_TYPE,
                             super.imageOutput.toString(),
                             "Gray32SubImage",
                             null);
         }
         if (!advanceToNextSubImage()) {
-            throw new Error(
-                            Error.PACKAGE.ALGORITHM,
-                            ErrorCodes.SUBIMAGE_NO_IMAGE_AVAILABLE,
+            throw new ImageError(
+                            ImageError.PACKAGE.ALGORITHM,
+                            AlgorithmErrorCodes.SUBIMAGE_NO_IMAGE_AVAILABLE,
                             this.toString(),
                             null,
                             null);
@@ -200,22 +200,22 @@ public class MaskedGray32SubImgGen extends PipelineStage {
     /**
      * Accepts a new MaskedGray8Image and initializes all the generator indices.
      * @param image The input MaskedGray8Image.
-     * @throws com.github.ojil.core.Error if the input is not of type MaskedGray8Image or is smaller than the
+     * @throws com.github.ojil.core.ImageError if the input is not of type MaskedGray8Image or is smaller than the
      * subimages to be generated.
      */
-    public void push(Image image) throws com.github.ojil.core.Error {
+    public void push(Image image) throws com.github.ojil.core.ImageError {
         if (!(image instanceof Gray32MaskedImage)) {
-            throw new Error(
-                            Error.PACKAGE.ALGORITHM,
-                            ErrorCodes.OBJECT_NOT_EXPECTED_TYPE,
+            throw new ImageError(
+                            ImageError.PACKAGE.ALGORITHM,
+                            AlgorithmErrorCodes.OBJECT_NOT_EXPECTED_TYPE,
                             image.toString(),
                             "Gray32MaskedImage",
                             null);
         }
         if (image.getWidth() < this.nWidth || image.getHeight() < this.nHeight) {
-            throw new Error(
-                            Error.PACKAGE.ALGORITHM,
-                            ErrorCodes.IMAGE_TOO_SMALL,
+            throw new ImageError(
+                            ImageError.PACKAGE.ALGORITHM,
+                            AlgorithmErrorCodes.IMAGE_TOO_SMALL,
                             image.toString(),
                             new Integer(this.nWidth).toString(),
                             new Integer(this.nHeight).toString());

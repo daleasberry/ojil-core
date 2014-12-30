@@ -23,7 +23,7 @@
  */
 
 package com.github.ojil.algorithm;
-import com.github.ojil.core.Error;
+import com.github.ojil.core.ImageError;
 import com.github.ojil.core.Gray8Image;
 import com.github.ojil.core.Image;
 import com.github.ojil.core.PipelineStage;
@@ -42,10 +42,10 @@ public class Gray8RectStretch extends PipelineStage {
      *
      * @param cWidth new image width
      * @param cHeight new image height
-     * @throws com.github.ojil.core.Error if either is less than or equal to zero.
+     * @throws com.github.ojil.core.ImageError if either is less than or equal to zero.
      */
     public Gray8RectStretch(int cWidth, int cHeight) 
-        throws com.github.ojil.core.Error {
+        throws com.github.ojil.core.ImageError {
         setWidth(cWidth);
         setHeight(cHeight);
     }
@@ -70,23 +70,23 @@ public class Gray8RectStretch extends PipelineStage {
      * Does this in two passes, for more efficient computation.
      * 
      * @param image the input image
-     * @throws com.github.ojil.core.Error if input image is not gray 8 bits,
+     * @throws com.github.ojil.core.ImageError if input image is not gray 8 bits,
      * or the input image size is larger than the target size. This class
      * does not do subsampling, only interpolation.
      */
-    public void push(Image image) throws com.github.ojil.core.Error {
+    public void push(Image image) throws com.github.ojil.core.ImageError {
         if (!(image instanceof Gray8Image)) {
-            throw new Error(
-			        		Error.PACKAGE.ALGORITHM,
-			        		ErrorCodes.IMAGE_NOT_GRAY8IMAGE,
+            throw new ImageError(
+			        		ImageError.PACKAGE.ALGORITHM,
+			        		AlgorithmErrorCodes.IMAGE_NOT_GRAY8IMAGE,
 			        		image.toString(),
 			        		null,
 			        		null);
         }
         if (image.getWidth() > this.cWidth || image.getHeight() > this.cHeight) {
-            throw new Error(
-			        		Error.PACKAGE.ALGORITHM,
-			        		ErrorCodes.STRETCH_OUTPUT_SMALLER_THAN_INPUT,
+            throw new ImageError(
+			        		ImageError.PACKAGE.ALGORITHM,
+			        		AlgorithmErrorCodes.STRETCH_OUTPUT_SMALLER_THAN_INPUT,
 			        		image.toString(),
 			        		new Integer(this.cWidth).toString(),
 			        		new Integer(this.cHeight).toString());
@@ -106,13 +106,13 @@ public class Gray8RectStretch extends PipelineStage {
     /** Changes target height
      * 
      * @param cHeight the new target height.
-     * @throws com.github.ojil.core.Error if height is not positive
+     * @throws com.github.ojil.core.ImageError if height is not positive
      */
-    public void setHeight(int cHeight) throws com.github.ojil.core.Error {
+    public void setHeight(int cHeight) throws com.github.ojil.core.ImageError {
         if (cHeight <= 0) {
-            throw new Error(
-			        Error.PACKAGE.ALGORITHM,
-			        ErrorCodes.OUTPUT_IMAGE_SIZE_NEGATIVE,
+            throw new ImageError(
+			        ImageError.PACKAGE.ALGORITHM,
+			        AlgorithmErrorCodes.OUTPUT_IMAGE_SIZE_NEGATIVE,
 			        new Integer(cHeight).toString(),
 			        null,
 			        null);
@@ -123,13 +123,13 @@ public class Gray8RectStretch extends PipelineStage {
     /** Changes target width
      * 
      * @param cWidth the new target width.
-     * @throws com.github.ojil.core.Error if height is not positive
+     * @throws com.github.ojil.core.ImageError if height is not positive
      */
-    public void setWidth(int cWidth) throws com.github.ojil.core.Error {
+    public void setWidth(int cWidth) throws com.github.ojil.core.ImageError {
         if (cWidth <= 0) {
-            throw new Error(
-    				        Error.PACKAGE.ALGORITHM,
-    				        ErrorCodes.OUTPUT_IMAGE_SIZE_NEGATIVE,
+            throw new ImageError(
+    				        ImageError.PACKAGE.ALGORITHM,
+    				        AlgorithmErrorCodes.OUTPUT_IMAGE_SIZE_NEGATIVE,
     				        new Integer(cWidth).toString(),
     				        null,
     				        null);

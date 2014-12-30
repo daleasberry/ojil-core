@@ -30,7 +30,7 @@
  */
 
 package com.github.ojil.algorithm;
-import com.github.ojil.core.Error;
+import com.github.ojil.core.ImageError;
 import com.github.ojil.core.Gray8Image;
 import com.github.ojil.core.Gray8OffsetImage;
 import com.github.ojil.core.Image;
@@ -92,10 +92,10 @@ public class Gray8SubImageGenerator extends PipelineStage {
     /**
      * Returns the next subimage.
      * @return a subimage within the input image, of type Gray8OffsetImage.
-     * @throws com.github.ojil.core.Error when there are no more subimages available (isEmpty() would return
+     * @throws com.github.ojil.core.ImageError when there are no more subimages available (isEmpty() would return
      * true.)
      */
-     public Image getFront() throws com.github.ojil.core.Error
+     public Image getFront() throws com.github.ojil.core.ImageError
     {
         // offset of first pixel of the subimage within the
         // larget image.
@@ -105,9 +105,9 @@ public class Gray8SubImageGenerator extends PipelineStage {
         // reuse output image
         // check to make sure nobody damaged it somehow
         if (!(super.imageOutput instanceof Gray8OffsetImage)) {
-            throw new Error(
-                            Error.PACKAGE.ALGORITHM,
-                            ErrorCodes.IMAGE_NOT_GRAY8IMAGE,
+            throw new ImageError(
+                            ImageError.PACKAGE.ALGORITHM,
+                            AlgorithmErrorCodes.IMAGE_NOT_GRAY8IMAGE,
                             imageOutput.toString(),
                             null,
                             null);
@@ -138,23 +138,23 @@ public class Gray8SubImageGenerator extends PipelineStage {
      * Reinitializes the subimage generator and prepares it to generate the first
      * Gray8OffsetImage for the new input.
      * @param image The new input image (which must be of type Gray8Image).
-     * @throws com.github.ojil.core.Error if image is not of type Gray8Image, or is too small
+     * @throws com.github.ojil.core.ImageError if image is not of type Gray8Image, or is too small
      * (less than the size of the subimages we're supposed to
      * be generating).
      */
-    public void push(Image image) throws com.github.ojil.core.Error {
+    public void push(Image image) throws com.github.ojil.core.ImageError {
         if (!(image instanceof Gray8Image)) {
-            throw new Error(
-            				Error.PACKAGE.ALGORITHM,
-            				ErrorCodes.IMAGE_NOT_GRAY8IMAGE,
+            throw new ImageError(
+            				ImageError.PACKAGE.ALGORITHM,
+            				AlgorithmErrorCodes.IMAGE_NOT_GRAY8IMAGE,
             				image.toString(),
             				null,
             				null);
         }
         if (image.getWidth() < this.nWidth || image.getHeight() < this.nHeight) {
-            throw new Error(
-            				Error.PACKAGE.ALGORITHM,
-            				ErrorCodes.IMAGE_TOO_SMALL,
+            throw new ImageError(
+            				ImageError.PACKAGE.ALGORITHM,
+            				AlgorithmErrorCodes.IMAGE_TOO_SMALL,
             				image.toString(),
             				new Integer(this.nWidth).toString(),
             				new Integer(this.nHeight).toString());

@@ -5,7 +5,7 @@
 
 package com.github.ojil.algorithm;
 
-import com.github.ojil.core.Error;
+import com.github.ojil.core.ImageError;
 import com.github.ojil.core.Image;
 import com.github.ojil.core.PipelineStage;
 import com.github.ojil.core.RgbImage;
@@ -33,13 +33,13 @@ public class RgbHsv extends PipelineStage {
      * The output is an RgbImage with the HSV values stored in the corresponding
      * RGB bytes.
      * @param imageInput input RgbImage 
-     * @throws com.github.ojil.core.Error if input is not an RgbImage.
+     * @throws com.github.ojil.core.ImageError if input is not an RgbImage.
      */
-    public void push(Image imageInput) throws Error {
+    public void push(Image imageInput) throws ImageError {
         if (!(imageInput instanceof RgbImage)) {
-            throw new Error(
-                			Error.PACKAGE.ALGORITHM,
-                			ErrorCodes.IMAGE_NOT_RGBIMAGE,
+            throw new ImageError(
+                			ImageError.PACKAGE.ALGORITHM,
+                			AlgorithmErrorCodes.IMAGE_NOT_RGBIMAGE,
                 			imageInput.toString(),
                 			null,
                 			null);

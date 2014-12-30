@@ -23,7 +23,7 @@
  */
 
 package com.github.ojil.algorithm;
-import com.github.ojil.core.Error;
+import com.github.ojil.core.ImageError;
 import com.github.ojil.core.Image;
 import com.github.ojil.core.PipelineStage;
 import com.github.ojil.core.RgbImage;
@@ -46,10 +46,10 @@ public class RgbSubSample extends PipelineStage {
      * Creates a new instance of RgbSubSample.
      * @param cTargetWidth the new width
      * @param cTargetHeight the new height
-     * @throws com.github.ojil.core.Error if the target width or height is less than or equal to zero.
+     * @throws com.github.ojil.core.ImageError if the target width or height is less than or equal to zero.
      */
     public RgbSubSample(int cTargetWidth, int cTargetHeight)
-    	throws com.github.ojil.core.Error {
+    	throws com.github.ojil.core.ImageError {
         setTargetSize(cTargetWidth, cTargetHeight);
     }
     
@@ -58,30 +58,30 @@ public class RgbSubSample extends PipelineStage {
      * size.
      *
      * @param image the input image.
-     * @throws com.github.ojil.core.Error if the input image is not gray, or
+     * @throws com.github.ojil.core.ImageError if the input image is not gray, or
      * the reduction factor does not evenly divide the image size.
      */
-    public void push(Image image) throws com.github.ojil.core.Error {
+    public void push(Image image) throws com.github.ojil.core.ImageError {
         if (!(image instanceof RgbImage)) {
-            throw new Error(
-                			Error.PACKAGE.ALGORITHM,
-                			ErrorCodes.IMAGE_NOT_RGBIMAGE,
+            throw new ImageError(
+                			ImageError.PACKAGE.ALGORITHM,
+                			AlgorithmErrorCodes.IMAGE_NOT_RGBIMAGE,
                 			image.toString(),
                 			null,
                 			null);
         }
         if (image.getWidth() < this.cTargetWidth) {
-            throw new Error(
-                			Error.PACKAGE.ALGORITHM,
-                			ErrorCodes.SHRINK_OUTPUT_LARGER_THAN_INPUT,
+            throw new ImageError(
+                			ImageError.PACKAGE.ALGORITHM,
+                			AlgorithmErrorCodes.SHRINK_OUTPUT_LARGER_THAN_INPUT,
                 			image.toString(),
                 			this.toString(),
                 			null);
         }
         if (image.getHeight() < this.cTargetHeight) {
-            throw new Error(
-                			Error.PACKAGE.ALGORITHM,
-                			ErrorCodes.SHRINK_OUTPUT_LARGER_THAN_INPUT,
+            throw new ImageError(
+                			ImageError.PACKAGE.ALGORITHM,
+                			AlgorithmErrorCodes.SHRINK_OUTPUT_LARGER_THAN_INPUT,
                 			image.toString(),
                 			this.toString(),
                 			null);
@@ -129,15 +129,15 @@ public class RgbSubSample extends PipelineStage {
      *
      * @param cTargetWidth the target image width.
      * @param cTargetHeight the target image height.
-     * @throws com.github.ojil.core.Error if either cTargetWidth or cTargetHeight
+     * @throws com.github.ojil.core.ImageError if either cTargetWidth or cTargetHeight
      * is less than or equal to 0.
      */
     public void setTargetSize(int cTargetWidth, int cTargetHeight) 
-        throws com.github.ojil.core.Error {
+        throws com.github.ojil.core.ImageError {
         if (cTargetWidth <= 0 || cTargetHeight <= 0) {
-            throw new Error(
-                			Error.PACKAGE.ALGORITHM,
-                			ErrorCodes.OUTPUT_IMAGE_SIZE_NEGATIVE,
+            throw new ImageError(
+                			ImageError.PACKAGE.ALGORITHM,
+                			AlgorithmErrorCodes.OUTPUT_IMAGE_SIZE_NEGATIVE,
                 			new Integer(cTargetWidth).toString(),
                 			new Integer(cTargetHeight).toString(),
                 			null);

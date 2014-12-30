@@ -51,12 +51,12 @@ public class Quad {
      * Return designated corner of quadrilateral
      * @param nCorner corner to return, from 0-3
      * @return designated corner of the quadrilateral
-     * @throws com.github.ojil.core.Error if nCorner &lt; 0 or &gt; 3
+     * @throws com.github.ojil.core.ImageError if nCorner &lt; 0 or &gt; 3
      */
-    public Point getCorner(int nCorner) throws Error {
+    public Point getCorner(int nCorner) throws ImageError {
         if (nCorner < 0 || nCorner > 3) {
-            throw new Error(
-                            Error.PACKAGE.CORE,
+            throw new ImageError(
+                            ImageError.PACKAGE.CORE,
                             ErrorCodes.ILLEGAL_PARAMETER_VALUE,
                             new Integer(nCorner).toString(),
                             "0",

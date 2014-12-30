@@ -23,14 +23,16 @@
  */
 
 package com.github.ojil.algorithm;
-import com.github.ojil.core.Error;
+
 import com.github.ojil.core.Gray32Image;
 import com.github.ojil.core.Gray8Image;
 import com.github.ojil.core.Image;
+import com.github.ojil.core.ImageError;
 import com.github.ojil.core.PipelineStage;
-/** Gray82Gray32 converts an 32-bit gray image to a 8-bit
- *  gray image. Input values are clamped between Byte.MIN_VALUE and
- *  Byte.MAX_VALUE.
+
+/**
+ * Gray82Gray32 converts an 32-bit gray image to a 8-bit gray image. Input
+ * values are clamped between Byte.MIN_VALUE and Byte.MAX_VALUE.
  *
  * @author webb
  */
@@ -40,33 +42,31 @@ public class Gray32Gray8 extends PipelineStage {
     public Gray32Gray8() {
     }
     
-    /** Converts a 32-bit gray image into an 8-bit gray image. 
+    /**
+     * Converts a 32-bit gray image into an 8-bit gray image.
      *
      *
-     * @param image the input image.
-     * @throws com.github.ojil.core.Error if the input is not a Gray8Image
+     * @param image
+     *            the input image.
+     * @throws com.github.ojil.core.ImageError
+     *             if the input is not a Gray8Image
      */
-    public void push(Image image) throws com.github.ojil.core.Error {
+    @Override
+    public void push(final Image<?> image) throws ImageError {
         if (!(image instanceof Gray32Image)) {
-            throw new Error(
-    				Error.PACKAGE.ALGORITHM,
-    				ErrorCodes.IMAGE_NOT_GRAY32IMAGE,
-    				image.toString(),
-    				null,
-    				null);
-
+            throw new ImageError(ImageError.PACKAGE.ALGORITHM, AlgorithmErrorCodes.IMAGE_NOT_GRAY32IMAGE, image.toString(), null, null);
+            
         }
-        Gray32Image gray32 = (Gray32Image) image;
-        Gray8Image gray8 = new Gray8Image(image.getWidth(), image.getHeight());
-        Integer[] gray32Data = gray32.getData();
-        Byte[] gray8Data = gray8.getData();
-        for (int i=0; i<gray32.getWidth() * gray32.getHeight(); i++) {
-            /* Convert from 32-bit value to 8-bit value.
+        final Gray32Image gray32 = (Gray32Image) image;
+        final Gray8Image gray8 = new Gray8Image(image.getWidth(), image.getHeight());
+        final Integer[] gray32Data = gray32.getData();
+        final Byte[] gray8Data = gray8.getData();
+        for (int i = 0; i < (gray32.getWidth() * gray32.getHeight()); i++) {
+            /*
+             * Convert from 32-bit value to 8-bit value.
              */
-             /* Assign 8-bit output */
-            gray8Data[i] = (byte)  
-                Math.min(Byte.MAX_VALUE, 
-                    Math.max(Byte.MIN_VALUE, gray32Data[i]));
+            /* Assign 8-bit output */
+            gray8Data[i] = (byte) Math.min(Byte.MAX_VALUE, Math.max(Byte.MIN_VALUE, gray32Data[i]));
         }
         super.setOutput(gray8);
     }

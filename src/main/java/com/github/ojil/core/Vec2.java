@@ -166,9 +166,9 @@ public class Vec2 implements Serializable {
     /**
      * Calculate length of this Vec2.
      * @return sqrt(mnX<sup>2</sup> + mnY<sup>2</sup>)
-     * @throws com.github.ojil.core.Error if sqrt does, due to coding error
+     * @throws com.github.ojil.core.ImageError if sqrt does, due to coding error
      */
-    public int length() throws Error {
+    public int length() throws ImageError {
         return MathPlus.sqrt(mnX * mnX + mnY * mnY);
     }
     

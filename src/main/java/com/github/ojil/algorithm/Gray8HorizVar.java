@@ -23,93 +23,89 @@
  */
 
 package com.github.ojil.algorithm;
-import com.github.ojil.core.Error;
+
 import com.github.ojil.core.Gray16Image;
 import com.github.ojil.core.Gray8Image;
 import com.github.ojil.core.Image;
+import com.github.ojil.core.ImageError;
 import com.github.ojil.core.PipelineStage;
 
 /**
- * Computes the variance of pixels horizontally distributed around
- * the current pixel.
+ * Computes the variance of pixels horizontally distributed around the current
+ * pixel.
+ * 
  * @author webb
  */
 public class Gray8HorizVar extends PipelineStage {
-	/**
-	 * The window size -- pixels within nWindow of the current
-	 * pixel are included in the window.
-	 */
-	int nWindow;
-	/**
-	 * The output image.
-	 */
-	Gray16Image g16 = null;
+    /**
+     * The window size -- pixels within nWindow of the current pixel are
+     * included in the window.
+     */
+    int nWindow;
+    /**
+     * The output image.
+     */
+    Gray16Image g16 = null;
     
     /**
      * Creates a new instance of Gray8HorizVar
-     * @param nWindow window size to compute horizontal variance over.
+     * 
+     * @param nWindow
+     *            window size to compute horizontal variance over.
      */
-    public Gray8HorizVar(int nWindow) {
-    	this.nWindow = nWindow;
+    public Gray8HorizVar(final int nWindow) {
+        this.nWindow = nWindow;
     }
     
-    /** Compute the horizontal variance of pixels within nWindow
-     * of the current pixel.
-     * @param image the input Gray8Image
-     * @throws com.github.ojil.core.Error if image is not a Gray8Image
+    /**
+     * Compute the horizontal variance of pixels within nWindow of the current
+     * pixel.
+     * 
+     * @param image
+     *            the input Gray8Image
+     * @throws ImageError
+     *             if image is not a Gray8Image
      */
-    public void push(Image image) throws com.github.ojil.core.Error {
+    @Override
+    public void push(final Image<?> image) throws ImageError {
         if (!(image instanceof Gray8Image)) {
-            throw new Error(
-    				Error.PACKAGE.ALGORITHM,
-    				ErrorCodes.IMAGE_NOT_GRAY8IMAGE,
-    				image.toString(),
-    				null,
-    				null);
+            throw new ImageError(ImageError.PACKAGE.ALGORITHM, AlgorithmErrorCodes.IMAGE_NOT_GRAY8IMAGE, image.toString(), null, null);
         }
-        if (this.g16 == null || 
-        	this.g16.getWidth() != image.getWidth()	|| 
-        	this.g16.getHeight() != image.getHeight()) {
-        	this.g16 = new Gray16Image(
-        			image.getWidth(), 
-        			image.getHeight());
+        if ((g16 == null) || (g16.getWidth() != image.getWidth()) || (g16.getHeight() != image.getHeight())) {
+            g16 = new Gray16Image(image.getWidth(), image.getHeight());
         }
-        Gray8Image input = (Gray8Image) image;
-        Byte[] bIn = input.getData();
-        int cWidth = input.getWidth();
-        Short[] sOut = g16.getData();
-        for (int i=0; i<input.getHeight(); i++) {
-	        int nSum = 0;
-	        int nSumSq = 0;
-	        int nCount = 0;
-	        // initialize sums and count for first pixel in row
-	        for (int j=0; j<this.nWindow; j++) {
-	        	nSum += bIn[i*cWidth + j];
-	        	nSumSq += bIn[i*cWidth + j] * bIn[i*cWidth + j];
-	        	nCount ++;
-	        }
-	        // increment across the row
-            for (int j=0; j<cWidth; j++) {
-            	// if window doesn't extend past right side of
-            	// row add new pixel
-            	if (j + this.nWindow < cWidth) {
-            		nSum += bIn[i*cWidth + j + this.nWindow];
-            		nSumSq += bIn[i*cWidth + j + this.nWindow] *
-            			bIn[i*cWidth + j + this.nWindow];
-            		nCount ++;
-            	}
-            	// if window doesn't extend past left side of
-            	// row subtract old pixel
-            	if (j >= this.nWindow) {
-            		nSum -= bIn[i*cWidth + j - this.nWindow];
-            		nSumSq -= bIn[i*cWidth + j - this.nWindow] *
-            			bIn[i*cWidth + j - this.nWindow];
-            		nCount --;
-            	}
-            	short nVar = (short)
-            		Math.min(Short.MAX_VALUE, 
-            			(nSumSq - nSum * nSum / nCount) / (nCount - 1)); 
-            	sOut[i*cWidth + j] = nVar;
+        final Gray8Image input = (Gray8Image) image;
+        final Byte[] bIn = input.getData();
+        final int cWidth = input.getWidth();
+        final Short[] sOut = g16.getData();
+        for (int i = 0; i < input.getHeight(); i++) {
+            int nSum = 0;
+            int nSumSq = 0;
+            int nCount = 0;
+            // initialize sums and count for first pixel in row
+            for (int j = 0; j < nWindow; j++) {
+                nSum += bIn[(i * cWidth) + j];
+                nSumSq += bIn[(i * cWidth) + j] * bIn[(i * cWidth) + j];
+                nCount++;
+            }
+            // increment across the row
+            for (int j = 0; j < cWidth; j++) {
+                // if window doesn't extend past right side of
+                // row add new pixel
+                if ((j + nWindow) < cWidth) {
+                    nSum += bIn[(i * cWidth) + j + nWindow];
+                    nSumSq += bIn[(i * cWidth) + j + nWindow] * bIn[(i * cWidth) + j + nWindow];
+                    nCount++;
+                }
+                // if window doesn't extend past left side of
+                // row subtract old pixel
+                if (j >= nWindow) {
+                    nSum -= bIn[((i * cWidth) + j) - nWindow];
+                    nSumSq -= bIn[((i * cWidth) + j) - nWindow] * bIn[((i * cWidth) + j) - nWindow];
+                    nCount--;
+                }
+                final short nVar = (short) Math.min(Short.MAX_VALUE, (nSumSq - ((nSum * nSum) / nCount)) / (nCount - 1));
+                sOut[(i * cWidth) + j] = nVar;
             }
         }
         super.setOutput(g16);

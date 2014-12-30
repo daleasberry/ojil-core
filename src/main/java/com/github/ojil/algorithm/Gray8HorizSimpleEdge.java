@@ -23,52 +23,53 @@
  */
 
 package com.github.ojil.algorithm;
-import com.github.ojil.core.Error;
+
 import com.github.ojil.core.Gray8Image;
 import com.github.ojil.core.Image;
+import com.github.ojil.core.ImageError;
 import com.github.ojil.core.PipelineStage;
 
 /**
- * Computes a simple horizontal edge measure. The measure is simply the difference
- * between the current pixel and the one to the left, clamped between Byte.MIN_VALUE
- * and Byte.MAX_VALUE. The output replaces the input.
+ * Computes a simple horizontal edge measure. The measure is simply the
+ * difference between the current pixel and the one to the left, clamped between
+ * Byte.MIN_VALUE and Byte.MAX_VALUE. The output replaces the input.
+ * 
  * @author webb
  */
 public class Gray8HorizSimpleEdge extends PipelineStage {
     
-    /** Creates a new instance of Gray8HorizSimpleEdge 
+    /**
+     * Creates a new instance of Gray8HorizSimpleEdge
      */
     public Gray8HorizSimpleEdge() {
     }
     
-    /** Compute a simple horizontal edge measure. The measure is simply the difference
-     * between the current pixel and the one to the left, clamped between Byte.MIN_VALUE
-     * and Byte.MAX_VALUE. The output replaces the input.
+    /**
+     * Compute a simple horizontal edge measure. The measure is simply the
+     * difference between the current pixel and the one to the left, clamped
+     * between Byte.MIN_VALUE and Byte.MAX_VALUE. The output replaces the input.
      *
-     * @param image the input Gray8Image
-     * @throws com.github.ojil.core.Error if image is not a Gray8Image
+     * @param image
+     *            the input Gray8Image
+     * @throws ImageError
+     *             if image is not a Gray8Image
      */
-    public void push(Image image) throws com.github.ojil.core.Error {
+    @Override
+    public void push(final Image<?> image) throws ImageError {
         if (!(image instanceof Gray8Image)) {
-            throw new Error(
-                			Error.PACKAGE.ALGORITHM,
-                			ErrorCodes.IMAGE_NOT_GRAY8IMAGE,
-                			image.toString(),
-                			null,
-                			null);
+            throw new ImageError(ImageError.PACKAGE.ALGORITHM, AlgorithmErrorCodes.IMAGE_NOT_GRAY8IMAGE, image.toString(), null, null);
         }
-        Gray8Image input = (Gray8Image) image;
-        Byte[] bIn = input.getData();
-        int cWidth = input.getWidth();
-        for (int i=0; i<input.getHeight(); i++) {
-        	int nPrev;
-        	int nThis = bIn[i*cWidth];
-            for (int j=0; j<cWidth; j++) {
-            	nPrev = nThis;
-            	nThis = bIn[i*cWidth + j];
-            	int nVal = Math.max(Byte.MIN_VALUE, 
-            			Math.min(Byte.MAX_VALUE, nPrev - nThis));
-            	bIn[i*cWidth + j] = (byte) nVal;
+        final Gray8Image input = (Gray8Image) image;
+        final Byte[] bIn = input.getData();
+        final int cWidth = input.getWidth();
+        for (int i = 0; i < input.getHeight(); i++) {
+            int nPrev;
+            int nThis = bIn[i * cWidth];
+            for (int j = 0; j < cWidth; j++) {
+                nPrev = nThis;
+                nThis = bIn[(i * cWidth) + j];
+                final int nVal = Math.max(Byte.MIN_VALUE, Math.min(Byte.MAX_VALUE, nPrev - nThis));
+                bIn[(i * cWidth) + j] = (byte) nVal;
             }
         }
         super.setOutput(input);

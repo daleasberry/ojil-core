@@ -23,21 +23,24 @@
  */
 
 package com.github.ojil.algorithm;
+
 import com.github.ojil.core.Complex;
 import com.github.ojil.core.Complex32Image;
-import com.github.ojil.core.Error;
 import com.github.ojil.core.Gray8Image;
 import com.github.ojil.core.Image;
+import com.github.ojil.core.ImageError;
 import com.github.ojil.core.PipelineStage;
 
 /**
- * Takes the fast Fourier transform of the input Gray8Image. The output image
- * is a Complex32Image. The image size must be a power of 2.
+ * Takes the fast Fourier transform of the input Gray8Image. The output image is
+ * a Complex32Image. The image size must be a power of 2.
+ * 
  * @author webb
  */
 public class Gray8Fft extends PipelineStage {
     /**
-     * Defines the scale factor applied to the image as a power of two, for accuracy.
+     * Defines the scale factor applied to the image as a power of two, for
+     * accuracy.
      */
     public static int SCALE = 8;
     
@@ -50,79 +53,69 @@ public class Gray8Fft extends PipelineStage {
     }
     
     /**
-     * Performs the fast Fourier transform on an image. The input image is a Gray8Image,
-     * and the output is a Complex32Image. The input is scaled by shifting left SCALE
-     * bits before the transformation, for accuracy.
-     * @param im Input image. Must be a Gray8Image.
-     * @throws com.github.ojil.core.Error if the input is not a Gray8Image or is not a power of two in width and 
-     * height.
+     * Performs the fast Fourier transform on an image. The input image is a
+     * Gray8Image, and the output is a Complex32Image. The input is scaled by
+     * shifting left SCALE bits before the transformation, for accuracy.
+     * 
+     * @param im
+     *            Input image. Must be a Gray8Image.
+     * @throws ImageError
+     *             if the input is not a Gray8Image or is not a power of two in
+     *             width and height.
      */
-    public void push(Image im) throws com.github.ojil.core.Error {
+    @Override
+    public void push(final Image<?> im) throws ImageError {
         if (!(im instanceof Gray8Image)) {
-            throw new Error(
-            				Error.PACKAGE.ALGORITHM,
-            				ErrorCodes.IMAGE_NOT_GRAY8IMAGE,
-            				im.toString(),
-            				null,
-            				null);
+            throw new ImageError(ImageError.PACKAGE.ALGORITHM, AlgorithmErrorCodes.IMAGE_NOT_GRAY8IMAGE, im.toString(), null, null);
         }
-        int nWidth = im.getWidth();
-        int nHeight = im.getHeight();
-        if ((nWidth & (nWidth-1)) != 0) {
-            throw new Error(
-            				Error.PACKAGE.ALGORITHM,
-            				ErrorCodes.FFT_SIZE_NOT_POWER_OF_2,
-            				im.toString(),
-            				null,
-            				null);
+        final int nWidth = im.getWidth();
+        final int nHeight = im.getHeight();
+        if ((nWidth & (nWidth - 1)) != 0) {
+            throw new ImageError(ImageError.PACKAGE.ALGORITHM, AlgorithmErrorCodes.FFT_SIZE_NOT_POWER_OF_2, im.toString(), null, null);
         }
-        if ((nHeight & (nHeight-1)) != 0) {
-            throw new Error(
-            				Error.PACKAGE.ALGORITHM,
-            				ErrorCodes.FFT_SIZE_NOT_POWER_OF_2,
-            				im.toString(),
-            				null,
-            				null);
+        if ((nHeight & (nHeight - 1)) != 0) {
+            throw new ImageError(ImageError.PACKAGE.ALGORITHM, AlgorithmErrorCodes.FFT_SIZE_NOT_POWER_OF_2, im.toString(), null, null);
         }
         // initialize FFT
-        if (this.fft == null) {
-            this.fft = new Fft1d(Math.max(nWidth, nHeight));
+        if (fft == null) {
+            fft = new Fft1d(Math.max(nWidth, nHeight));
         } else {
-            this.fft.setMaxWidth(Math.max(nWidth, nHeight));
+            fft.setMaxWidth(Math.max(nWidth, nHeight));
         }
         
-        Gray8Image gray = (Gray8Image) im;
-        Byte data[] = gray.getData();
+        final Gray8Image gray = (Gray8Image) im;
+        final Byte data[] = gray.getData();
         // create output
-        Complex32Image cxmResult = new Complex32Image(nWidth, nHeight);
+        final Complex32Image cxmResult = new Complex32Image(nWidth, nHeight);
         // take FFT of each row
         int nIndex = 0;
-        Complex cxRow[] = new Complex[nWidth];
-        for (int i=0; i<nHeight; i++) {
-            for (int j=0; j<nWidth; j++) {
-                // convert each byte to a complex number. Imaginary component is 0.
+        final Complex cxRow[] = new Complex[nWidth];
+        for (int i = 0; i < nHeight; i++) {
+            for (int j = 0; j < nWidth; j++) {
+                // convert each byte to a complex number. Imaginary component is
+                // 0.
                 // everything gets scaled for accuracy
-                cxRow[j] = new Complex((data[nIndex++] - Byte.MIN_VALUE) << SCALE);
+                cxRow[j] = new Complex((data[nIndex++] - Byte.MIN_VALUE) << Gray8Fft.SCALE);
             }
             // compute FFT
-            Complex cxResult[] = this.fft.fft(cxRow);
+            final Complex cxResult[] = fft.fft(cxRow);
             // save result
-            System.arraycopy(cxResult, 0, cxmResult.getData(), i*nWidth, nWidth);
+            System.arraycopy(cxResult, 0, cxmResult.getData(), i * nWidth, nWidth);
         }
         // take FFT of each column
-        Complex cxCol[] = new Complex[nHeight];
-        for (int j=0; j<nWidth; j++) {
+        final Complex cxCol[] = new Complex[nHeight];
+        for (int j = 0; j < nWidth; j++) {
             // copy column into a 1-D array
-            for (int i=0; i<nHeight; i++) {
-                cxCol[i] = cxmResult.getData()[i*nWidth+j];
+            for (int i = 0; i < nHeight; i++) {
+                cxCol[i] = cxmResult.getData()[(i * nWidth) + j];
             }
             // compute FFT
-            Complex cxResult[] = this.fft.fft(cxCol);
+            final Complex cxResult[] = fft.fft(cxCol);
             // save result back into column
-             for (int i=0; i<nHeight; i++) {
-                cxmResult.getData()[i*nWidth+j] = cxResult[i];
+            for (int i = 0; i < nHeight; i++) {
+                cxmResult.getData()[(i * nWidth) + j] = cxResult[i];
             }
-       }
-       super.setOutput(cxmResult);
+        }
+        super.setOutput(cxmResult);
     }
 }

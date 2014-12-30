@@ -64,11 +64,11 @@ public class RectCollection {
      * adding the rectangle itself to every rectangle list between its starting
      * and ending coordinates.
      * @param r the rectangle to add
-     * @throws com.github.ojil.core.Error in the case of type error (key wrong
+     * @throws com.github.ojil.core.ImageError in the case of type error (key wrong
      * type)
      */
     public void add(Rect r)
-    	throws com.github.ojil.core.Error
+    	throws com.github.ojil.core.ImageError
     {
         this.vAllRect.addElement(r);
         this.treeHoriz =
@@ -94,7 +94,7 @@ public class RectCollection {
      * @param tbtRoot the root of the ThreadedBinaryTree that we are modifying
      * @return the modified binary tree (= tbtRoot if it already exists, 
      * otherwise it will be created)
-     * @throws com.github.ojil.core.Error in the case of type error (key wrong
+     * @throws com.github.ojil.core.ImageError in the case of type error (key wrong
      * type)
      */
     @SuppressWarnings({ "unchecked", "rawtypes" })
@@ -103,7 +103,7 @@ public class RectCollection {
             int start, 
             int end, 
             ThreadedBinaryTree tbtRoot)
-    	throws com.github.ojil.core.Error
+    	throws com.github.ojil.core.ImageError
     {
         // get lists of Rectangles enclosing the given rectangle start and end
         ThreadedBinaryTree tbtFind = null;
@@ -200,11 +200,11 @@ public class RectCollection {
      * @param p the point to test
      * @return a Rect that contains p if it is contained by any Rect, otherwise
      * null
-     * @throws com.github.ojil.core.Error in the case of type error (key wrong
+     * @throws com.github.ojil.core.ImageError in the case of type error (key wrong
      * type)
      */
     public Rect contains(Point p) 
-    	throws com.github.ojil.core.Error
+    	throws com.github.ojil.core.ImageError
     {
         // if no rectangles are in collection answer is null
         if (this.treeHoriz == null || this.treeVert == null) {

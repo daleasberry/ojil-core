@@ -25,7 +25,7 @@
 package com.github.ojil.algorithm;
 import com.github.ojil.core.Complex;
 import com.github.ojil.core.Complex32Image;
-import com.github.ojil.core.Error;
+import com.github.ojil.core.ImageError;
 import com.github.ojil.core.Gray8Image;
 import com.github.ojil.core.Image;
 import com.github.ojil.core.MathPlus;
@@ -47,21 +47,21 @@ public class Gray8InverseFilter extends PipelineStage {
      * @param nGamma The gamma parameter from the inverse filter operation, corresponding to
      * a noise level. Higher gamma values imply a higher noise level and keep
      * the inverse filter from amplifying noisy components.
-     * @throws com.github.ojil.core.Error If the point spread function is not square or a power of 2 in size.
+     * @throws com.github.ojil.core.ImageError If the point spread function is not square or a power of 2 in size.
      */
-    public Gray8InverseFilter(Gray8Image psf, int nGamma) throws com.github.ojil.core.Error {
+    public Gray8InverseFilter(Gray8Image psf, int nGamma) throws com.github.ojil.core.ImageError {
         if (psf.getWidth() != psf.getHeight()) {
-            throw new Error(
-            				Error.PACKAGE.ALGORITHM,
-            				ErrorCodes.IMAGE_NOT_SQUARE,
+            throw new ImageError(
+            				ImageError.PACKAGE.ALGORITHM,
+            				AlgorithmErrorCodes.IMAGE_NOT_SQUARE,
             				psf.toString(),
             				null,
             				null);
         }
         if (!(psf instanceof Gray8Image)) {
-            throw new Error(
-            				Error.PACKAGE.ALGORITHM,
-            				ErrorCodes.IMAGE_NOT_GRAY8IMAGE,
+            throw new ImageError(
+            				ImageError.PACKAGE.ALGORITHM,
+            				AlgorithmErrorCodes.IMAGE_NOT_GRAY8IMAGE,
             				psf.toString(),
             				null,
             				null);
@@ -76,31 +76,31 @@ public class Gray8InverseFilter extends PipelineStage {
     /**
      * Compute the inverse filter of the given image.
      * @param im the Gray8Image to compute the inverse filter on.
-     * @throws com.github.ojil.core.Error If the input image is not a Gray8Image or not the same size as the 
+     * @throws com.github.ojil.core.ImageError If the input image is not a Gray8Image or not the same size as the 
      * point spread function.
      */
-    public void push(Image im) throws com.github.ojil.core.Error {
+    public void push(Image im) throws com.github.ojil.core.ImageError {
         if (im.getWidth() != im.getHeight()) {
-            throw new Error(
-            				Error.PACKAGE.ALGORITHM,
-            				ErrorCodes.IMAGE_NOT_SQUARE,
+            throw new ImageError(
+            				ImageError.PACKAGE.ALGORITHM,
+            				AlgorithmErrorCodes.IMAGE_NOT_SQUARE,
             				im.toString(),
             				null,
             				null);
         }
         if (im.getWidth() != this.cxmPsfInv.getWidth() ||
         	im.getHeight() != this.cxmPsfInv.getHeight()) {
-            throw new Error(
-            				Error.PACKAGE.ALGORITHM,
-            				ErrorCodes.IMAGE_SIZES_DIFFER,
+            throw new ImageError(
+            				ImageError.PACKAGE.ALGORITHM,
+            				AlgorithmErrorCodes.IMAGE_SIZES_DIFFER,
             				im.toString(),
             				this.cxmPsfInv.toString(),
             				null);
         }
         if (!(im instanceof Gray8Image)) {
-            throw new Error(
-            				Error.PACKAGE.ALGORITHM,
-            				ErrorCodes.IMAGE_NOT_GRAY8IMAGE,
+            throw new ImageError(
+            				ImageError.PACKAGE.ALGORITHM,
+            				AlgorithmErrorCodes.IMAGE_NOT_GRAY8IMAGE,
             				im.toString(),
             				null,
             				null);

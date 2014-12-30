@@ -1,6 +1,6 @@
 package com.github.ojil.algorithm;
 
-import com.github.ojil.core.Error;
+import com.github.ojil.core.ImageError;
 import com.github.ojil.core.Gray32Image;
 import com.github.ojil.core.Gray8Image;
 import com.github.ojil.core.Image;
@@ -36,20 +36,20 @@ public class Gray8UnsignedBackgroundSubtract extends PipelineStage {
 	 * size of the input. This is done using a cumulative sum operation
 	 * so the operation is done efficiently.
 	 */
-	public void push(Image imageInput) throws Error {
+	public void push(Image imageInput) throws ImageError {
         if (!(imageInput instanceof Gray8Image)) {
-            throw new Error(
-            				Error.PACKAGE.ALGORITHM,
-            				ErrorCodes.IMAGE_NOT_GRAY8IMAGE,
+            throw new ImageError(
+            				ImageError.PACKAGE.ALGORITHM,
+            				AlgorithmErrorCodes.IMAGE_NOT_GRAY8IMAGE,
             				imageInput.toString(),
             				null,
             				null);
         }
         if (this.mnWidth > imageInput.getWidth() || 
         		this.mnHeight > imageInput.getHeight()) {
-            throw new Error(
-    				Error.PACKAGE.ALGORITHM,
-    				ErrorCodes.PARAMETER_OUT_OF_RANGE,
+            throw new ImageError(
+    				ImageError.PACKAGE.ALGORITHM,
+    				AlgorithmErrorCodes.PARAMETER_OUT_OF_RANGE,
     				imageInput.toString(),
     				Integer.toString(this.mnWidth),
     				Integer.toString(this.mnHeight));

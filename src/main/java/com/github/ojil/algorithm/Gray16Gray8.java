@@ -23,13 +23,16 @@
  */
 
 package com.github.ojil.algorithm;
-import com.github.ojil.core.Error;
+
 import com.github.ojil.core.Gray16Image;
 import com.github.ojil.core.Gray8Image;
 import com.github.ojil.core.Image;
+import com.github.ojil.core.ImageError;
 import com.github.ojil.core.PipelineStage;
-/** Gray16Gray8 converts an 16-bit gray image to an 8-bit
- *  gray image. The most significant 8 bits of each pixel are dropped.
+
+/**
+ * Gray16Gray8 converts an 16-bit gray image to an 8-bit gray image. The most
+ * significant 8 bits of each pixel are dropped.
  *
  * @author webb
  */
@@ -39,28 +42,28 @@ public class Gray16Gray8 extends PipelineStage {
     public Gray16Gray8() {
     }
     
-    /** Converts an 16-bit gray image into an 8-bit image by and'ing off
-     * the top 8 bits of every pixel.
+    /**
+     * Converts an 16-bit gray image into an 8-bit image by and'ing off the top
+     * 8 bits of every pixel.
      *
-     * @param image the input image.
-     * @throws com.github.ojil.core.Error if the input is not a Gray8Image
+     * @param image
+     *            the input image.
+     * @throws com.github.ojil.core.ImageError
+     *             if the input is not a Gray8Image
      */
-    public void push(Image image) throws com.github.ojil.core.Error {
+    @Override
+    public void push(final Image<?> image) throws com.github.ojil.core.ImageError {
         if (!(image instanceof Gray16Image)) {
-            throw new Error(
-    				Error.PACKAGE.ALGORITHM,
-    				ErrorCodes.IMAGE_NOT_GRAY16IMAGE,
-    				image.toString(),
-    				null,
-    				null);
+            throw new ImageError(ImageError.PACKAGE.ALGORITHM, AlgorithmErrorCodes.IMAGE_NOT_GRAY16IMAGE, image.toString(), null, null);
         }
-        Gray16Image gray = (Gray16Image) image;
-        Gray8Image gray8 = new Gray8Image(image.getWidth(), image.getHeight());
-        Short[] grayData = gray.getData();
-        Byte[] gray8Data = gray8.getData();
-        for (int i=0; i<gray.getWidth() * gray.getHeight(); i++) {
-            /* Convert from 16-bit value to 8-bit value, discarding
-             * most significant bits.
+        final Gray16Image gray = (Gray16Image) image;
+        final Gray8Image gray8 = new Gray8Image(image.getWidth(), image.getHeight());
+        final Short[] grayData = gray.getData();
+        final Byte[] gray8Data = gray8.getData();
+        for (int i = 0; i < (gray.getWidth() * gray.getHeight()); i++) {
+            /*
+             * Convert from 16-bit value to 8-bit value, discarding most
+             * significant bits.
              */
             gray8Data[i] = (byte) (grayData[i] & 0xff);
         }

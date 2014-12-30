@@ -23,7 +23,7 @@
  */
 
 package com.github.ojil.algorithm;
-import com.github.ojil.core.Error;
+import com.github.ojil.core.ImageError;
 import com.github.ojil.core.Gray8Image;
 import com.github.ojil.core.Image;
 import com.github.ojil.core.Ladder;
@@ -45,33 +45,33 @@ public class Gray8Sub implements Ladder.Join {
      * @param imageFirst the first image (and output)
      * @param imageSecond the second image
      * @return the difference of the two byte images, replacing the first
-     * @throws com.github.ojil.core.Error if either image is not a gray 8-bit
+     * @throws com.github.ojil.core.ImageError if either image is not a gray 8-bit
      * image, or they are of different sizes.
      */
     public Image doJoin(Image imageFirst, Image imageSecond)
-        throws com.github.ojil.core.Error
+        throws com.github.ojil.core.ImageError
     {
         if (!(imageFirst instanceof Gray8Image)) {
-            throw new Error(
-            				Error.PACKAGE.ALGORITHM,
-            				ErrorCodes.IMAGE_NOT_GRAY8IMAGE,
+            throw new ImageError(
+            				ImageError.PACKAGE.ALGORITHM,
+            				AlgorithmErrorCodes.IMAGE_NOT_GRAY8IMAGE,
             				imageFirst.toString(),
             				null,
             				null);
         }
         if (!(imageSecond instanceof Gray8Image)) {
-            throw new Error(
-            				Error.PACKAGE.ALGORITHM,
-            				ErrorCodes.IMAGE_NOT_GRAY8IMAGE,
+            throw new ImageError(
+            				ImageError.PACKAGE.ALGORITHM,
+            				AlgorithmErrorCodes.IMAGE_NOT_GRAY8IMAGE,
             				imageSecond.toString(),
             				null,
             				null);
         }
         if (imageFirst.getWidth() != imageSecond.getWidth() ||
         	imageSecond.getHeight() != imageSecond.getHeight()) {
-        	throw new Error(
-        				Error.PACKAGE.ALGORITHM,
-        				ErrorCodes.IMAGE_SIZES_DIFFER,
+        	throw new ImageError(
+        				ImageError.PACKAGE.ALGORITHM,
+        				AlgorithmErrorCodes.IMAGE_SIZES_DIFFER,
         				imageFirst.toString(),
         				imageSecond.toString(),
         				null);

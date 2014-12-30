@@ -87,9 +87,9 @@ public class Sequence extends PipelineStage {
      * Returns the Image produced by the last stage
      * in the pipeline. Overrides PipelineStage.getFront.
      * @return the Image produced by the pipeline.
-     * @throws com.github.ojil.core.Error if no image is available.
+     * @throws com.github.ojil.core.ImageError if no image is available.
      */
-    public Image getFront() throws com.github.ojil.core.Error
+    public Image<?> getFront() throws com.github.ojil.core.ImageError
     {
         if (pNext == null) {
             return pFirst.getFront();
@@ -105,13 +105,13 @@ public class Sequence extends PipelineStage {
      * stage, until the end of the pipeline is reached.
      * Overrides PipelineStage.push(Image).
      * @param i the image to be pushed.
-     * @throws com.github.ojil.core.Error if the pipeline is empty.
+     * @throws com.github.ojil.core.ImageError if the pipeline is empty.
      */
-    public void push(Image i) throws com.github.ojil.core.Error
+    public void push(Image<?> i) throws com.github.ojil.core.ImageError
     {
         if (pFirst == null) {
-            throw new Error(
-                            Error.PACKAGE.CORE,
+            throw new ImageError(
+                            ImageError.PACKAGE.CORE,
                             ErrorCodes.PIPELINE_EMPTY_PUSH,
                             this.toString(),
                             null,
@@ -119,8 +119,8 @@ public class Sequence extends PipelineStage {
         }
         pFirst.push(i);
         if (pFirst.isEmpty()) {
-            throw new Error(
-                            Error.PACKAGE.CORE,
+            throw new ImageError(
+                            ImageError.PACKAGE.CORE,
                             ErrorCodes.NO_RESULT_AVAILABLE,
                             pFirst.toString(),
                             null,

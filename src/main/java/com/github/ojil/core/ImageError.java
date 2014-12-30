@@ -18,7 +18,7 @@ package com.github.ojil.core;
  * @author webb
  *
  */
-public class Error extends Throwable {
+public class ImageError extends Throwable {
 	private static final long serialVersionUID = 5624201930901954089L;
 
 		/**
@@ -82,7 +82,7 @@ public class Error extends Throwable {
      * Copy constructor.
      * @param e Error object to copy.
      */
-        public Error(Error e) {
+        public ImageError(ImageError e) {
             this.nPackage = e.getPackage();
             this.nCode = e.getCode();
             this.szParam1 = e.getParam1();
@@ -100,7 +100,7 @@ public class Error extends Throwable {
      * @param szParam2 : a second parameter giving detailed information
      * @param szParam3 : a third parameter giving detailed information
      */
-	public Error(
+	public ImageError(
 			int nPackage,
 			int nCode, 
 			String szParam1, 

@@ -25,61 +25,56 @@
  */
 
 package com.github.ojil.algorithm;
-import com.github.ojil.core.Error;
+
 import com.github.ojil.core.Gray8Image;
+import com.github.ojil.core.ImageError;
 import com.github.ojil.core.RgbImage;
-/** Gray3Bands2Rgb converts three 8-bit gray images to RGB by copying the 
- * three input gray values into R, G, and B. The signed byte values in the gray
- * image are changed into unsigned byte values in the ARGB word.
+
+/**
+ * Gray3Bands2Rgb converts three 8-bit gray images to RGB by copying the three
+ * input gray values into R, G, and B. The signed byte values in the gray image
+ * are changed into unsigned byte values in the ARGB word.
  *
  * @author webb
  */
 public class Gray3Bands2Rgb {
     
     /**
-     * Converts 3 8-bit gray images into an RGB image by combining the
-     * R, G, and B values. Also changes the data range of the bytes
-     * from -128->127 to 0->255 since the bit shift in Java would treat them
-     * as signed values otherwise.
-     * @param imRed the input red image.
-     * @param imGreen the input green image.
-     * @param imBlue the input blue image.
+     * Converts 3 8-bit gray images into an RGB image by combining the R, G, and
+     * B values. Also changes the data range of the bytes from -128->127 to
+     * 0->255 since the bit shift in Java would treat them as signed values
+     * otherwise.
+     * 
+     * @param imRed
+     *            the input red image.
+     * @param imGreen
+     *            the input green image.
+     * @param imBlue
+     *            the input blue image.
      * @return the color image
-     * @throws com.github.ojil.core.Error if the input sizes do not match
+     * @throws ImageError
+     *             if the input sizes do not match
      */
-    static public RgbImage push(
-            Gray8Image imRed, 
-            Gray8Image imGreen, 
-            Gray8Image imBlue) throws com.github.ojil.core.Error {
-        if (imRed.getWidth() != imGreen.getWidth() ||
-            imGreen.getWidth() != imBlue.getWidth() ||
-            imRed.getHeight() != imGreen.getHeight() ||
-            imGreen.getHeight() != imBlue.getHeight()) {
-            throw new Error(
-                			Error.PACKAGE.ALGORITHM,
-                			ErrorCodes.IMAGE_SIZES_DIFFER,
-                			imRed.toString(),
-                			imGreen.toString(),
-                			imBlue.toString());
+    static public RgbImage push(final Gray8Image imRed, final Gray8Image imGreen, final Gray8Image imBlue) throws ImageError {
+        if ((imRed.getWidth() != imGreen.getWidth()) || (imGreen.getWidth() != imBlue.getWidth()) || (imRed.getHeight() != imGreen.getHeight()) || (imGreen.getHeight() != imBlue.getHeight())) {
+            throw new ImageError(ImageError.PACKAGE.ALGORITHM, AlgorithmErrorCodes.IMAGE_SIZES_DIFFER, imRed.toString(), imGreen.toString(), imBlue.toString());
         }
-        RgbImage rgb = new RgbImage(imRed.getWidth(), imRed.getHeight());
-        Byte[] redData = imRed.getData();
-        Byte[] greenData = imGreen.getData();
-        Byte[] blueData = imBlue.getData();
-        Integer[] rgbData = rgb.getData();
-        for (int i=0; i<imRed.getWidth() * imRed.getHeight(); i++) {
-            /* Convert from signed byte value to unsigned byte for storage
-             * in the RGB image.
+        final RgbImage rgb = new RgbImage(imRed.getWidth(), imRed.getHeight());
+        final Byte[] redData = imRed.getData();
+        final Byte[] greenData = imGreen.getData();
+        final Byte[] blueData = imBlue.getData();
+        final Integer[] rgbData = rgb.getData();
+        for (int i = 0; i < (imRed.getWidth() * imRed.getHeight()); i++) {
+            /*
+             * Convert from signed byte value to unsigned byte for storage in
+             * the RGB image.
              */
-            int redUnsigned = (redData[i]) - Byte.MIN_VALUE;
-            int greenUnsigned = (greenData[i]) - Byte.MIN_VALUE;
-            int blueUnsigned = (blueData[i]) - Byte.MIN_VALUE;
+            final int redUnsigned = (redData[i]) - Byte.MIN_VALUE;
+            final int greenUnsigned = (greenData[i]) - Byte.MIN_VALUE;
+            final int blueUnsigned = (blueData[i]) - Byte.MIN_VALUE;
             /* Create ARGB word */
-            rgbData[i] = 
-                    (0xFF000000) |              // mask is off
-                    ((redUnsigned)<<16) | 
-                    ((greenUnsigned)<<8) | 
-                    blueUnsigned;
+            rgbData[i] = (0xFF000000) | // mask is off
+                    ((redUnsigned) << 16) | ((greenUnsigned) << 8) | blueUnsigned;
         }
         return rgb;
     }

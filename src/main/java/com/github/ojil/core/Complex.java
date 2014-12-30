@@ -88,12 +88,12 @@ public class Complex extends Number{
      * Divide the complex number by a real ineger.
      * @param n the divisor.
      * @return the Complex number resulting from the division (replaces this).
-     * @throws com.github.ojil.core.Error if n = 0
+     * @throws com.github.ojil.core.ImageError if n = 0
      */
-    public Complex div(int n) throws com.github.ojil.core.Error {
+    public Complex div(int n) throws com.github.ojil.core.ImageError {
         if (n==0) {
-            throw new Error(
-            				Error.PACKAGE.CORE,
+            throw new ImageError(
+            				ImageError.PACKAGE.CORE,
             				ErrorCodes.MATH_DIVISION_ZERO, 
             				this.toString(), 
             				new Integer(n).toString(), 
@@ -108,9 +108,9 @@ public class Complex extends Number{
      * Divides one complex number by another
      * @param cx The complex number to divide by.
      * @return the result of dividing this number by cx.
-     * @throws com.github.ojil.core.Error If division by 0 is attempted, i.e., cx.square() is 0.
+     * @throws com.github.ojil.core.ImageError If division by 0 is attempted, i.e., cx.square() is 0.
      */
-    public Complex div(Complex cx) throws com.github.ojil.core.Error {
+    public Complex div(Complex cx) throws com.github.ojil.core.ImageError {
         int nShift = 0;
         if (Math.abs(cx.real()) >= MathPlus.SCALE ||
             Math.abs(cx.imag()) >= MathPlus.SCALE) {
@@ -119,8 +119,8 @@ public class Complex extends Number{
         }
         int nSq = cx.square();
         if (nSq == 0) {
-            throw new Error(
-            				Error.PACKAGE.CORE,
+            throw new ImageError(
+            				ImageError.PACKAGE.CORE,
             				ErrorCodes.MATH_PRODUCT_TOO_LARGE,
             				this.toString(),
             				cx.toString(),
@@ -167,9 +167,9 @@ public class Complex extends Number{
     /**
      * Complex magnitude.
      * @return the magnitude of this number, i.e., sqrt(real**2 + imag**2)
-     * @throws com.github.ojil.core.Error if the square value computed is too large.
+     * @throws com.github.ojil.core.ImageError if the square value computed is too large.
      */
-    public int magnitude() throws com.github.ojil.core.Error {
+    public int magnitude() throws com.github.ojil.core.ImageError {
         // special case when one component is 0
         if (this.nReal == 0 || this.nImag == 0) {
             return Math.abs(this.nReal) + Math.abs(this.nImag);
@@ -232,13 +232,13 @@ public class Complex extends Number{
     /**
      * Computes the absolute square.
      * @return The absolute square, i.e, real**2 + imag**2.
-     * @throws com.github.ojil.core.Error if Complex value is too large.
+     * @throws com.github.ojil.core.ImageError if Complex value is too large.
      */
-    public int square() throws com.github.ojil.core.Error {
+    public int square() throws com.github.ojil.core.ImageError {
         if (Math.abs(this.nReal) > MathPlus.SCALE ||
             Math.abs(this.nImag) > MathPlus.SCALE) {
-            throw new Error(
-                            Error.PACKAGE.CORE,
+            throw new ImageError(
+                            ImageError.PACKAGE.CORE,
                             ErrorCodes.MATH_SQUARE_TOO_LARGE,
                             this.toString(),
                             null,

@@ -26,130 +26,127 @@ package com.github.ojil.algorithm;
 
 import com.github.ojil.core.Complex;
 import com.github.ojil.core.Complex32Image;
-import com.github.ojil.core.Error;
 import com.github.ojil.core.Gray32Image;
 import com.github.ojil.core.Gray8Image;
 import com.github.ojil.core.Image;
+import com.github.ojil.core.ImageError;
 import com.github.ojil.core.PipelineStage;
 
 /**
- * Computes the inverse FFT of the input Complex32Image. The output is a Gray8Image,
- * which is the magnitude of the inverse FFT. The output can be scaled so the
- * maximum and minimum values of the magnitude are mapped to Byte.MAX_VALUE and
- * Byte.MIN_VALUE.
+ * Computes the inverse FFT of the input Complex32Image. The output is a
+ * Gray8Image, which is the magnitude of the inverse FFT. The output can be
+ * scaled so the maximum and minimum values of the magnitude are mapped to
+ * Byte.MAX_VALUE and Byte.MIN_VALUE.
+ * 
  * @author webb
  */
 public class Complex32IFft extends PipelineStage {
-    private boolean bScale;
+    private final boolean bScale;
     private Fft1d fft = null;
     
     /**
      * Creates a new instance of Complex32IFft
-     * @param bScale Whether or not to scale the output before converting it to a byte.
+     * 
+     * @param bScale
+     *            Whether or not to scale the output before converting it to a
+     *            byte.
      */
-    public Complex32IFft(boolean bScale) {
+    public Complex32IFft(final boolean bScale) {
         this.bScale = bScale;
     }
     
     /**
-     * Perform the inverse FFT on the input Complex32Image, producing a Gray8Image.
-     * @param im Input image. Must be a power of 2 in size and of type Complex32Image.
-     * @throws com.github.ojil.core.Error if the input is not a power of 2 in size or not a Complex32Image.
+     * Perform the inverse FFT on the input Complex32Image, producing a
+     * Gray8Image.
+     * 
+     * @param im
+     *            Input image. Must be a power of 2 in size and of type
+     *            Complex32Image.
+     * @throws com.github.ojil.core.ImageError
+     *             if the input is not a power of 2 in size or not a
+     *             Complex32Image.
      */
-    public void push(Image im) throws com.github.ojil.core.Error {
+    @Override
+    public void push(final Image<?> im) throws com.github.ojil.core.ImageError {
         if (!(im instanceof Complex32Image)) {
-            throw new Error(
-            				Error.PACKAGE.ALGORITHM,
-            				ErrorCodes.IMAGE_NOT_COMPLEX32IMAGE,
-            				im.toString(),
-            				null,
-            				null);
+            throw new ImageError(ImageError.PACKAGE.ALGORITHM, AlgorithmErrorCodes.IMAGE_NOT_COMPLEX32IMAGE, im.toString(), null, null);
         }
         // make sure the image width and height are powers of two
-        int nWidth = im.getWidth();
-        int nHeight = im.getHeight();
-        if ((nWidth & (nWidth-1)) != 0) {
-            throw new Error(
-            				Error.PACKAGE.ALGORITHM,
-            				ErrorCodes.FFT_SIZE_NOT_POWER_OF_2,
-            				im.toString(),
-            				null,
-            				null);
+        final int nWidth = im.getWidth();
+        final int nHeight = im.getHeight();
+        if ((nWidth & (nWidth - 1)) != 0) {
+            throw new ImageError(ImageError.PACKAGE.ALGORITHM, AlgorithmErrorCodes.FFT_SIZE_NOT_POWER_OF_2, im.toString(), null, null);
         }
-        if ((nHeight & (nHeight-1)) != 0) {
-            throw new Error(
-            				Error.PACKAGE.ALGORITHM,
-            				ErrorCodes.FFT_SIZE_NOT_POWER_OF_2,
-            				im.toString(),
-            				null,
-            				null);
+        if ((nHeight & (nHeight - 1)) != 0) {
+            throw new ImageError(ImageError.PACKAGE.ALGORITHM, AlgorithmErrorCodes.FFT_SIZE_NOT_POWER_OF_2, im.toString(), null, null);
         }
         // initialize FFT
-        if (this.fft == null) {
-            this.fft = new Fft1d(Math.max(nWidth, nHeight));
+        if (fft == null) {
+            fft = new Fft1d(Math.max(nWidth, nHeight));
         } else {
-            this.fft.setMaxWidth(Math.max(nWidth, nHeight));
+            fft.setMaxWidth(Math.max(nWidth, nHeight));
         }
-         // get access to the complex image
-        Complex32Image cxmIn = (Complex32Image) im;
-        Complex data[] = cxmIn.getData();
+        // get access to the complex image
+        final Complex32Image cxmIn = (Complex32Image) im;
+        final Complex data[] = cxmIn.getData();
         // create output
-        Complex32Image cxmResult = new Complex32Image(nWidth, nHeight);
+        final Complex32Image cxmResult = new Complex32Image(nWidth, nHeight);
         // take inverse FFT of each row
-        Complex cxRow[] = new Complex[nWidth];
-        for (int i=0; i<nHeight; i++) {
-            System.arraycopy(data, i*nWidth, cxRow, 0, nWidth);
+        final Complex cxRow[] = new Complex[nWidth];
+        for (int i = 0; i < nHeight; i++) {
+            System.arraycopy(data, i * nWidth, cxRow, 0, nWidth);
             // compute inverse FFT
-            Complex cxResult[] = this.fft.ifft(cxRow);
+            final Complex cxResult[] = fft.ifft(cxRow);
             // save result
-            System.arraycopy(cxResult, 0, cxmResult.getData(), i*nWidth, nWidth);
+            System.arraycopy(cxResult, 0, cxmResult.getData(), i * nWidth, nWidth);
         }
         // take inverse FFT of each column
-        Complex cxCol[] = new Complex[nHeight];
-        for (int j=0; j<nWidth; j++) {
+        final Complex cxCol[] = new Complex[nHeight];
+        for (int j = 0; j < nWidth; j++) {
             // copy column into a 1-D array
-            for (int i=0; i<nHeight; i++) {
-                cxCol[i] = cxmResult.getData()[i*nWidth+j];
+            for (int i = 0; i < nHeight; i++) {
+                cxCol[i] = cxmResult.getData()[(i * nWidth) + j];
             }
             // compute inverse FFT
-            Complex cxResult[] = this.fft.ifft(cxCol);
+            final Complex cxResult[] = fft.ifft(cxCol);
             // save result back into column
-             for (int i=0; i<nHeight; i++) {
-                cxmResult.getData()[i*nWidth+j] = cxResult[i];
+            for (int i = 0; i < nHeight; i++) {
+                cxmResult.getData()[(i * nWidth) + j] = cxResult[i];
             }
         }
         // convert back to a gray image
         // first convert it to an integer image
-        Gray32Image imInteger = new Gray32Image(nWidth, nHeight);
-        Complex cxData[] = cxmResult.getData();
-        Integer nData[] = imInteger.getData();
+        final Gray32Image imInteger = new Gray32Image(nWidth, nHeight);
+        final Complex cxData[] = cxmResult.getData();
+        final Integer nData[] = imInteger.getData();
         int nMinVal = Integer.MAX_VALUE;
         int nMaxVal = Integer.MIN_VALUE;
-        for (int i = 0; i < nWidth * nHeight; i++) {
-            // magnitude is always guaranteed to be >= 0 so we only have to clamp
+        for (int i = 0; i < (nWidth * nHeight); i++) {
+            // magnitude is always guaranteed to be >= 0 so we only have to
+            // clamp
             // below Byte.MAX_VALUE
             nData[i] = cxData[i].rsh(Gray8Fft.SCALE).magnitude();
-            if (this.bScale) {
+            if (bScale) {
                 nMinVal = Math.min(nMinVal, nData[i]);
                 nMaxVal = Math.max(nMaxVal, nData[i]);
             }
         }
         // compute range of values in image and avoid division by 0 later
-        int nDiff = Math.max(nMaxVal - nMinVal, 1);
+        final int nDiff = Math.max(nMaxVal - nMinVal, 1);
         // this inverts the operation in Gray8Fft. The two must be kept in sync.
-        Gray8Image imResult = new Gray8Image(nWidth, nHeight);
-        Byte bData[] = imResult.getData();
+        final Gray8Image imResult = new Gray8Image(nWidth, nHeight);
+        final Byte bData[] = imResult.getData();
         if (bScale) {
-            for (int i = 0; i < nWidth * nHeight; i++) {
-                // magnitude is always guaranteed to be >= 0 so we only have to clamp
+            for (int i = 0; i < (nWidth * nHeight); i++) {
+                // magnitude is always guaranteed to be >= 0 so we only have to
+                // clamp
                 // below Byte.MAX_VALUE
-                bData[i] = (byte)  
-                    (((nData[i] - nMinVal) * (Byte.MAX_VALUE - Byte.MIN_VALUE)) / 
-                        nDiff + Byte.MIN_VALUE);
-            }            
+                bData[i] = (byte) ((((nData[i] - nMinVal) * (Byte.MAX_VALUE - Byte.MIN_VALUE)) / nDiff) + Byte.MIN_VALUE);
+            }
         } else {
-            for (int i = 0; i < nWidth * nHeight; i++) {
-                // magnitude is always guaranteed to be >= 0 so we only have to clamp
+            for (int i = 0; i < (nWidth * nHeight); i++) {
+                // magnitude is always guaranteed to be >= 0 so we only have to
+                // clamp
                 // below Byte.MAX_VALUE
                 bData[i] = (byte) Math.min(Byte.MAX_VALUE, nData[i] + Byte.MIN_VALUE);
             }

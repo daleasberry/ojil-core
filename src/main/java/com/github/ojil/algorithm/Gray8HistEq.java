@@ -23,67 +23,72 @@
  */
 
 package com.github.ojil.algorithm;
-import com.github.ojil.core.Error;
+
 import com.github.ojil.core.Gray8Image;
 import com.github.ojil.core.Image;
+import com.github.ojil.core.ImageError;
 import com.github.ojil.core.PipelineStage;
 
 /**
  * Equalize the histogram of a gray image.
  * <p>
+ * 
  * @author webb
  */
 public class Gray8HistEq extends PipelineStage {
     private int cPixels = 0;
-    private Gray8HistMatch histMatch;
+    private final Gray8HistMatch histMatch;
     
     /**
      * Creates a new instance of Gray8HistEq
-     * @throws com.github.ojil.core.Error if Gray8HistMatch throws jjil.core.Error due to coding error.
+     * 
+     * @throws com.github.ojil.core.ImageError
+     *             if Gray8HistMatch throws jjil.core.Error due to coding error.
      */
-    public Gray8HistEq() throws com.github.ojil.core.Error {
-        Integer[] nullHist = new Integer[256];
-        this.histMatch = new Gray8HistMatch(nullHist);
+    public Gray8HistEq() throws com.github.ojil.core.ImageError {
+        final Integer[] nullHist = new Integer[256];
+        histMatch = new Gray8HistMatch(nullHist);
     }
     
-    /** Equalize the histogram of an input gray image.
+    /**
+     * Equalize the histogram of an input gray image.
      *
-     * @param image the input image.
-     * @throws com.github.ojil.core.Error if the input image is not gray.
+     * @param image
+     *            the input image.
+     * @throws com.github.ojil.core.ImageError
+     *             if the input image is not gray.
      */
-    public void push(Image image) throws com.github.ojil.core.Error {
+    @Override
+    public void push(final Image<?> image) throws com.github.ojil.core.ImageError {
         if (!(image instanceof Gray8Image)) {
-            throw new Error(
-            				Error.PACKAGE.ALGORITHM,
-            				ErrorCodes.IMAGE_NOT_GRAY8IMAGE,
-            				image.toString(),
-            				null,
-            				null);
+            throw new ImageError(ImageError.PACKAGE.ALGORITHM, AlgorithmErrorCodes.IMAGE_NOT_GRAY8IMAGE, image.toString(), null, null);
         }
-        Gray8Image gray = (Gray8Image) image;
-        /* In order to avoid recreating histMatch every call, we recompute
-         * the target histogram only when the image size (total # pixels)
-         * changes.
+        final Gray8Image gray = (Gray8Image) image;
+        /*
+         * In order to avoid recreating histMatch every call, we recompute the
+         * target histogram only when the image size (total # pixels) changes.
          */
-        if (image.getWidth() * image.getHeight() != cPixels) {
-            this.cPixels = image.getWidth() * image.getHeight();
+        if ((image.getWidth() * image.getHeight()) != cPixels) {
+            cPixels = image.getWidth() * image.getHeight();
             int cPixelsRemaining = cPixels;
-            /* (Re)compute the equalizing histogram. We want a histogram
-             * which is as flat as possible. The calculation below evens
-             * out the histogram values so all are within 1 of each other.
+            /*
+             * (Re)compute the equalizing histogram. We want a histogram which
+             * is as flat as possible. The calculation below evens out the
+             * histogram values so all are within 1 of each other.
              */
-            Integer[] histogram = new Integer[256];
-            for (int i=0; i<256; i++) {
-                int c = cPixelsRemaining / (256 - i);
+            final Integer[] histogram = new Integer[256];
+            for (int i = 0; i < 256; i++) {
+                final int c = cPixelsRemaining / (256 - i);
                 histogram[i] = c;
                 cPixelsRemaining -= c;
             }
-            this.histMatch.setHistogram(histogram);
+            histMatch.setHistogram(histogram);
         }
-        /* Apply the histogram match algorithm to equalize the histogram
-         * of the input.
+        /*
+         * Apply the histogram match algorithm to equalize the histogram of the
+         * input.
          */
-        this.histMatch.push(gray);
-        super.setOutput(this.histMatch.getFront());
+        histMatch.push(gray);
+        super.setOutput(histMatch.getFront());
     }
 }

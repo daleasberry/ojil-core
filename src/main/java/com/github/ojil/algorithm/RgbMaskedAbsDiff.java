@@ -19,7 +19,7 @@
 
 package com.github.ojil.algorithm;
 
-import com.github.ojil.core.Error;
+import com.github.ojil.core.ImageError;
 import com.github.ojil.core.Gray8Image;
 import com.github.ojil.core.Image;
 import com.github.ojil.core.PipelineStage;
@@ -50,24 +50,24 @@ public class RgbMaskedAbsDiff extends PipelineStage {
      * background, in the masked areas. Outside the masked areas the output
      * is Byte.MIN_VALUE.
      * @param imInput input RgbImage
-     * @throws com.github.ojil.core.Error if imInput is not an RgbImage or is not the same
+     * @throws com.github.ojil.core.ImageError if imInput is not an RgbImage or is not the same
      * size as the background image set in the constructor.
      */
-    public void push(Image imInput) throws Error {
+    public void push(Image imInput) throws ImageError {
         {
         if (!(imInput instanceof RgbMaskedImage)) 
-            throw new Error(
-                			Error.PACKAGE.ALGORITHM,
-                			ErrorCodes.OBJECT_NOT_EXPECTED_TYPE,
+            throw new ImageError(
+                			ImageError.PACKAGE.ALGORITHM,
+                			AlgorithmErrorCodes.OBJECT_NOT_EXPECTED_TYPE,
                 			imInput.toString(),
                 			"RgbMaskedImage",
                 			null);
         }
         if (imInput.getWidth() != this.rgbBack.getWidth() ||
         	imInput.getHeight() != this.rgbBack.getHeight()) {
-        	throw new Error(
-        				Error.PACKAGE.ALGORITHM,
-        				ErrorCodes.IMAGE_SIZES_DIFFER,
+        	throw new ImageError(
+        				ImageError.PACKAGE.ALGORITHM,
+        				AlgorithmErrorCodes.IMAGE_SIZES_DIFFER,
         				imInput.toString(),
         				this.rgbBack.toString(),
         				null);

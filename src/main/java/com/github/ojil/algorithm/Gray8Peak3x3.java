@@ -5,7 +5,7 @@
 
 package com.github.ojil.algorithm;
 
-import com.github.ojil.core.Error;
+import com.github.ojil.core.ImageError;
 import com.github.ojil.core.Gray8Image;
 import com.github.ojil.core.Image;
 import com.github.ojil.core.PipelineStage;
@@ -20,13 +20,13 @@ public class Gray8Peak3x3 extends PipelineStage {
      * Scan the image and set all pixels not equal to the local 3x3 maximum
      * to Byte.MIN_VALUE.
      * @param imageInput input Gray8Image. Not modified.
-     * @throws com.github.ojil.core.Error if input is not a Gray8Image.
+     * @throws com.github.ojil.core.ImageError if input is not a Gray8Image.
      */
-    public void push(Image imageInput) throws Error {
+    public void push(Image imageInput) throws ImageError {
         if (!(imageInput instanceof Gray8Image)) {
-            throw new Error(
-                            Error.PACKAGE.ALGORITHM,
-                            ErrorCodes.IMAGE_NOT_GRAY8IMAGE,
+            throw new ImageError(
+                            ImageError.PACKAGE.ALGORITHM,
+                            AlgorithmErrorCodes.IMAGE_NOT_GRAY8IMAGE,
                             imageInput.toString(),
                             null,
                             null);

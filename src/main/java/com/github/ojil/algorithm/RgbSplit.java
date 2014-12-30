@@ -9,7 +9,7 @@ import java.util.Enumeration;
 import java.util.Random;
 import java.util.Vector;
 
-import com.github.ojil.core.Error;
+import com.github.ojil.core.ImageError;
 import com.github.ojil.core.Image;
 import com.github.ojil.core.PipelineStage;
 import com.github.ojil.core.Rect;
@@ -153,12 +153,12 @@ public class RgbSplit extends PipelineStage {
      * is used during debugging to see how the image has been split so that
      * the threshold can be adjusted.
      * @return RgbImage with colors randomly assigned to regions.
-     * @throws com.github.ojil.core.Error if push() hasn't been called yet
+     * @throws com.github.ojil.core.ImageError if push() hasn't been called yet
      */
-    public RgbImage getRandomizedRgbImage() throws com.github.ojil.core.Error {
+    public RgbImage getRandomizedRgbImage() throws com.github.ojil.core.ImageError {
         if (this.vecROk == null) {
-            throw new com.github.ojil.core.Error(
-                            com.github.ojil.core.Error.PACKAGE.CORE,
+            throw new com.github.ojil.core.ImageError(
+                            com.github.ojil.core.ImageError.PACKAGE.CORE,
                             com.github.ojil.core.ErrorCodes.NO_RESULT_AVAILABLE,
                             null,
                             null,
@@ -183,12 +183,12 @@ public class RgbSplit extends PipelineStage {
     /**
      * Return the region list.
      * @return an Enumeration on RgbRegion objects.
-     * @throws com.github.ojil.core.Error if push() hasn't been called yet
+     * @throws com.github.ojil.core.ImageError if push() hasn't been called yet
      */
-    public Enumeration<RgbRegion> getRegions() throws com.github.ojil.core.Error {
+    public Enumeration<RgbRegion> getRegions() throws com.github.ojil.core.ImageError {
         if (this.vecROk == null) {
-            throw new com.github.ojil.core.Error(
-                            com.github.ojil.core.Error.PACKAGE.CORE,
+            throw new com.github.ojil.core.ImageError(
+                            com.github.ojil.core.ImageError.PACKAGE.CORE,
                             com.github.ojil.core.ErrorCodes.NO_RESULT_AVAILABLE,
                             null,
                             null,
@@ -203,12 +203,12 @@ public class RgbSplit extends PipelineStage {
      * blocky, depending on the thresholds set.
      * @return RgbImage with the mean color of each region assigned to the
      * region.
-     * @throws com.github.ojil.core.Error if push() hasn't been called yet
+     * @throws com.github.ojil.core.ImageError if push() hasn't been called yet
      */
-    public RgbImage getRgbImage() throws com.github.ojil.core.Error {
+    public RgbImage getRgbImage() throws com.github.ojil.core.ImageError {
         if (this.vecROk == null) {
-            throw new com.github.ojil.core.Error(
-                            com.github.ojil.core.Error.PACKAGE.CORE,
+            throw new com.github.ojil.core.ImageError(
+                            com.github.ojil.core.ImageError.PACKAGE.CORE,
                             com.github.ojil.core.ErrorCodes.NO_RESULT_AVAILABLE,
                             null,
                             null,
@@ -241,11 +241,11 @@ public class RgbSplit extends PipelineStage {
         return szResult + ")";
     }
 
-    public void push(Image imageInput) throws Error {
+    public void push(Image imageInput) throws ImageError {
         if (!(imageInput instanceof RgbImage)) {
-            throw new Error(
-                            Error.PACKAGE.ALGORITHM,
-                            ErrorCodes.IMAGE_NOT_RGBIMAGE,
+            throw new ImageError(
+                            ImageError.PACKAGE.ALGORITHM,
+                            AlgorithmErrorCodes.IMAGE_NOT_RGBIMAGE,
                             imageInput.toString(),
                             null,
                             null);

@@ -27,7 +27,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.Serializable;
 
-import com.github.ojil.core.Error;
+import com.github.ojil.core.ImageError;
 import com.github.ojil.core.Gray32Image;
 import com.github.ojil.core.Gray8Image;
 import com.github.ojil.core.Image;
@@ -96,17 +96,17 @@ public abstract class HaarClassifierCascade implements Serializable {
      * @param nStart starting position in array to assign
      * @param nLength number of characters to read
      * @throws IOException if InputStreamReader.read() does
-     * @throws Error if input is terminated before all characters are read
+     * @throws ImageError if input is terminated before all characters are read
      */
     protected static void readChars(InputStreamReader isr, char[] rChars, int nStart, int nLength) 
-    	throws IOException, Error
+    	throws IOException, ImageError
     	{
     		for (int i=0; i<nLength; i++) {
     			int n = isr.read();
     			if (n == -1) {
-                    throw new Error(
-                            Error.PACKAGE.ALGORITHM,
-                            ErrorCodes.INPUT_TERMINATED_EARLY,
+                    throw new ImageError(
+                            ImageError.PACKAGE.ALGORITHM,
+                            AlgorithmErrorCodes.INPUT_TERMINATED_EARLY,
                             isr.toString(),
                             null,
                             null);
@@ -121,9 +121,9 @@ public abstract class HaarClassifierCascade implements Serializable {
      * @param i The input Gray8Image. The image size must be equal to the expected size
      * (as given by getWidth() and getHeight()).
      * @return true iff the input image passes all the tests in the Haar cascade.
-     * @throws com.github.ojil.core.Error if the input image is not a Gray8Image or is the wrong size.
+     * @throws com.github.ojil.core.ImageError if the input image is not a Gray8Image or is the wrong size.
      */
-    public abstract boolean eval(Image i) throws com.github.ojil.core.Error;
+    public abstract boolean eval(Image i) throws com.github.ojil.core.ImageError;
     
     /**
      * Support method for reading integers from an input stream. The single-character
@@ -135,20 +135,20 @@ public abstract class HaarClassifierCascade implements Serializable {
      * characters are to be read.
      * @return the next integer read from the input stream.
      * @param isr The input stream.
-     * @throws com.github.ojil.core.Error if there is a parse error in the file.
+     * @throws com.github.ojil.core.ImageError if there is a parse error in the file.
      * @throws java.io.IOException if the read method of isr returns an IOException.
      */
     protected static int readInt(InputStreamReader isr) 
-        throws com.github.ojil.core.Error, IOException, IOException
+        throws com.github.ojil.core.ImageError, IOException, IOException
     {
         int n = 0;
         int sign = 1;
         do {
            int nChar = isr.read();
             if (nChar == -1) {
-                throw new Error(
-                                Error.PACKAGE.ALGORITHM,
-                                ErrorCodes.INPUT_TERMINATED_EARLY,
+                throw new ImageError(
+                                ImageError.PACKAGE.ALGORITHM,
+                                AlgorithmErrorCodes.INPUT_TERMINATED_EARLY,
                                 isr.toString(),
                                 null,
                                 null);
@@ -406,15 +406,15 @@ public abstract class HaarClassifierCascade implements Serializable {
        // think of a better way to do this than to make this a member of
        // HaarFeature and make the name as below.
         private HaarRect makeHaarRectFromStream(InputStreamReader isr) 
-            throws com.github.ojil.core.Error, IOException
+            throws com.github.ojil.core.ImageError, IOException
         {
 
             char[] rC = new char[4];
             readChars(isr,rC, 0, 4);
             if ("(hr ".compareTo(new String(rC)) != 0) { //$NON-NLS-1$
-                throw new Error(
-                                Error.PACKAGE.ALGORITHM,
-                                ErrorCodes.PARSE_ERROR,
+                throw new ImageError(
+                                ImageError.PACKAGE.ALGORITHM,
+                                AlgorithmErrorCodes.PARSE_ERROR,
                                 new String(rC),
                                 "(hr ",
                                 isr.toString());
@@ -456,17 +456,17 @@ public abstract class HaarClassifierCascade implements Serializable {
          * are tilted, 0 if not.
          * @throws java.io.IOException if the input stream reader methods return IOException, or we get an early
          * end of file.
-         * @throws com.github.ojil.core.Error if the input is not in the expected format.
+         * @throws com.github.ojil.core.ImageError if the input is not in the expected format.
          */
         public HaarFeature(InputStreamReader isr)
-           throws com.github.ojil.core.Error, IOException 
+           throws com.github.ojil.core.ImageError, IOException 
         {
             char[] rC = new char[4];
             readChars(isr,rC, 0, 4);
             if ("(hf ".compareTo(new String(rC)) != 0) { //$NON-NLS-1$
-                throw new Error(
-                                Error.PACKAGE.ALGORITHM,
-                                ErrorCodes.PARSE_ERROR,
+                throw new ImageError(
+                                ImageError.PACKAGE.ALGORITHM,
+                                AlgorithmErrorCodes.PARSE_ERROR,
                                 new String(rC),
                                 "(hf ",
                                 isr.toString());
@@ -562,10 +562,10 @@ public abstract class HaarClassifierCascade implements Serializable {
      * @return The created HaarClassifierCascade. This will always be of
      * type HaarClassifierStumpBase.
      * @throws java.io.IOException if the read from isr returns an IOException, or if end of file is encountered unexpectedly.
-     * @throws com.github.ojil.core.Error If the input doesn't match what is expected.
+     * @throws com.github.ojil.core.ImageError If the input doesn't match what is expected.
      */
     public static HaarClassifierCascade fromStream(InputStreamReader isr) 
-           throws com.github.ojil.core.Error, IOException 
+           throws com.github.ojil.core.ImageError, IOException 
     {
         // read the first token from the stream
         String szToken = ""; //$NON-NLS-1$
@@ -573,9 +573,9 @@ public abstract class HaarClassifierCascade implements Serializable {
         do {
             int nCh = isr.read();
             if (nCh == -1) {
-                throw new Error(
-                                Error.PACKAGE.ALGORITHM,
-                                ErrorCodes.INPUT_TERMINATED_EARLY,
+                throw new ImageError(
+                                ImageError.PACKAGE.ALGORITHM,
+                                AlgorithmErrorCodes.INPUT_TERMINATED_EARLY,
                                 isr.toString(),
                                 null,
                                 null);
@@ -585,9 +585,9 @@ public abstract class HaarClassifierCascade implements Serializable {
         } while (c != ' ');
         if (szToken.compareTo("(hcsb ") == 0) return new HaarClassifierStumpBase(isr); //$NON-NLS-1$
         else
-            throw new Error(
-                            Error.PACKAGE.ALGORITHM,
-                            ErrorCodes.PARSE_ERROR,
+            throw new ImageError(
+                            ImageError.PACKAGE.ALGORITHM,
+                            AlgorithmErrorCodes.PARSE_ERROR,
                             szToken,
                             "(hcsb ",
                             isr.toString());
@@ -661,11 +661,11 @@ class HaarClassifierTreeBase extends HaarClassifierCascade
     private HaarStageClassifier child;
     private HaarClassifierTreeBase parent;
 
-    public boolean eval(Image image) throws com.github.ojil.core.Error {
+    public boolean eval(Image image) throws com.github.ojil.core.ImageError {
         if (!(image instanceof Gray32Image)) {
-             throw new Error(
-            				Error.PACKAGE.ALGORITHM,
-            				ErrorCodes.IMAGE_NOT_GRAY32IMAGE,
+             throw new ImageError(
+            				ImageError.PACKAGE.ALGORITHM,
+            				AlgorithmErrorCodes.IMAGE_NOT_GRAY32IMAGE,
             				image.toString(),
             				null,
             				null);
@@ -735,14 +735,14 @@ class  HaarClassifierStumpBase extends HaarClassifierCascade
         // create from input stream
         // expected data: (hwcs <feature><threshold>,<alpha>)
         public HaarWeakClassifierStump(InputStreamReader isr, int width, int height) 
-           throws com.github.ojil.core.Error, IOException 
+           throws com.github.ojil.core.ImageError, IOException 
         {
             char[] rC = new char[6];
             readChars(isr,rC, 0, 6);
             if ("(hwcs ".compareTo(new String(rC)) != 0) { //$NON-NLS-1$
-                throw new Error(
-                                Error.PACKAGE.ALGORITHM,
-                                ErrorCodes.PARSE_ERROR,
+                throw new ImageError(
+                                ImageError.PACKAGE.ALGORITHM,
+                                AlgorithmErrorCodes.PARSE_ERROR,
                                 new String(rC),
                                 "(hwcs ",
                                 isr.toString());
@@ -810,14 +810,14 @@ class  HaarClassifierStumpBase extends HaarClassifierCascade
         // create from stream
         // expected input (hcs <count><HaarClassifierStumpLimb>^count<threshold>)
         public HaarClassifierStump(InputStreamReader isr, int width, int height) 
-           throws com.github.ojil.core.Error, IOException 
+           throws com.github.ojil.core.ImageError, IOException 
         {
             char[] rC = new char[5];
             readChars(isr,rC, 0, 5);
             if ("(hcs ".compareTo(new String(rC)) != 0) { //$NON-NLS-1$
-                throw new Error(
-                                Error.PACKAGE.ALGORITHM,
-                                ErrorCodes.PARSE_ERROR,
+                throw new ImageError(
+                                ImageError.PACKAGE.ALGORITHM,
+                                AlgorithmErrorCodes.PARSE_ERROR,
                                 new String(rC),
                                 "(hcs ",
                                 isr.toString());
@@ -861,11 +861,11 @@ class  HaarClassifierStumpBase extends HaarClassifierCascade
     };
 
        
-        public boolean eval(Image image) throws com.github.ojil.core.Error {
+        public boolean eval(Image image) throws com.github.ojil.core.ImageError {
             if (!(image instanceof Gray8Image)) {
-                 throw new Error(
-                                 Error.PACKAGE.ALGORITHM,
-                                 ErrorCodes.IMAGE_NOT_GRAY8IMAGE,
+                 throw new ImageError(
+                                 ImageError.PACKAGE.ALGORITHM,
+                                 AlgorithmErrorCodes.IMAGE_NOT_GRAY8IMAGE,
                                  image.toString(),
                                  null,
                                  null);
@@ -900,7 +900,7 @@ class  HaarClassifierStumpBase extends HaarClassifierCascade
     // Expected input (hcsb <width> <height> <count><HaarClassifierStump>^count)
     // the '(hcsb ' has already been read before this gets called
     public HaarClassifierStumpBase(InputStreamReader isr) 
-       throws com.github.ojil.core.Error, IOException 
+       throws com.github.ojil.core.ImageError, IOException 
     {
         /*
         char[] rC = new char[6];
@@ -919,18 +919,18 @@ class  HaarClassifierStumpBase extends HaarClassifierCascade
         }
         n = isr.read();
         if (n == -1) {
-            throw new Error(
-                            Error.PACKAGE.ALGORITHM,
-                            ErrorCodes.INPUT_TERMINATED_EARLY,
+            throw new ImageError(
+                            ImageError.PACKAGE.ALGORITHM,
+                            AlgorithmErrorCodes.INPUT_TERMINATED_EARLY,
                             isr.toString(),
                             null,
                             null);
         }
         char c = (char) n;
         if (c != ')') {
-            throw new Error(
-                            Error.PACKAGE.ALGORITHM,
-                            ErrorCodes.PARSE_ERROR,
+            throw new ImageError(
+                            ImageError.PACKAGE.ALGORITHM,
+                            AlgorithmErrorCodes.PARSE_ERROR,
                             new Character(c).toString(),
                             ")",
                             isr.toString());

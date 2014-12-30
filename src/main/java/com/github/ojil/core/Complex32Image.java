@@ -29,7 +29,7 @@ package com.github.ojil.core;
  *
  * @author webb
  */
-public class Complex32Image extends Image {
+public class Complex32Image extends Image<Object> {
     private final Complex cxImage[];
     
     /**

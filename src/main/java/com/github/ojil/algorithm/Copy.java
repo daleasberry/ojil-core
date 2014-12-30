@@ -23,11 +23,14 @@
  */
 
 package com.github.ojil.algorithm;
+
 import com.github.ojil.core.Image;
 import com.github.ojil.core.PipelineStage;
+
 /**
  * Copies an input image to the output. This is a shallow copy, so if anything
  * modifies the image contents the copy will be modified too.
+ * 
  * @author webb
  */
 public class Copy extends PipelineStage {
@@ -37,10 +40,14 @@ public class Copy extends PipelineStage {
     }
     
     /**
-     * Copy an input image to the output without creating a deep copy of the contents.
-     * @param im Input image. May be of any Image type.
+     * Copy an input image to the output without creating a deep copy of the
+     * contents.
+     * 
+     * @param im
+     *            Input image. May be of any Image type.
      */
-    public void push(Image im) {
+    @Override
+    public void push(final Image<?> im) {
         super.setOutput(im);
     }
 }

@@ -156,13 +156,13 @@ public class MathPlus {
     /**
      * Computes square root using Newton's iteration.
      * @param x number to take square root of
-     * @throws com.github.ojil.core.Error if x < 0
+     * @throws com.github.ojil.core.ImageError if x < 0
      * @return the square root of x
      */
-    public static int sqrt(int x) throws com.github.ojil.core.Error {
+    public static int sqrt(int x) throws com.github.ojil.core.ImageError {
         if (x < 0) {
-            throw new Error(
-            				Error.PACKAGE.CORE,
+            throw new ImageError(
+            				ImageError.PACKAGE.CORE,
             				ErrorCodes.MATH_NEGATIVE_SQRT,
             				new Integer(x).toString(),
             				null,

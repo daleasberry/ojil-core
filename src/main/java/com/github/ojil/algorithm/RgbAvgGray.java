@@ -23,7 +23,7 @@
  */
 
 package com.github.ojil.algorithm;
-import com.github.ojil.core.Error;
+import com.github.ojil.core.ImageError;
 import com.github.ojil.core.Gray8Image;
 import com.github.ojil.core.Image;
 import com.github.ojil.core.PipelineStage;
@@ -51,13 +51,13 @@ public class RgbAvgGray extends PipelineStage {
      * because byte is a signed type.
      *
      * @param image the input image
-     * @throws com.github.ojil.core.Error if image is not an RgbImage
+     * @throws com.github.ojil.core.ImageError if image is not an RgbImage
      */
-    public void push(Image image) throws com.github.ojil.core.Error {
+    public void push(Image image) throws com.github.ojil.core.ImageError {
         if (!(image instanceof RgbImage)) {
-            throw new Error(
-            				Error.PACKAGE.ALGORITHM,
-            				ErrorCodes.IMAGE_NOT_RGBIMAGE,
+            throw new ImageError(
+            				ImageError.PACKAGE.ALGORITHM,
+            				AlgorithmErrorCodes.IMAGE_NOT_RGBIMAGE,
             				image.toString(),
             				null,
             				null);

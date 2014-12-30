@@ -23,7 +23,7 @@
  */
 
 package com.github.ojil.algorithm;
-import com.github.ojil.core.Error;
+import com.github.ojil.core.ImageError;
 import com.github.ojil.core.Gray8Image;
 import com.github.ojil.core.Image;
 import com.github.ojil.core.PipelineStage;
@@ -40,9 +40,9 @@ public class RgbVertGaussSmooth extends PipelineStage {
     
     /** Smooth an image vertically using a Gaussian blur.
      * @param nSigma the sigma value of window to smooth over
-     * @throws com.github.ojil.core.Error if sigma is out of range
+     * @throws com.github.ojil.core.ImageError if sigma is out of range
      */
-    public RgbVertGaussSmooth(int nSigma) throws com.github.ojil.core.Error {
+    public RgbVertGaussSmooth(int nSigma) throws com.github.ojil.core.ImageError {
         setWidth(nSigma);
     }
     
@@ -50,13 +50,13 @@ public class RgbVertGaussSmooth extends PipelineStage {
     /**
      * Smooth an RgbImage vertically using a Gaussian blur operator
      * @param image the input RgbImage image.
-     * @throws com.github.ojil.core.Error if the input is not an RgbImage
+     * @throws com.github.ojil.core.ImageError if the input is not an RgbImage
      */
-    public void push(Image image) throws com.github.ojil.core.Error {
+    public void push(Image image) throws com.github.ojil.core.ImageError {
         if (!(image instanceof RgbImage)) {
-            throw new Error(
-    				Error.PACKAGE.ALGORITHM,
-    				ErrorCodes.IMAGE_NOT_RGBIMAGE,
+            throw new ImageError(
+    				ImageError.PACKAGE.ALGORITHM,
+    				AlgorithmErrorCodes.IMAGE_NOT_RGBIMAGE,
     				image.toString(),
     				null,
     				null);
@@ -72,9 +72,9 @@ public class RgbVertGaussSmooth extends PipelineStage {
     
     /** Set sigma value of Gaussian blur
      * @param nSigma the sigma of the window to blur over
-     * @throws com.github.ojil.core.Error if nSigma is out of range.
+     * @throws com.github.ojil.core.ImageError if nSigma is out of range.
      */
-    public void setWidth(int nSigma) throws com.github.ojil.core.Error {
+    public void setWidth(int nSigma) throws com.github.ojil.core.ImageError {
         this.nSigma = nSigma;
         this.seqR = new Sequence(new RgbSelectGray(RgbSelectGray.RED));
         this.seqR.add(new Gray8GaussSmoothVert(nSigma));

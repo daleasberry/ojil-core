@@ -1,10 +1,11 @@
 package com.github.ojil.core;
 
-public class FactoryService implements OjilFactories {
+public class FactoryService {
     private OjilFactories factoryServiceSpi;
+    private static FactoryService factoryService;
     
     @SuppressWarnings("unchecked")
-    public FactoryService() {
+    private FactoryService() {
         Class<?> factoryServiceClass = null;
         try {
             factoryServiceClass = (Class<OjilFactories>) ClassLoader.getSystemClassLoader().loadClass("com.github.ojil.platform.FactoryServiceSpi");
@@ -19,13 +20,17 @@ public class FactoryService implements OjilFactories {
         }
     }
     
-    @Override
-    public ImageFactory getImageFactory() {
-        return factoryServiceSpi.getImageFactory();
+    public static synchronized ImageFactory getImageFactory() {
+        if(null == factoryService) {
+            factoryService = new FactoryService();
+        }
+        return factoryService.factoryServiceSpi.getImageFactory();
     }
 
-    @Override
-    public IoFactory getIoFactory() {
-        return factoryServiceSpi.getIoFactory();
+    public static synchronized IoFactory getIoFactory() {
+        if(null == factoryService) {
+            factoryService = new FactoryService();
+        }
+        return factoryService.factoryServiceSpi.getIoFactory();
     }
 }

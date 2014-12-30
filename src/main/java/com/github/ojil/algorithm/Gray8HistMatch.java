@@ -23,9 +23,10 @@
  */
 
 package com.github.ojil.algorithm;
-import com.github.ojil.core.Error;
+
 import com.github.ojil.core.Gray8Image;
 import com.github.ojil.core.Image;
+import com.github.ojil.core.ImageError;
 import com.github.ojil.core.PipelineStage;
 import com.github.ojil.core.RgbVal;
 
@@ -37,31 +38,34 @@ import com.github.ojil.core.RgbVal;
  * @author webb
  */
 public class Gray8HistMatch extends PipelineStage {
-    /* We use the cumulative pixel count in computation, not
-     * the input histogram.
+    /*
+     * We use the cumulative pixel count in computation, not the input
+     * histogram.
      */
     private Integer[] histCumTarget;
     
-    /** Creates a new instance of Gray8HistMatch 
+    /**
+     * Creates a new instance of Gray8HistMatch
      *
-     * @param histTarget the input histogram.
-     * @throws com.github.ojil.core.Error if the input histogram does not have
-     * 256 elements.
+     * @param histTarget
+     *            the input histogram.
+     * @throws ImageError
+     *             if the input histogram does not have 256 elements.
      */
-    public Gray8HistMatch(Integer[] histTarget) throws com.github.ojil.core.Error {
+    public Gray8HistMatch(final Integer[] histTarget) throws ImageError {
         setHistogram(histTarget);
     }
     
-    private Byte[] createLookup(Integer[] histCumTarget, Integer[] histCumSource) {
-        Byte[] lookup = new Byte[256];
-        int j=0;
-        for (int i=0; i<256; i++) {
+    private Byte[] createLookup(final Integer[] histCumTarget, final Integer[] histCumSource) {
+        final Byte[] lookup = new Byte[256];
+        int j = 0;
+        for (int i = 0; i < 256; i++) {
             while (histCumTarget[j] < histCumSource[i]) {
                 j++;
             }
-            if (j<256) {
+            if (j < 256) {
                 // don't forget byte is a signed 8-bit value
-                lookup[i] = RgbVal.toSignedByte((byte)j);
+                lookup[i] = RgbVal.toSignedByte((byte) j);
             } else {
                 lookup[i] = Byte.MAX_VALUE;
             }
@@ -69,85 +73,83 @@ public class Gray8HistMatch extends PipelineStage {
         return lookup;
     }
     
-    /** getHistogram returns the target histogram that has been
-     * previously set.
+    /**
+     * getHistogram returns the target histogram that has been previously set.
      *
      * @return the target histogram
      */
     public Integer[] getHistogram() {
-        Integer[] result = new Integer[256];
-        /* since we store the cumulative histogram, not the original,
-         * we have to recover it by taking the differences.
+        final Integer[] result = new Integer[256];
+        /*
+         * since we store the cumulative histogram, not the original, we have to
+         * recover it by taking the differences.
          */
-        result[0] = this.histCumTarget[0];
-        for (int i=1; i<256; i++) {
-            result[i] = this.histCumTarget[i] - this.histCumTarget[i-1];
+        result[0] = histCumTarget[0];
+        for (int i = 1; i < 256; i++) {
+            result[i] = histCumTarget[i] - histCumTarget[i - 1];
         }
         return result;
     }
     
-    /** push transforms an input gray image to have the target histogram,
-     * as near as possible while assigning each input grayvalue a unique
-     * output grayvalue.
+    /**
+     * push transforms an input gray image to have the target histogram, as near
+     * as possible while assigning each input grayvalue a unique output
+     * grayvalue.
      *
-     * @param image the input image.
-     * @throws com.github.ojil.core.Error if the input image is not gray.
+     * @param image
+     *            the input image.
+     * @throws ImageError
+     *             if the input image is not gray.
      */
-    public void push(Image image) throws com.github.ojil.core.Error {
+    @Override
+    public void push(final Image<?> image) throws ImageError {
         if (!(image instanceof Gray8Image)) {
-            throw new Error(
-    				Error.PACKAGE.ALGORITHM,
-    				ErrorCodes.IMAGE_NOT_GRAY8IMAGE,
-    				image.toString(),
-    				null,
-    				null);
-
+            throw new ImageError(ImageError.PACKAGE.ALGORITHM, AlgorithmErrorCodes.IMAGE_NOT_GRAY8IMAGE, image.toString(), null, null);
+            
         }
-        /* We could do a test here to make sure that the uppermost
-         * element of histCumTarget equals the count of pixels in
-         * the input image. But my own feeling is that it is OK if
-         * they don't match. The result will be a working lookup
-         * table, in any case, though the histogram won't quite
+        /*
+         * We could do a test here to make sure that the uppermost element of
+         * histCumTarget equals the count of pixels in the input image. But my
+         * own feeling is that it is OK if they don't match. The result will be
+         * a working lookup table, in any case, though the histogram won't quite
          * match what was intended.
          */
-        Gray8Image input = (Gray8Image) image;
+        final Gray8Image input = (Gray8Image) image;
         // get the input histogram
-        Integer[] histCum = Gray8Hist.computeHistogram(input);
+        final Integer[] histCum = Gray8Hist.computeHistogram(input);
         // for the purposes of computation below we need a cumulative
         // pixel count, not a histogram
-        for (int i=1; i<256; i++) {
-            histCum[i] = histCum[i] + histCum[i-1];
+        for (int i = 1; i < 256; i++) {
+            histCum[i] = histCum[i] + histCum[i - 1];
         }
         // create a lookkup table to map the input cumulative histogram
         // to the target cumulative histogram.
-        Byte[] lookup = createLookup(this.histCumTarget, histCum);
+        final Byte[] lookup = createLookup(histCumTarget, histCum);
         // apply the lookup table
-        Gray8Lookup modify = new Gray8Lookup(lookup);
+        final Gray8Lookup modify = new Gray8Lookup(lookup);
         modify.push(input);
         super.setOutput(modify.getFront());
     }
     
-    /** setHistogram sets a new target histogram.
+    /**
+     * setHistogram sets a new target histogram.
      *
-     * @param histTarget the new target histogram
-     * @throws com.github.ojil.core.Error if histTarget does not have 256
-     * elements.
+     * @param histTarget
+     *            the new target histogram
+     * @throws ImageError
+     *             if histTarget does not have 256 elements.
      */
-    public void setHistogram(Integer[] histTarget) throws com.github.ojil.core.Error {
+    public void setHistogram(final Integer[] histTarget) throws ImageError {
         if (histTarget.length != 256) {
-            throw new Error(
-    				Error.PACKAGE.ALGORITHM,
-    				ErrorCodes.HISTOGRAM_LENGTH_NOT_256,
-    				histTarget.toString(),
-    				null,
-    				null);
+            throw new ImageError(ImageError.PACKAGE.ALGORITHM, AlgorithmErrorCodes.HISTOGRAM_LENGTH_NOT_256, histTarget.toString(), null, null);
         }
-        this.histCumTarget = new Integer[256];
-        /* We actually store the cumulative histogram, not the original.
+        histCumTarget = new Integer[256];
+        /*
+         * We actually store the cumulative histogram, not the original.
          */
         histCumTarget[0] = histTarget[0];
-        for (int i=1; i<256; i++) {
-            histCumTarget[i] = histCumTarget[i-1] + histTarget[i];
+        for (int i = 1; i < 256; i++) {
+            histCumTarget[i] = histCumTarget[i - 1] + histTarget[i];
         }
     }
 }

@@ -23,69 +23,69 @@
  */
 
 package com.github.ojil.algorithm;
+
 import com.github.ojil.core.Gray32Image;
 import com.github.ojil.core.Gray8Image;
 import com.github.ojil.core.Image;
+import com.github.ojil.core.ImageError;
 import com.github.ojil.core.PipelineStage;
 
 /**
- * Threshold. Output is a Gray8Image with values greater than or equal to threshold
- * set to Byte.MAX_VALUE, below threshold set to Byte.MIN_VALUE. Input
+ * Threshold. Output is a Gray8Image with values greater than or equal to
+ * threshold set to Byte.MAX_VALUE, below threshold set to Byte.MIN_VALUE. Input
  * is a Gray32Image.
+ * 
  * @author webb
  */
 public class Gray32Threshold extends PipelineStage {
-	int nThreshold;
-	Gray8Image imageOutput = null;
+    int nThreshold;
+    Gray8Image imageOutput = null;
     
     /**
      * Creates a new instance of Gray32Threshold
-     * @param nThreshold the threshold.
+     * 
+     * @param nThreshold
+     *            the threshold.
      */
-    public Gray32Threshold(int nThreshold) {
-    	this.nThreshold = nThreshold;
+    public Gray32Threshold(final int nThreshold) {
+        this.nThreshold = nThreshold;
     }
     
-    /** Threshold gray image. Output is Byte.MAX_VALUE over or equal to threshold,
-     * Byte.MIN_VALUE under.
+    /**
+     * Threshold gray image. Output is Byte.MAX_VALUE over or equal to
+     * threshold, Byte.MIN_VALUE under.
      *
-     * @param image the input Gray32Image
-     * @throws com.github.ojil.core.Error if the image is not a Gray32Image.
+     * @param image
+     *            the input Gray32Image
+     * @throws ImageError
+     *             if the image is not a Gray32Image.
      */
-    public void push(Image image)
-        throws com.github.ojil.core.Error
-    {
+    @Override
+    public void push(final Image<?> image) throws ImageError {
         if (!(image instanceof Gray32Image)) {
-            throw new com.github.ojil.core.Error(
-            		com.github.ojil.core.Error.PACKAGE.ALGORITHM,
-            		com.github.ojil.algorithm.ErrorCodes.IMAGE_NOT_GRAY32IMAGE,
-                    image.toString(),
-                    null,
+            throw new ImageError(ImageError.PACKAGE.ALGORITHM, com.github.ojil.algorithm.AlgorithmErrorCodes.IMAGE_NOT_GRAY32IMAGE, image.toString(), null,
                     null);
         }
-        if (this.imageOutput == null ||
-        	this.imageOutput.getWidth() != image.getWidth() ||
-        	this.imageOutput.getHeight() != image.getHeight()) {
-        	this.imageOutput = new Gray8Image(
-        			image.getWidth(),
-        			image.getHeight());
+        if ((imageOutput == null) || (imageOutput.getWidth() != image.getWidth()) || (imageOutput.getHeight() != image.getHeight())) {
+            imageOutput = new Gray8Image(image.getWidth(), image.getHeight());
         }
-        Gray32Image gray = (Gray32Image) image;
-        Integer[] data = gray.getData();
-        Byte[] dataOut = this.imageOutput.getData();
-        for (int i=0; i<data.length; i++) {
-            dataOut[i] = (data[i] >= this.nThreshold) ?
-            		Byte.MAX_VALUE : Byte.MIN_VALUE;
+        final Gray32Image gray = (Gray32Image) image;
+        final Integer[] data = gray.getData();
+        final Byte[] dataOut = imageOutput.getData();
+        for (int i = 0; i < data.length; i++) {
+            dataOut[i] = (data[i] >= nThreshold) ? Byte.MAX_VALUE : Byte.MIN_VALUE;
         }
-        super.setOutput(this.imageOutput);
+        super.setOutput(imageOutput);
     }
     
     /**
      * Implement toString
+     * 
      * @return a String describing the class instance.
      */
+    @Override
     public String toString() {
-    	return super.toString() + "(" + this.nThreshold + ")"; //$NON-NLS-1$ //$NON-NLS-2$
+        return super.toString() + "(" + nThreshold + ")"; //$NON-NLS-1$ //$NON-NLS-2$
     }
-
+    
 }

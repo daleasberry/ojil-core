@@ -23,74 +23,68 @@
  */
 
 package com.github.ojil.algorithm;
+
 import com.github.ojil.core.Gray16Image;
 import com.github.ojil.core.Image;
+import com.github.ojil.core.ImageError;
 import com.github.ojil.core.Ladder;
 
 /**
  * Forms the linear combination of two Gray16Images. Designed to be used as a
- * combining stage in a Ladder. Calculates (nA * left image + nB * right image) / nC
+ * combining stage in a Ladder. Calculates (nA * left image + nB * right image)
+ * / nC
+ * 
  * @author webb
  */
 public class Gray16LinComb implements Ladder.Join {
-	private int nA, nB, nC;
+    private final int nA, nB, nC;
     
     /**
-     * Creates a new instance of Gray16LinComb which will form the linear combination of 
-     * two images by calculating (nA * first image + nB * second image) / nC.
-     * @param nA the multiplier for the first image.
-     * @param nB the multiplier for the second image.
-     * @param nC the divisor.
+     * Creates a new instance of Gray16LinComb which will form the linear
+     * combination of two images by calculating (nA * first image + nB * second
+     * image) / nC.
+     * 
+     * @param nA
+     *            the multiplier for the first image.
+     * @param nB
+     *            the multiplier for the second image.
+     * @param nC
+     *            the divisor.
      */
-    public Gray16LinComb(int nA, int nB, int nC) {
-    	this.nA = nA;
-    	this.nB = nB;
-    	this.nC = nC;
+    public Gray16LinComb(final int nA, final int nB, final int nC) {
+        this.nA = nA;
+        this.nB = nB;
+        this.nC = nC;
     }
     
     /**
-     * Form the linear combination of two Gray16Images. Output replaces the first
-     * input.
-     * @param imageFirst the left-hand image image (and output)
-     * @param imageSecond the right-hand image image
-     * @throws com.github.ojil.core.Error if either image is not a gray 16-bit
-     * image.
+     * Form the linear combination of two Gray16Images. Output replaces the
+     * first input.
+     * 
+     * @param imageFirst
+     *            the left-hand image image (and output)
+     * @param imageSecond
+     *            the right-hand image image
+     * @throws ImageError
+     *             if either image is not a gray 16-bit image.
      * @return the resulting Gray16Image.
      */
-    public Image doJoin(Image imageFirst, Image imageSecond)
-        throws com.github.ojil.core.Error
-    {
+    @Override
+    public Image<?> doJoin(final Image<?> imageFirst, final Image<?> imageSecond) throws ImageError {
         if (!(imageFirst instanceof Gray16Image)) {
-            throw new com.github.ojil.core.Error(
-            		com.github.ojil.core.Error.PACKAGE.ALGORITHM,
-            		com.github.ojil.algorithm.ErrorCodes.IMAGE_NOT_GRAY16IMAGE,
-            		imageFirst.toString(),
-            		null,
-            		null);
+            throw new ImageError(ImageError.PACKAGE.ALGORITHM, AlgorithmErrorCodes.IMAGE_NOT_GRAY16IMAGE, imageFirst.toString(), null, null);
         }
         if (!(imageSecond instanceof Gray16Image)) {
-            throw new com.github.ojil.core.Error(
-            		com.github.ojil.core.Error.PACKAGE.ALGORITHM,
-            		com.github.ojil.algorithm.ErrorCodes.IMAGE_NOT_GRAY16IMAGE,
-            		imageSecond.toString(),
-            		null,
-            		null);
+            throw new ImageError(ImageError.PACKAGE.ALGORITHM, AlgorithmErrorCodes.IMAGE_NOT_GRAY16IMAGE, imageSecond.toString(), null, null);
         }
-        if (imageFirst.getWidth() != imageSecond.getWidth() ||
-        	imageFirst.getHeight() != imageSecond.getHeight()) {
-        	throw new com.github.ojil.core.Error(
-            		com.github.ojil.core.Error.PACKAGE.ALGORITHM,
-            		com.github.ojil.algorithm.ErrorCodes.IMAGE_SIZES_DIFFER,
-        			imageFirst.toString(), 
-        			imageSecond.toString(),
-        			null);
+        if ((imageFirst.getWidth() != imageSecond.getWidth()) || (imageFirst.getHeight() != imageSecond.getHeight())) {
+            throw new ImageError(ImageError.PACKAGE.ALGORITHM, AlgorithmErrorCodes.IMAGE_SIZES_DIFFER, imageFirst.toString(), imageSecond.toString(), null);
         }
-        Short[] dataFirst = ((Gray16Image) imageFirst).getData();
-        Short[] dataSecond = ((Gray16Image) imageSecond).getData();
-        for (int i=0; i<dataFirst.length; i++) {
-        	dataFirst[i] = (short) ((this.nA * dataFirst[i] + this.nB * dataSecond[i]) / this.nC);
+        final Short[] dataFirst = ((Gray16Image) imageFirst).getData();
+        final Short[] dataSecond = ((Gray16Image) imageSecond).getData();
+        for (int i = 0; i < dataFirst.length; i++) {
+            dataFirst[i] = (short) (((nA * dataFirst[i]) + (nB * dataSecond[i])) / nC);
         }
         return imageFirst;
     }
-
 }

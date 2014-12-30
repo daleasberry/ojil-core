@@ -25,7 +25,7 @@
 */
 
 package com.github.ojil.algorithm;
-import com.github.ojil.core.Error;
+import com.github.ojil.core.ImageError;
 import com.github.ojil.core.Gray8Image;
 import com.github.ojil.core.RgbImage;
 import com.github.ojil.core.RgbVal;
@@ -45,15 +45,15 @@ public class RgbGray8ApplyMask {
      * @param imRgb the input RgbImage.
      * @param imMask The input mask. Pixels with the value Byte.MIN_VALUE are 
      * unmasked. Everything else is considered to be masked.
-     * @throws com.github.ojil.core.Error if the input sizes do not match
+     * @throws com.github.ojil.core.ImageError if the input sizes do not match
      */
     public RgbImage push(
             RgbImage imRgb,
-            Gray8Image imMask) throws com.github.ojil.core.Error {
+            Gray8Image imMask) throws com.github.ojil.core.ImageError {
         if (imRgb.getWidth() != imMask.getWidth() ||
             imRgb.getHeight() != imMask.getHeight()) {
-            throw new Error(
-                            Error.PACKAGE.CORE,
+            throw new ImageError(
+                            ImageError.PACKAGE.CORE,
                             com.github.ojil.core.ErrorCodes.IMAGE_MASK_SIZE_MISMATCH,
                             imRgb.toString(),
                             imMask.toString(),

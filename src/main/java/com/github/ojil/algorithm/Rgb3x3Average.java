@@ -23,7 +23,7 @@
  */
 package com.github.ojil.algorithm;
 
-import com.github.ojil.core.Error;
+import com.github.ojil.core.ImageError;
 import com.github.ojil.core.Image;
 import com.github.ojil.core.PipelineStage;
 import com.github.ojil.core.RgbImage;
@@ -49,15 +49,15 @@ public class Rgb3x3Average extends PipelineStage {
      * with 0, when doing the average.
      *
      * @param imageInput the input image
-     * @throws com.github.ojil.core.Error if imageInput is not an RgbImage
+     * @throws com.github.ojil.core.ImageError if imageInput is not an RgbImage
      */
-    public void push(Image imageInput) throws com.github.ojil.core.Error 
+    public void push(Image imageInput) throws com.github.ojil.core.ImageError 
    {
         if (!(imageInput instanceof RgbImage)) 
         {
-            throw new Error(
-                			Error.PACKAGE.ALGORITHM,
-                			ErrorCodes.IMAGE_NOT_RGBIMAGE,
+            throw new ImageError(
+                			ImageError.PACKAGE.ALGORITHM,
+                			AlgorithmErrorCodes.IMAGE_NOT_RGBIMAGE,
                 			imageInput.toString(),
                 			null,
                 			null);

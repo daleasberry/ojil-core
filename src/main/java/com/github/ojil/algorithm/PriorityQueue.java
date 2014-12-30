@@ -43,23 +43,23 @@ public interface PriorityQueue {
      * Duplicates are allowed.
      * @return may return a Position useful for decreaseKey.
      * @param x the item to insert.
-     * @throws com.github.ojil.core.Error if x is not of the correct type or null.
+     * @throws com.github.ojil.core.ImageError if x is not of the correct type or null.
      */
-    Position insert( ComparableJ2me x ) throws com.github.ojil.core.Error;
+    Position insert( ComparableJ2me x ) throws com.github.ojil.core.ImageError;
     
     /**
      * Find the smallest item in the priority queue.
      * @return the smallest item.
-     * @throws com.github.ojil.core.Error if the heap is empty.
+     * @throws com.github.ojil.core.ImageError if the heap is empty.
      */
-    ComparableJ2me findMin( ) throws com.github.ojil.core.Error;
+    ComparableJ2me findMin( ) throws com.github.ojil.core.ImageError;
     
     /**
      * Remove and return the smallest item from the priority queue.
      * @return the smallest item.
-     * @throws com.github.ojil.core.Error if empty.
+     * @throws com.github.ojil.core.ImageError if empty.
      */
-    ComparableJ2me deleteMin( ) throws com.github.ojil.core.Error;
+    ComparableJ2me deleteMin( ) throws com.github.ojil.core.ImageError;
     
     /**
      * Test if the priority queue is logically empty.

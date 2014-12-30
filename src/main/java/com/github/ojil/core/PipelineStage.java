@@ -41,7 +41,7 @@ public abstract class PipelineStage
     protected boolean fReady = false;
     /** The output image from this stage.
      */
-    protected Image imageOutput = null;
+    protected Image<?> imageOutput = null;
    
     /** Class constructor
      */
@@ -62,19 +62,19 @@ public abstract class PipelineStage
     /**
      * Returns the current output, and pops it off the stack.
      * @return the current output
-     * @throws com.github.ojil.core.Error if no output is available
+     * @throws com.github.ojil.core.ImageError if no output is available
      */
-    public Image getFront() throws com.github.ojil.core.Error
+    public Image<?> getFront() throws com.github.ojil.core.ImageError
     {
         if (!this.fReady) {
-            throw new Error(
-                            Error.PACKAGE.CORE,
+            throw new ImageError(
+                            ImageError.PACKAGE.CORE,
                             ErrorCodes.NO_RESULT_AVAILABLE,
                             this.toString(),
                             null,
                             null);
         }
-        Image imageResult = this.imageOutput;
+        Image<?> imageResult = this.imageOutput;
         this.imageOutput = null;
         this.fReady = false;
         return imageResult;
@@ -83,16 +83,16 @@ public abstract class PipelineStage
     /**
      * Actual processing is done in the derived class here.
      * @param imageInput the input image
-     * @throws com.github.ojil.core.Error typically, when the image is not of the expected type.
+     * @throws com.github.ojil.core.ImageError typically, when the image is not of the expected type.
      */
-    public abstract void push(Image imageInput) throws com.github.ojil.core.Error;
+    public abstract void push(Image<?> imageInput) throws com.github.ojil.core.ImageError;
     
     /** Derived classes use setOutput to pass their result back
      * here.
      *
      * @param imageResult the output image
      */
-    protected void setOutput(Image imageResult)
+    protected void setOutput(Image<?> imageResult)
     {
         this.imageOutput = imageResult;
         this.fReady = true;

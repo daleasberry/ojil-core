@@ -40,10 +40,10 @@ public class Ladder extends PipelineStage {
          * @param imageFirst First image
          * @param imageSecond Second image
          * @return the combined image
-         * @throws com.github.ojil.core.Error typically, when the two images are not the expected type or are of other
+         * @throws com.github.ojil.core.ImageError typically, when the two images are not the expected type or are of other
          * than the required size.
          */
-        Image doJoin(Image imageFirst, Image imageSecond) throws com.github.ojil.core.Error;
+        Image<?> doJoin(Image<?> imageFirst, Image<?> imageSecond) throws com.github.ojil.core.ImageError;
     }
     
     /**
@@ -78,24 +78,24 @@ public class Ladder extends PipelineStage {
      * Pass the input image to both pipeines, then combine the two outputs into one
      * using the join operation
      * @param image Input image
-     * @throws com.github.ojil.core.Error if either pipeline does not produce an output
+     * @throws com.github.ojil.core.ImageError if either pipeline does not produce an output
      * after being supplied with the input.
      */
-    public void push(Image image) throws com.github.ojil.core.Error {
-        Image imageCopy = (Image) image.clone();
+    public void push(Image<?> image) throws com.github.ojil.core.ImageError {
+        Image<?> imageCopy = (Image<?>) image.clone();
         pipeFirst.push(image);
         pipeSecond.push(imageCopy);
         if (pipeFirst.isEmpty()) {
-            throw new Error(
-                            Error.PACKAGE.CORE,
+            throw new ImageError(
+                            ImageError.PACKAGE.CORE,
                             ErrorCodes.NO_RESULT_AVAILABLE,
                             pipeFirst.toString(),
                             null,
                             null);
         }
         if (pipeSecond.isEmpty()) {
-            throw new Error(
-                                Error.PACKAGE.CORE,
+            throw new ImageError(
+                                ImageError.PACKAGE.CORE,
                                 ErrorCodes.NO_RESULT_AVAILABLE,
                                 pipeSecond.toString(),
                                 null,
