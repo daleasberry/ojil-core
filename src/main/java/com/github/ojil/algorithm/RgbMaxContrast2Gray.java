@@ -57,13 +57,13 @@ public class RgbMaxContrast2Gray extends PipelineStage {
      *             if image is not an RgbImage
      */
     @Override
-    public void push(final Image<?> image) throws ImageError {
+    public void push(final Image<?, ?> image) throws ImageError {
         if (!(image instanceof RgbImage)) {
             throw new ImageError(ImageError.PACKAGE.CORE, AlgorithmErrorCodes.IMAGE_NOT_RGBIMAGE, image.toString(), null, null);
         }
         final RgbImage<?> rgb = (RgbImage<?>) image;
         final Integer[] rgbData = rgb.getData();
-        final Gray8Image gray = new Gray8Image(image.getWidth(), image.getHeight());
+        final Gray8Image<?> gray = new Gray8Image<>(image.getWidth(), image.getHeight());
         final Byte[] grayData = gray.getData();
         for (int i = 0; i < (image.getWidth() * image.getHeight()); i++) {
             /*

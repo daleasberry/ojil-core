@@ -45,7 +45,7 @@ public class Gray8Hist {
      * @return the histogram, a 256-element int array. The array is offset so
      *         element 0 corresponds to signed byte value Byte.MIN_VALUE.
      */
-    public static Integer[] computeHistogram(final Gray8Image image) {
+    public static Integer[] computeHistogram(final Gray8Image<?> image) {
         final Integer[] result = new Integer[256];
         for (int i = 0; i < 256; i++) {
             result[i] = 0;

@@ -174,7 +174,7 @@ public class RgbMaskPoly extends PipelineStage {
      *             the sorting throws.
      */
     @Override
-    public void push(final Image<?> imageInput) throws ImageError {
+    public void push(final Image<?, ?> imageInput) throws ImageError {
         if (!(imageInput instanceof RgbImage)) {
             throw new ImageError(ImageError.PACKAGE.ALGORITHM, AlgorithmErrorCodes.IMAGE_NOT_RGBIMAGE, imageInput.toString(), null, null);
         }

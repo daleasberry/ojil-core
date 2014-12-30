@@ -45,8 +45,8 @@ public class Gray8WienerDeconv extends PipelineStage {
     private final int nNoise;
     private static final int nThreshold = 5;
     Gray8Fft fft;
-    Complex32Image cxmPsfInv;
-    Gray32Image gPsfSq;
+    Complex32Image<?> cxmPsfInv;
+    Gray32Image<?> gPsfSq;
     
     /**
      * Creates a new instance of Gray8WienerDeconv.
@@ -60,7 +60,7 @@ public class Gray8WienerDeconv extends PipelineStage {
      *             if the input point spread function is not a Gray8Image or not
      *             square.
      */
-    public Gray8WienerDeconv(final Gray8Image psf, final int nNoise) throws ImageError {
+    public Gray8WienerDeconv(final Gray8Image<?> psf, final int nNoise) throws ImageError {
         if (psf.getWidth() != psf.getHeight()) {
             throw new ImageError(ImageError.PACKAGE.ALGORITHM, AlgorithmErrorCodes.IMAGE_NOT_SQUARE, psf.toString(), null, null);
         }
@@ -70,7 +70,7 @@ public class Gray8WienerDeconv extends PipelineStage {
         this.nNoise = nNoise;
         fft = new Gray8Fft();
         fft.push(psf);
-        cxmPsfInv = (Complex32Image) fft.getFront();
+        cxmPsfInv = (Complex32Image<?>) fft.getFront();
         invertPsf();
     }
     
@@ -84,7 +84,7 @@ public class Gray8WienerDeconv extends PipelineStage {
      *             if the input image is not a Gray8Image or not square.
      */
     @Override
-    public void push(final Image<?> im) throws ImageError {
+    public void push(final Image<?, ?> im) throws ImageError {
         if (im.getWidth() != im.getHeight()) {
             throw new ImageError(ImageError.PACKAGE.ALGORITHM, AlgorithmErrorCodes.IMAGE_NOT_SQUARE, im.toString(), null, null);
         }
@@ -95,9 +95,9 @@ public class Gray8WienerDeconv extends PipelineStage {
             throw new ImageError(ImageError.PACKAGE.ALGORITHM, AlgorithmErrorCodes.IMAGE_NOT_GRAY8IMAGE, im.toString(), null, null);
         }
         fft.push(im);
-        final Complex32Image cxmIm = (Complex32Image) fft.getFront();
+        final Complex32Image<?> cxmIm = (Complex32Image<?>) fft.getFront();
         final Complex cxIn[] = cxmIm.getData();
-        final Complex32Image cxmResult = new Complex32Image(im.getWidth(), im.getHeight());
+        final Complex32Image<?> cxmResult = new Complex32Image<>(im.getWidth(), im.getHeight());
         final Complex cxOut[] = cxmResult.getData();
         final Complex cxPsfInv[] = cxmPsfInv.getData();
         final Integer[] nPsfSq = gPsfSq.getData();
@@ -111,7 +111,7 @@ public class Gray8WienerDeconv extends PipelineStage {
     }
     
     private void invertPsf() throws ImageError {
-        gPsfSq = new Gray32Image(cxmPsfInv.getWidth(), cxmPsfInv.getHeight());
+        gPsfSq = new Gray32Image<>(cxmPsfInv.getWidth(), cxmPsfInv.getHeight());
         final Complex cxPsf[] = cxmPsfInv.getData();
         final Integer[] nData = gPsfSq.getData();
         for (int i = 0; i < (cxmPsfInv.getWidth() * cxmPsfInv.getHeight()); i++) {

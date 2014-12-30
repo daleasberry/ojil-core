@@ -34,12 +34,7 @@ package com.github.ojil.core;
  * 
  * @author webb
  */
-public class RgbImage<T> extends Image<Object> {
-    /**
-     * A pointer to the image data
-     */
-    protected Integer[] imageData;
-    
+public class RgbImage<T extends Object> extends Image<Integer, T> {
     /**
      * Creates a new instance of RgbImage
      *
@@ -49,13 +44,11 @@ public class RgbImage<T> extends Image<Object> {
      *            the image height
      */
     public RgbImage(final int cWidth, final int cHeight) {
-        super(cWidth, cHeight, ImageType.INT_RGB);
-        imageData = new Integer[getWidth() * getHeight()];
+        super(cWidth, cHeight, ImageType.INT_RGB, new Integer[cWidth * cHeight], null);
     }
     
     public RgbImage(final int cWidth, final int cHeight, final Integer[] rnData) {
-        super(cWidth, cHeight, ImageType.INT_RGB);
-        imageData = rnData;
+        super(cWidth, cHeight, ImageType.INT_RGB, rnData, null);
     }
     
     /**
@@ -100,6 +93,18 @@ public class RgbImage<T> extends Image<Object> {
     }
     
     /**
+     * Creates a new RgbImage backed by the platform-specific object and the
+     * data contained by that platform-specific object.
+     * 
+     * @param thePlatformImage
+     * @param theImageData
+     */
+    public RgbImage(T thePlatformImage, Integer[] theImageData) {
+        super(thePlatformImage);
+        imageData = theImageData;
+    }
+    
+    /**
      * Creates a shallow copy of this image
      *
      * @return the image copy.
@@ -132,25 +137,5 @@ public class RgbImage<T> extends Image<Object> {
             }
         }
         return this;
-    }
-    
-    /**
-     * Get a pointer to the image data.
-     *
-     * @return the data pointer.
-     */
-    @Override
-    public Integer[] getData() {
-        return imageData;
-    }
-    
-    /**
-     * Return a string describing the image.
-     *
-     * @return the string.
-     */
-    @Override
-    public String toString() {
-        return super.toString() + " (" + getWidth() + "x" + getHeight() + ")";
     }
 }

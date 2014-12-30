@@ -35,7 +35,7 @@ public class FindLinesHoriz {
         hough = new LinefitHoughHoriz(cMinY, cMaxY, cMinSlope, cMaxSlope, cSteps);
     }
     
-    public void push(final Gray8Image im) throws ImageError {
+    public void push(final Gray8Image<?> im) throws ImageError {
         final Byte[] bData = im.getData();
         final Vector<Point> points = new Vector<>();
         for (int i = 0; i < im.getHeight(); i++) {

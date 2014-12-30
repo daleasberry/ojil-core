@@ -42,7 +42,7 @@ public class Gray8InverseFilter extends PipelineStage {
     private final int nGamma;
     Gray8Fft fft;
     Complex32IFft ifft;
-    Complex32Image cxmPsfInv;
+    Complex32Image<?> cxmPsfInv;
     
     /**
      * Creates a new instance of Gray8InverseFilter.
@@ -59,7 +59,7 @@ public class Gray8InverseFilter extends PipelineStage {
      *             If the point spread function is not square or a power of 2 in
      *             size.
      */
-    public Gray8InverseFilter(final Gray8Image psf, final int nGamma) throws ImageError {
+    public Gray8InverseFilter(final Gray8Image<?> psf, final int nGamma) throws ImageError {
         if (psf.getWidth() != psf.getHeight()) {
             throw new ImageError(ImageError.PACKAGE.ALGORITHM, AlgorithmErrorCodes.IMAGE_NOT_SQUARE, psf.toString(), null, null);
         }
@@ -69,7 +69,7 @@ public class Gray8InverseFilter extends PipelineStage {
         this.nGamma = nGamma;
         fft = new Gray8Fft();
         fft.push(psf);
-        cxmPsfInv = (Complex32Image) fft.getFront();
+        cxmPsfInv = (Complex32Image<?>) fft.getFront();
         ifft = new Complex32IFft(true);
     }
     
@@ -83,7 +83,7 @@ public class Gray8InverseFilter extends PipelineStage {
      *             as the point spread function.
      */
     @Override
-    public void push(final Image<?> im) throws ImageError {
+    public void push(final Image<?, ?> im) throws ImageError {
         if (im.getWidth() != im.getHeight()) {
             throw new ImageError(ImageError.PACKAGE.ALGORITHM, AlgorithmErrorCodes.IMAGE_NOT_SQUARE, im.toString(), null, null);
         }
@@ -94,9 +94,9 @@ public class Gray8InverseFilter extends PipelineStage {
             throw new ImageError(ImageError.PACKAGE.ALGORITHM, AlgorithmErrorCodes.IMAGE_NOT_GRAY8IMAGE, im.toString(), null, null);
         }
         fft.push(im);
-        final Complex32Image cxmIm = (Complex32Image) fft.getFront();
+        final Complex32Image<?> cxmIm = (Complex32Image<?>) fft.getFront();
         final Complex cxIn[] = cxmIm.getData();
-        final Complex32Image cxmResult = new Complex32Image(im.getWidth(), im.getHeight());
+        final Complex32Image<?> cxmResult = new Complex32Image<>(im.getWidth(), im.getHeight());
         final Complex cxOut[] = cxmResult.getData();
         final Complex cxPsfFft[] = cxmPsfInv.getData();
         // compute inverse filter

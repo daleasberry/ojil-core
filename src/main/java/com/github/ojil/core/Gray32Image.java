@@ -25,13 +25,11 @@
 package com.github.ojil.core;
 
 /**
- * Gray32Image is the image type used to store a 32-bit Integereger image.
+ * Gray32Image is the image type used to store a 32-bit Integer image.
  *
  * @author webb
  */
-public class Gray32Image extends Image<Object> {
-    private final Integer nImage[];
-    
+public class Gray32Image<T extends Object> extends Image<Integer, T> {
     /**
      * Creates a new instance of Gray32Image
      * 
@@ -41,8 +39,7 @@ public class Gray32Image extends Image<Object> {
      *            Height of the image (rows)
      */
     public Gray32Image(final Integer cWidth, final Integer cHeight) {
-        super(cWidth, cHeight);
-        nImage = new Integer[getWidth() * getHeight()];
+        super(cWidth, cHeight, null, new Integer[cWidth * cHeight]);
     }
     
     /**
@@ -57,9 +54,9 @@ public class Gray32Image extends Image<Object> {
      */
     public Gray32Image(final Integer cWidth, final Integer cHeight, final Integer nValue) {
         super(cWidth, cHeight);
-        nImage = new Integer[getWidth() * getHeight()];
+        imageData = new Integer[getWidth() * getHeight()];
         for (Integer i = 0; i < (getWidth() * getHeight()); i++) {
-            nImage[i] = nValue;
+            imageData[i] = nValue;
         }
     }
     
@@ -70,30 +67,8 @@ public class Gray32Image extends Image<Object> {
      */
     @Override
     public Object clone() {
-        final Gray32Image image = new Gray32Image(getWidth(), getHeight());
+        final Gray32Image<?> image = new Gray32Image<>(getWidth(), getHeight());
         System.arraycopy(getData(), 0, image.getData(), 0, getWidth() * getHeight());
         return image;
     }
-    
-    /**
-     * Return a poIntegerer to the image data.
-     *
-     * @return the data poIntegerer.
-     */
-    @Override
-    public Integer[] getData() {
-        return nImage;
-    }
-    
-    /**
-     * Return a string describing the image.
-     *
-     * @return the string.
-     */
-    @Override
-    public String toString() {
-        return super.toString() + " (" + getWidth() + "x" + getHeight() + //$NON-NLS-1$ //$NON-NLS-2$
-                ")"; //$NON-NLS-1$
-    }
-    
 }

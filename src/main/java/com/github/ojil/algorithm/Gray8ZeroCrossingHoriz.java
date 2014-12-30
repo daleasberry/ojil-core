@@ -127,7 +127,7 @@ public class Gray8ZeroCrossingHoriz {
      *         can be represented. A value of null means there were no zero
      *         crossings in the row.
      */
-    public Integer[][] push(final Gray8Image image) {
+    public Integer[][] push(final Gray8Image<?> image) {
         final Byte[] data = image.getData();
         final Integer[][] result = new Integer[image.getHeight()][];
         for (int i = 0; i < image.getHeight(); i++) {

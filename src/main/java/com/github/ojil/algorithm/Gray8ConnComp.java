@@ -49,7 +49,7 @@ import com.github.ojil.core.RgbVal;
 public class Gray8ConnComp extends PipelineStage {
     // class variables
     private boolean bComponents = false;
-    private Gray16Image imLabeled = null;
+    private Gray16Image<?> imLabeled = null;
     private int nSortedLabels = -1;
     private PriorityQueue pqLabels = null;
     Random random = new Random();
@@ -272,7 +272,7 @@ public class Gray8ConnComp extends PipelineStage {
      *             if no components were found in the input image
      */
     @Override
-    public Image<?> getFront() throws ImageError {
+    public Image<?, ?> getFront() throws ImageError {
         if ((getComponentCount() == 0) || (imLabeled == null)) {
             throw new ImageError(ImageError.PACKAGE.CORE, ErrorCodes.NO_RESULT_AVAILABLE, null, null, null);
             
@@ -302,7 +302,7 @@ public class Gray8ConnComp extends PipelineStage {
      * 
      * @return a Gray16Image with final labels assigned to every pixel
      */
-    public Gray16Image getLabeledImage() {
+    public Gray16Image<?> getLabeledImage() {
         return imLabeled;
     }
     
@@ -358,7 +358,7 @@ public class Gray8ConnComp extends PipelineStage {
      *             if the image is not a gray 8-bit image.
      */
     @Override
-    public void push(final Image<?> image) throws ImageError {
+    public void push(final Image<?, ?> image) throws ImageError {
         if (!(image instanceof Gray8Image)) {
             throw new ImageError(ImageError.PACKAGE.ALGORITHM, AlgorithmErrorCodes.IMAGE_NOT_GRAY8IMAGE, image.toString(), null, null);
         }
@@ -370,7 +370,7 @@ public class Gray8ConnComp extends PipelineStage {
         // the sorted components yet
         bComponents = false;
         
-        final Gray8Image gray = (Gray8Image) image;
+        final Gray8Image<?> gray = (Gray8Image<?>) image;
         final Byte[] bData = gray.getData();
         // for each pixel in the input image assign a label,
         // performing equivalence operations when two labels
@@ -525,7 +525,7 @@ public class Gray8ConnComp extends PipelineStage {
             }
         }
         // initialize the labeled image
-        imLabeled = new Gray16Image(gray.getWidth(), gray.getHeight(), (short) 0);
+        imLabeled = new Gray16Image<>(gray.getWidth(), gray.getHeight(), (short) 0);
         final Short[] sLabels = imLabeled.getData();
         // assign label pixels their final values
         for (int i = 0; i < sLabels.length; i++) {

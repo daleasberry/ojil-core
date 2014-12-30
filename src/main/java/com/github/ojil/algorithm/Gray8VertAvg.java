@@ -48,7 +48,7 @@ public class Gray8VertAvg {
      * @return a byte vector of length equal to the image width. element i of
      *         this vector is the average of column i in the image.
      */
-    public static Byte[] push(final Gray8Image image) {
+    public static Byte[] push(final Gray8Image<?> image) {
         final Integer[] sum = new Integer[image.getWidth()];
         final Byte[] data = image.getData();
         for (int i = 0; i < image.getHeight(); i++) {

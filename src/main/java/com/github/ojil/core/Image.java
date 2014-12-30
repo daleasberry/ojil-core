@@ -32,7 +32,7 @@ package com.github.ojil.core;
  * 
  * @author webb
  */
-public abstract class Image<T extends Object> {
+public abstract class Image<T extends Number, U extends Object> {
     
     /**
      * The image height.
@@ -44,7 +44,10 @@ public abstract class Image<T extends Object> {
     protected int width;
     
     protected ImageType imageType;
-    private T platformImage;
+    
+    protected T[] imageData;
+    
+    protected U platformImage;
     
     /**
      * Creates a new instance of Image
@@ -57,6 +60,19 @@ public abstract class Image<T extends Object> {
     public Image(final int theWidth, final int theHeight) {
         width = theWidth;
         height = theHeight;
+    }
+    
+    public Image(final int theWidth, final int theHeight, final ImageType theImageType, final T[] theImageData) {
+        width = theWidth;
+        height = theHeight;
+        imageData = theImageData;
+    }
+    
+    public Image(final int theWidth, final int theHeight, final ImageType theImageType, final T[] theImageData, final U thePlatformImage) {
+        width = theWidth;
+        height = theHeight;
+        imageData = theImageData;
+        platformImage = thePlatformImage;
     }
     
     /**
@@ -73,7 +89,7 @@ public abstract class Image<T extends Object> {
         imageType = theImageType;
     }
     
-    public Image(final T thePlatformImage) {
+    public Image(final U thePlatformImage) {
         platformImage = thePlatformImage;
     }
     
@@ -116,9 +132,11 @@ public abstract class Image<T extends Object> {
         return imageType;
     }
     
-    public abstract Number[] getData();
+    public T[] getData() {
+        return imageData;
+    }
     
-    public T getPlatformImage() {
+    public U getPlatformImage() {
         return platformImage;
     }
     
@@ -136,5 +154,15 @@ public abstract class Image<T extends Object> {
             copy[i] = data[i].intValue();
         }
         return copy;
+    }
+    
+    /**
+     * Return a string describing the image.
+     *
+     * @return the string.
+     */
+    @Override
+    public String toString() {
+        return super.toString() + ":[" + imageType + "," + imageData.getClass().getSimpleName() + "," + platformImage.getClass().getName() + ",(" + getWidth() + "x" + getHeight() + ")]";
     }
 }

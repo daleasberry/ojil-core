@@ -55,11 +55,11 @@ public class Gray8HorizSimpleEdge extends PipelineStage {
      *             if image is not a Gray8Image
      */
     @Override
-    public void push(final Image<?> image) throws ImageError {
+    public void push(final Image<?, ?> image) throws ImageError {
         if (!(image instanceof Gray8Image)) {
             throw new ImageError(ImageError.PACKAGE.ALGORITHM, AlgorithmErrorCodes.IMAGE_NOT_GRAY8IMAGE, image.toString(), null, null);
         }
-        final Gray8Image input = (Gray8Image) image;
+        final Gray8Image<?> input = (Gray8Image<?>) image;
         final Byte[] bIn = input.getData();
         final int cWidth = input.getWidth();
         for (int i = 0; i < input.getHeight(); i++) {

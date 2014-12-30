@@ -16,7 +16,7 @@ import com.github.ojil.core.PipelineStage;
  *
  */
 public class Gray8UnsignedBackgroundSubtract extends PipelineStage {
-    Gray32Image mg32 = null;
+    Gray32Image<?> mg32 = null;
     int mnHeight;
     int mnWidth;
     
@@ -39,7 +39,7 @@ public class Gray8UnsignedBackgroundSubtract extends PipelineStage {
      * is done efficiently.
      */
     @Override
-    public void push(final Image<?> imageInput) throws ImageError {
+    public void push(final Image<?, ?> imageInput) throws ImageError {
         if (!(imageInput instanceof Gray8Image)) {
             throw new ImageError(ImageError.PACKAGE.ALGORITHM, AlgorithmErrorCodes.IMAGE_NOT_GRAY8IMAGE, imageInput.toString(), null, null);
         }
@@ -49,9 +49,9 @@ public class Gray8UnsignedBackgroundSubtract extends PipelineStage {
         // if the image size is changed or this is the first time
         // allocate the intermediate Gray32Image.
         if ((mg32 == null) || !mg32.getSize().equals(imageInput.getSize())) {
-            mg32 = new Gray32Image(imageInput.getWidth(), imageInput.getHeight());
+            mg32 = new Gray32Image<>(imageInput.getWidth(), imageInput.getHeight());
         }
-        final Gray8Image gray = (Gray8Image) imageInput;
+        final Gray8Image<?> gray = (Gray8Image<?>) imageInput;
         final Byte[] grayData = gray.getData();
         final Integer[] gray32Data = mg32.getData();
         // First row

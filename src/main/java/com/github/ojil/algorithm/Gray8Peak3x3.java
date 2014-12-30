@@ -27,13 +27,13 @@ public class Gray8Peak3x3 extends PipelineStage {
      *             if input is not a Gray8Image.
      */
     @Override
-    public void push(final Image<?> imageInput) throws ImageError {
+    public void push(final Image<?, ?> imageInput) throws ImageError {
         if (!(imageInput instanceof Gray8Image)) {
             throw new ImageError(ImageError.PACKAGE.ALGORITHM, AlgorithmErrorCodes.IMAGE_NOT_GRAY8IMAGE, imageInput.toString(), null, null);
         }
-        final Gray8Image grayInput = (Gray8Image) imageInput;
+        final Gray8Image<?> grayInput = (Gray8Image<?>) imageInput;
         final Byte[] bData = grayInput.getData();
-        final Gray8Image grayOutput = new Gray8Image(imageInput.getWidth(), imageInput.getHeight());
+        final Gray8Image<?> grayOutput = new Gray8Image<>(imageInput.getWidth(), imageInput.getHeight());
         final Byte[] bDataOut = grayOutput.getData();
         for (int i = 1; i < (grayInput.getHeight() - 1); i++) {
             for (int j = 1; j < (grayInput.getWidth() - 1); j++) {

@@ -70,7 +70,7 @@ public class Gray8HorizVertContrast extends PipelineStage {
      *             if image is not a Gray16Image
      */
     @Override
-    public void push(final Image<?> image) throws ImageError {
+    public void push(final Image<?, ?> image) throws ImageError {
         pipe.push(image);
         super.setOutput(pipe.getFront());
     }

@@ -47,7 +47,7 @@ public class Copy extends PipelineStage {
      *            Input image. May be of any Image type.
      */
     @Override
-    public void push(final Image<?> im) {
+    public void push(final Image<?, ?> im) {
         super.setOutput(im);
     }
 }

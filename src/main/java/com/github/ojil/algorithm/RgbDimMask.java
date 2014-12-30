@@ -61,7 +61,7 @@ public class RgbDimMask extends PipelineStage {
      *             if the input image is not an RgbImage.
      */
     @Override
-    public void push(final Image<?> image) throws ImageError {
+    public void push(final Image<?, ?> image) throws ImageError {
         if (!(image instanceof RgbMaskedImage)) {
             throw new ImageError(ImageError.PACKAGE.ALGORITHM, AlgorithmErrorCodes.OBJECT_NOT_EXPECTED_TYPE, image.toString(), "RgbMaskedImage", null);
         }

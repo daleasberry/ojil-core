@@ -86,14 +86,14 @@ public class Gray8RectStretch extends PipelineStage {
      *             subsampling, only interpolation.
      */
     @Override
-    public void push(final Image<?> image) throws ImageError {
+    public void push(final Image<?, ?> image) throws ImageError {
         if (!(image instanceof Gray8Image)) {
             throw new ImageError(ImageError.PACKAGE.ALGORITHM, AlgorithmErrorCodes.IMAGE_NOT_GRAY8IMAGE, image.toString(), null, null);
         }
         if ((image.getWidth() > cWidth) || (image.getHeight() > cHeight)) {
             throw new ImageError(ImageError.PACKAGE.ALGORITHM, AlgorithmErrorCodes.STRETCH_OUTPUT_SMALLER_THAN_INPUT, image.toString(), new Integer(cWidth).toString(), new Integer(cHeight).toString());
         }
-        final Gray8Image input = (Gray8Image) image;
+        final Gray8Image<?> input = (Gray8Image<?>) image;
         /**
          * we do the stretch in to passes, one horizontal and the other
          * vertical. This leads to less computation than doing it in one pass,
@@ -101,8 +101,8 @@ public class Gray8RectStretch extends PipelineStage {
          * only once.
          */
         /* horizontal stretch */
-        final Gray8Image horiz = stretchHoriz(input);
-        final Gray8Image result = stretchVert(horiz);
+        final Gray8Image<?> horiz = stretchHoriz(input);
+        final Gray8Image<?> result = stretchVert(horiz);
         super.setOutput(result);
     }
     
@@ -144,9 +144,9 @@ public class Gray8RectStretch extends PipelineStage {
      *            the input image
      * @return the stretched image
      */
-    private Gray8Image stretchHoriz(final Gray8Image input) {
+    private Gray8Image<?> stretchHoriz(final Gray8Image<?> input) {
         /* horizontal stretch */
-        final Gray8Image horiz = new Gray8Image(cWidth, input.getHeight());
+        final Gray8Image<?> horiz = new Gray8Image<>(cWidth, input.getHeight());
         final Byte[] inData = input.getData();
         final Byte[] outData = horiz.getData();
         for (int j = 0; j < cWidth; j++) {
@@ -193,9 +193,9 @@ public class Gray8RectStretch extends PipelineStage {
      *            the input image.
      * @returns the stretched image.
      */
-    private Gray8Image stretchVert(final Gray8Image input) {
+    private Gray8Image<?> stretchVert(final Gray8Image<?> input) {
         final Byte[] inData = input.getData();
-        final Gray8Image vert = new Gray8Image(cWidth, cHeight);
+        final Gray8Image<?> vert = new Gray8Image<>(cWidth, cHeight);
         final Byte[] outData = vert.getData();
         for (int i = 0; i < cHeight; i++) {
             /* remainder */

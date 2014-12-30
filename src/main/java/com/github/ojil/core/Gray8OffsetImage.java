@@ -31,7 +31,7 @@ package com.github.ojil.core;
  * 
  * @author webb
  */
-public class Gray8OffsetImage extends Gray8Image {
+public class Gray8OffsetImage<T extends Object> extends Gray8Image<T> {
     int cX;
     int cY;
     
@@ -83,7 +83,7 @@ public class Gray8OffsetImage extends Gray8Image {
      * @param cY
      *            Vertical position of top-left corner of subimage.
      */
-    public Gray8OffsetImage(final Gray8Image image, final int cX, final int cY) {
+    public Gray8OffsetImage(final Gray8Image<?> image, final int cX, final int cY) {
         super(image.getWidth(), image.getHeight());
         System.arraycopy(image.getData(), 0, getData(), 0, getWidth() * getHeight());
         this.cX = cX;
@@ -97,7 +97,7 @@ public class Gray8OffsetImage extends Gray8Image {
      */
     @Override
     public Object clone() {
-        final Gray8Image image = new Gray8OffsetImage(getWidth(), getHeight(), getXOffset(), getYOffset());
+        final Gray8Image<?> image = new Gray8OffsetImage<>(getWidth(), getHeight(), getXOffset(), getYOffset());
         System.arraycopy(getData(), 0, image.getData(), 0, getWidth() * getHeight());
         return image;
     }
@@ -150,5 +150,4 @@ public class Gray8OffsetImage extends Gray8Image {
         return super.toString() + " (" + getWidth() + "x" + getHeight() + //$NON-NLS-1$ //$NON-NLS-2$
                 "," + getXOffset() + "," + getYOffset() + ")"; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
     }
-    
 }

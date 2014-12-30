@@ -41,7 +41,7 @@ public abstract class PipelineStage {
     /**
      * The output image from this stage.
      */
-    protected Image<?> imageOutput = null;
+    protected Image<?, ?> imageOutput = null;
     
     /**
      * Class constructor
@@ -65,11 +65,11 @@ public abstract class PipelineStage {
      * @throws ImageError
      *             if no output is available
      */
-    public Image<?> getFront() throws ImageError {
+    public Image<?, ?> getFront() throws ImageError {
         if (!fReady) {
             throw new ImageError(ImageError.PACKAGE.CORE, ErrorCodes.NO_RESULT_AVAILABLE, toString(), null, null);
         }
-        final Image<?> imageResult = imageOutput;
+        final Image<?, ?> imageResult = imageOutput;
         imageOutput = null;
         fReady = false;
         return imageResult;
@@ -83,7 +83,7 @@ public abstract class PipelineStage {
      * @throws ImageError
      *             typically, when the image is not of the expected type.
      */
-    public abstract void push(Image<?> imageInput) throws ImageError;
+    public abstract void push(Image<?, ?> imageInput) throws ImageError;
     
     /**
      * Derived classes use setOutput to pass their result back here.
@@ -91,7 +91,7 @@ public abstract class PipelineStage {
      * @param imageResult
      *            the output image
      */
-    protected void setOutput(final Image<?> imageResult) {
+    protected void setOutput(final Image<?, ?> imageResult) {
         imageOutput = imageResult;
         fReady = true;
     }

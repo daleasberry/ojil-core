@@ -52,12 +52,12 @@ public class Gray16Gray8 extends PipelineStage {
      *             if the input is not a Gray8Image
      */
     @Override
-    public void push(final Image<?> image) throws com.github.ojil.core.ImageError {
+    public void push(final Image<?, ?> image) throws com.github.ojil.core.ImageError {
         if (!(image instanceof Gray16Image)) {
             throw new ImageError(ImageError.PACKAGE.ALGORITHM, AlgorithmErrorCodes.IMAGE_NOT_GRAY16IMAGE, image.toString(), null, null);
         }
-        final Gray16Image gray = (Gray16Image) image;
-        final Gray8Image gray8 = new Gray8Image(image.getWidth(), image.getHeight());
+        final Gray16Image<?> gray = (Gray16Image<?>) image;
+        final Gray8Image<?> gray8 = new Gray8Image<>(image.getWidth(), image.getHeight());
         final Short[] grayData = gray.getData();
         final Byte[] gray8Data = gray8.getData();
         for (int i = 0; i < (gray.getWidth() * gray.getHeight()); i++) {

@@ -45,7 +45,7 @@ public class Gray8VertVar extends PipelineStage {
     /**
      * The output image.
      */
-    Gray16Image g16 = null;
+    Gray16Image<?> g16 = null;
     
     /**
      * Creates a new instance of Gray8VertVar
@@ -67,14 +67,14 @@ public class Gray8VertVar extends PipelineStage {
      *             if image is not a Gray8Image
      */
     @Override
-    public void push(final Image<?> image) throws ImageError {
+    public void push(final Image<?, ?> image) throws ImageError {
         if (!(image instanceof Gray8Image)) {
             throw new ImageError(ImageError.PACKAGE.ALGORITHM, AlgorithmErrorCodes.IMAGE_NOT_GRAY8IMAGE, image.toString(), null, null);
         }
         if ((g16 == null) || (g16.getWidth() != image.getWidth()) || (g16.getHeight() != image.getHeight())) {
-            g16 = new Gray16Image(image.getWidth(), image.getHeight());
+            g16 = new Gray16Image<>(image.getWidth(), image.getHeight());
         }
-        final Gray8Image input = (Gray8Image) image;
+        final Gray8Image<?> input = (Gray8Image<?>) image;
         final Byte[] bIn = input.getData();
         final int cHeight = input.getHeight();
         final int cWidth = input.getWidth();

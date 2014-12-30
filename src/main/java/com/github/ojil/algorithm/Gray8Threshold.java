@@ -64,11 +64,11 @@ public class Gray8Threshold extends PipelineStage {
      *             if the image is not a gray 8-bit image.
      */
     @Override
-    public void push(final Image<?> image) throws ImageError {
+    public void push(final Image<?, ?> image) throws ImageError {
         if (!(image instanceof Gray8Image)) {
             throw new ImageError(ImageError.PACKAGE.ALGORITHM, AlgorithmErrorCodes.IMAGE_NOT_GRAY8IMAGE, image.toString(), null, null);
         }
-        final Gray8Image gray = (Gray8Image) image;
+        final Gray8Image<?> gray = (Gray8Image<?>) image;
         final Byte[] data = gray.getData();
         for (int i = 0; i < data.length; i++) {
             data[i] = (((data[i]) < nThreshold) == bWithin) ? Byte.MAX_VALUE : Byte.MIN_VALUE;

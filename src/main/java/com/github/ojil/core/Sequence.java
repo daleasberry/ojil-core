@@ -94,7 +94,7 @@ public class Sequence extends PipelineStage {
      *             if no image is available.
      */
     @Override
-    public Image<?> getFront() throws ImageError {
+    public Image<?, ?> getFront() throws ImageError {
         if (pNext == null) {
             return pFirst.getFront();
         } else {
@@ -114,7 +114,7 @@ public class Sequence extends PipelineStage {
      *             if the pipeline is empty.
      */
     @Override
-    public void push(final Image<?> i) throws ImageError {
+    public void push(final Image<?, ?> i) throws ImageError {
         if (pFirst == null) {
             throw new ImageError(ImageError.PACKAGE.CORE, ErrorCodes.PIPELINE_EMPTY_PUSH, toString(), null, null);
         }

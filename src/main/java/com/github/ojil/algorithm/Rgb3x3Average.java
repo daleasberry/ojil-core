@@ -54,7 +54,7 @@ public class Rgb3x3Average extends PipelineStage {
      *             if imageInput is not an RgbImage
      */
     @Override
-    public void push(final Image<?> imageInput) throws ImageError {
+    public void push(final Image<?, ?> imageInput) throws ImageError {
         if (!(imageInput instanceof RgbImage)) {
             throw new ImageError(ImageError.PACKAGE.ALGORITHM, AlgorithmErrorCodes.IMAGE_NOT_RGBIMAGE, imageInput.toString(), null, null);
         }

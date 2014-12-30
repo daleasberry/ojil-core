@@ -48,7 +48,7 @@ public class RgbMaxDiff extends PipelineStage {
      *             background image set in the constructor.
      */
     @Override
-    public void push(final Image<?> imInput) throws ImageError {
+    public void push(final Image<?, ?> imInput) throws ImageError {
         {
             if (!(imInput instanceof RgbImage)) {
                 throw new ImageError(ImageError.PACKAGE.ALGORITHM, AlgorithmErrorCodes.IMAGE_NOT_RGBIMAGE, imInput.toString(), null, null);
@@ -61,7 +61,7 @@ public class RgbMaxDiff extends PipelineStage {
         
         final Integer[] wInput = ((RgbImage<?>) imInput).getData();
         final Integer[] wBack = rgbBack.getData();
-        final Gray8Image grayOut = new Gray8Image(rgbBack.getWidth(), rgbBack.getHeight());
+        final Gray8Image<?> grayOut = new Gray8Image<>(rgbBack.getWidth(), rgbBack.getHeight());
         final Byte[] bGray = grayOut.getData();
         for (int i = 0; i < (imInput.getWidth() * imInput.getHeight()); i++) {
             final int rIn = RgbVal.getR(wInput[i]);

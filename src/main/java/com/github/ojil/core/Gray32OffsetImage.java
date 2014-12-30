@@ -31,7 +31,7 @@ package com.github.ojil.core;
  * 
  * @author webb
  */
-public class Gray32OffsetImage extends Gray32Image {
+public class Gray32OffsetImage<T extends Object> extends Gray32Image<T> {
     int cX;
     int cY;
     
@@ -60,7 +60,7 @@ public class Gray32OffsetImage extends Gray32Image {
      */
     @Override
     public Object clone() {
-        final Gray32Image image = new Gray32OffsetImage(getWidth(), getHeight(), getXOffset(), getYOffset());
+        final Gray32Image<?> image = new Gray32OffsetImage<>(getWidth(), getHeight(), getXOffset(), getYOffset());
         System.arraycopy(getData(), 0, image.getData(), 0, getWidth() * getHeight());
         return image;
     }

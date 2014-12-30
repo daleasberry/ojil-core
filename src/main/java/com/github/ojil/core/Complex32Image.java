@@ -29,9 +29,7 @@ package com.github.ojil.core;
  *
  * @author webb
  */
-public class Complex32Image extends Image<Object> {
-    private final Complex cxImage[];
-    
+public class Complex32Image<T extends Object> extends Image<Complex, T> {
     /**
      * Creates a new instance of Complex32Image
      * 
@@ -41,8 +39,7 @@ public class Complex32Image extends Image<Object> {
      *            Height of the image (rows)
      */
     public Complex32Image(final int cWidth, final int cHeight) {
-        super(cWidth, cHeight);
-        cxImage = new Complex[getWidth() * getHeight()];
+        super(cWidth, cHeight, null, new Complex[cWidth * cHeight]);
     }
     
     /**
@@ -52,30 +49,8 @@ public class Complex32Image extends Image<Object> {
      */
     @Override
     public Object clone() {
-        final Complex32Image image = new Complex32Image(getWidth(), getHeight());
+        final Complex32Image<?> image = new Complex32Image<>(getWidth(), getHeight());
         System.arraycopy(getData(), 0, image.getData(), 0, getWidth() * getHeight());
         return image;
     }
-    
-    /**
-     * Return a pointer to the image data.
-     *
-     * @return the data pointer.
-     */
-    @Override
-    public Complex[] getData() {
-        return cxImage;
-    }
-    
-    /**
-     * Return a string describing the image.
-     *
-     * @return the string.
-     */
-    @Override
-    public String toString() {
-        return super.toString() + " (" + getWidth() + "x" + getHeight() + //$NON-NLS-1$ //$NON-NLS-2$
-                ")"; //$NON-NLS-1$
-    }
-    
 }

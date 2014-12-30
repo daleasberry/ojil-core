@@ -33,8 +33,8 @@ package com.github.ojil.core;
  * 
  * @author webb
  */
-public class Gray32MaskedImage extends Gray32Image {
-    private final Gray8Image imMask;
+public class Gray32MaskedImage<T extends Object> extends Gray32Image<T> {
+    private final Gray8Image<?> imMask;
     
     /**
      * Creates a new instance of Gray32MaskedImage
@@ -46,7 +46,7 @@ public class Gray32MaskedImage extends Gray32Image {
      */
     public Gray32MaskedImage(final int cWidth, final int cHeight) {
         super(cWidth, cHeight);
-        imMask = new Gray8Image(cWidth, cHeight);
+        imMask = new Gray8Image<>(cWidth, cHeight);
     }
     
     /**
@@ -61,7 +61,7 @@ public class Gray32MaskedImage extends Gray32Image {
      *             If either input is not a Gray8Image or the sizes are not the
      *             same.
      */
-    public Gray32MaskedImage(final Gray32Image imData, final Gray8Image imMask) throws ImageError {
+    public Gray32MaskedImage(final Gray32Image<?> imData, final Gray8Image<?> imMask) throws ImageError {
         super(imData.getWidth(), imData.getHeight());
         if ((imData.getWidth() != imMask.getWidth()) || (imData.getHeight() != imMask.getHeight())) {
             throw new ImageError(ImageError.PACKAGE.CORE, ErrorCodes.IMAGE_MASK_SIZE_MISMATCH, imData.toString(), imMask.toString(), null);
@@ -77,19 +77,10 @@ public class Gray32MaskedImage extends Gray32Image {
      */
     @Override
     public Object clone() {
-        final Gray32MaskedImage image = new Gray32MaskedImage(getWidth(), getHeight());
-        System.arraycopy(getImage().getData(), 0, image.getImage().getData(), 0, getWidth() * getHeight());
+        final Gray32MaskedImage<?> image = new Gray32MaskedImage<>(getWidth(), getHeight());
+        System.arraycopy(getData(), 0, image.getData(), 0, getWidth() * getHeight());
         System.arraycopy(getMask().getData(), 0, image.getMask().getData(), 0, getWidth() * getHeight());
         return image;
-    }
-    
-    /**
-     * Get the input Gray32Image.
-     * 
-     * @return the input iamge
-     */
-    public Gray32Image getImage() {
-        return this;
     }
     
     /**
@@ -97,7 +88,7 @@ public class Gray32MaskedImage extends Gray32Image {
      * 
      * @return the input mask
      */
-    public Gray8Image getMask() {
+    public Gray8Image<?> getMask() {
         return imMask;
     }
     
@@ -122,16 +113,4 @@ public class Gray32MaskedImage extends Gray32Image {
     public boolean isMasked(final int nRow, final int nCol) {
         return imMask.getData()[(nRow * imMask.getWidth()) + nCol] != Byte.MIN_VALUE;
     }
-    
-    /**
-     * Return a string describing the image.
-     *
-     * @return the string.
-     */
-    @Override
-    public String toString() {
-        return super.toString() + " (" + getWidth() + "x" + //$NON-NLS-1$ //$NON-NLS-2$
-                getHeight() + ")"; //$NON-NLS-1$
-    }
-    
 }

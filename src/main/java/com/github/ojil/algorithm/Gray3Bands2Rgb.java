@@ -55,7 +55,7 @@ public class Gray3Bands2Rgb {
      * @throws ImageError
      *             if the input sizes do not match
      */
-    static public RgbImage<?> push(final Gray8Image imRed, final Gray8Image imGreen, final Gray8Image imBlue) throws ImageError {
+    static public RgbImage<?> push(final Gray8Image<?> imRed, final Gray8Image<?> imGreen, final Gray8Image<?> imBlue) throws ImageError {
         if ((imRed.getWidth() != imGreen.getWidth()) || (imGreen.getWidth() != imBlue.getWidth()) || (imRed.getHeight() != imGreen.getHeight()) || (imGreen.getHeight() != imBlue.getHeight())) {
             throw new ImageError(ImageError.PACKAGE.ALGORITHM, AlgorithmErrorCodes.IMAGE_SIZES_DIFFER, imRed.toString(), imGreen.toString(), imBlue.toString());
         }

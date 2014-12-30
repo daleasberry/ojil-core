@@ -37,7 +37,7 @@ import com.github.ojil.core.PipelineStage;
  * @author webb
  */
 public class Gray8TrapWarp extends PipelineStage {
-    Gray8Image imageOutput;
+    Gray8Image<?> imageOutput;
     private int nColLeftEnd;
     private int nColLeftStart;
     private int nColRightEnd;
@@ -149,7 +149,7 @@ public class Gray8TrapWarp extends PipelineStage {
      *             specified extends outside its bounds.
      */
     @Override
-    public void push(final Image<?> image) throws ImageError {
+    public void push(final Image<?, ?> image) throws ImageError {
         if (!(image instanceof Gray8Image)) {
             throw new ImageError(ImageError.PACKAGE.ALGORITHM, AlgorithmErrorCodes.IMAGE_NOT_GRAY8IMAGE, image.toString(), null, null);
         }
@@ -162,7 +162,7 @@ public class Gray8TrapWarp extends PipelineStage {
         final int nWidth = imageOutput.getWidth();
         final int fLeftIncr = ((nColLeftEnd - nColLeftStart) * 256) / nHeight;
         final int fRightIncr = ((nColRightEnd - nColRightStart) * 256) / nHeight;
-        final Byte[] in = ((Gray8Image) image).getData();
+        final Byte[] in = ((Gray8Image<?>) image).getData();
         final Byte[] out = imageOutput.getData();
         for (int i = 0; i < nHeight; i++) {
             // we scale everything by 8 bits for accurate computation without
@@ -233,7 +233,7 @@ public class Gray8TrapWarp extends PipelineStage {
         }
         final int nHeight = this.nRowEnd - this.nRowStart;
         final int nWidth = Math.max(this.nColRightStart - this.nColLeftStart, this.nColRightEnd - this.nColLeftEnd);
-        imageOutput = new Gray8Image(nWidth, nHeight);
+        imageOutput = new Gray8Image<>(nWidth, nHeight);
         
     }
     

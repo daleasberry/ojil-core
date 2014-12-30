@@ -60,7 +60,7 @@ public class RgbMaskedAbsDiff extends PipelineStage {
      *             background image set in the constructor.
      */
     @Override
-    public void push(final Image<?> imInput) throws ImageError {
+    public void push(final Image<?, ?> imInput) throws ImageError {
         {
             if (!(imInput instanceof RgbMaskedImage)) {
                 throw new ImageError(ImageError.PACKAGE.ALGORITHM, AlgorithmErrorCodes.OBJECT_NOT_EXPECTED_TYPE, imInput.toString(), "RgbMaskedImage", null);
@@ -73,7 +73,7 @@ public class RgbMaskedAbsDiff extends PipelineStage {
         final RgbMaskedImage<?> rgbInput = (RgbMaskedImage<?>) imInput;
         final Integer[] wInput = rgbInput.getData();
         final Integer[] wBack = rgbBack.getData();
-        final Gray8Image grayOut = new Gray8Image(rgbBack.getWidth(), rgbBack.getHeight());
+        final Gray8Image<?> grayOut = new Gray8Image<>(rgbBack.getWidth(), rgbBack.getHeight());
         final Byte[] bGray = grayOut.getData();
         for (int i = 0; i < imInput.getHeight(); i++) {
             for (int j = 0; j < imInput.getWidth(); j++) {

@@ -146,7 +146,7 @@ public class Gray8VertTrapWarp extends PipelineStage {
      *             specified extends outside its bounds.
      */
     @Override
-    public void push(final Image<?> image) throws ImageError {
+    public void push(final Image<?, ?> image) throws ImageError {
         if (!(image instanceof Gray8Image)) {
             throw new ImageError(ImageError.PACKAGE.ALGORITHM, AlgorithmErrorCodes.IMAGE_NOT_GRAY8IMAGE, image.toString(), null, null);
         }
@@ -161,8 +161,8 @@ public class Gray8VertTrapWarp extends PipelineStage {
         final int nWidth = imageOutput.getWidth();
         final int fTopIncr = ((nRowTopEnd - nRowTopStart) << 8) / nWidth;
         final int fBotIncr = ((nRowBotEnd - nRowBotStart) << 8) / nWidth;
-        final Byte[] in = ((Gray8Image) image).getData();
-        final Byte[] out = ((Gray8Image) super.imageOutput).getData();
+        final Byte[] in = ((Gray8Image<?>) image).getData();
+        final Byte[] out = ((Gray8Image<?>) super.imageOutput).getData();
         for (int i = 0; i < nWidth; i++) {
             // these are scaled by 8 bits
             int fY = fTop;
@@ -223,7 +223,7 @@ public class Gray8VertTrapWarp extends PipelineStage {
         }
         final int nWidth = this.nColEnd - this.nColStart;
         final int nHeight = Math.max(this.nRowBotStart - this.nRowTopStart, this.nRowBotEnd - this.nRowTopEnd);
-        super.imageOutput = new Gray8Image(nWidth, nHeight);
+        super.imageOutput = new Gray8Image<>(nWidth, nHeight);
         
     }
     

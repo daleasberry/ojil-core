@@ -88,15 +88,15 @@ public class Gray16Crop extends PipelineStage {
      *             the input image is not a Gray16Image.
      */
     @Override
-    public void push(final Image<?> image) throws com.github.ojil.core.ImageError {
+    public void push(final Image<?, ?> image) throws com.github.ojil.core.ImageError {
         if (!(image instanceof Gray16Image)) {
             throw new ImageError(ImageError.PACKAGE.ALGORITHM, AlgorithmErrorCodes.IMAGE_NOT_GRAY16IMAGE, image.toString(), null, null);
         }
-        final Gray16Image imageInput = (Gray16Image) image;
+        final Gray16Image<?> imageInput = (Gray16Image<?>) image;
         if (((cX + cWidth) > image.getWidth()) || ((cY + cHeight) > image.getHeight())) {
             throw new ImageError(ImageError.PACKAGE.CORE, ErrorCodes.BOUNDS_OUTSIDE_IMAGE, image.toString(), toString(), null);
         }
-        final Gray16Image imageResult = new Gray16Image(cWidth, cHeight);
+        final Gray16Image<?> imageResult = new Gray16Image<>(cWidth, cHeight);
         final Short[] src = imageInput.getData();
         final Short[] dst = imageResult.getData();
         for (int i = 0; i < cHeight; i++) {

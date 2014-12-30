@@ -195,7 +195,7 @@ public class Gray8GaussDeblurHoriz extends PipelineStage {
      *             if the input is not a Gray8Image or is not square.
      */
     @Override
-    public void push(final Image<?> im) throws ImageError {
+    public void push(final Image<?, ?> im) throws ImageError {
         if (im.getWidth() != im.getHeight()) {
             throw new ImageError(ImageError.PACKAGE.ALGORITHM, AlgorithmErrorCodes.IMAGE_NOT_SQUARE, im.toString(), null, null);
         }
@@ -203,9 +203,9 @@ public class Gray8GaussDeblurHoriz extends PipelineStage {
             throw new ImageError(ImageError.PACKAGE.ALGORITHM, AlgorithmErrorCodes.IMAGE_NOT_GRAY8IMAGE, im.toString(), null, null);
         }
         fft.push(im);
-        final Complex32Image cxmIm = (Complex32Image) fft.getFront();
+        final Complex32Image<?> cxmIm = (Complex32Image<?>) fft.getFront();
         final Complex cxIn[] = cxmIm.getData();
-        final Complex32Image cxmResult = new Complex32Image(im.getWidth(), im.getHeight());
+        final Complex32Image<?> cxmResult = new Complex32Image<>(im.getWidth(), im.getHeight());
         final Complex cxOut[] = cxmResult.getData();
         // compute inverse filter
         final int rnCoeff[] = rxnCoeffs[nStdDev];

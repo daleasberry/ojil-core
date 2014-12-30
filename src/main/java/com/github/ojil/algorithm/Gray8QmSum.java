@@ -61,12 +61,12 @@ public class Gray8QmSum extends PipelineStage {
      *             if the input is not a Gray8Image
      */
     @Override
-    public void push(final Image<?> image) throws ImageError {
+    public void push(final Image<?, ?> image) throws ImageError {
         if (!(image instanceof Gray8Image)) {
             throw new ImageError(ImageError.PACKAGE.ALGORITHM, AlgorithmErrorCodes.IMAGE_NOT_GRAY8IMAGE, image.toString(), null, null);
         }
-        final Gray8Image gray = (Gray8Image) image;
-        final Gray32Image gray32 = new Gray32Image(image.getWidth(), image.getHeight());
+        final Gray8Image<?> gray = (Gray8Image<?>) image;
+        final Gray32Image<?> gray32 = new Gray32Image<>(image.getWidth(), image.getHeight());
         final Byte[] grayData = gray.getData();
         final Integer[] gray32Data = gray32.getData();
         // First row

@@ -64,7 +64,7 @@ public class Gray8Fft extends PipelineStage {
      *             width and height.
      */
     @Override
-    public void push(final Image<?> im) throws ImageError {
+    public void push(final Image<?, ?> im) throws ImageError {
         if (!(im instanceof Gray8Image)) {
             throw new ImageError(ImageError.PACKAGE.ALGORITHM, AlgorithmErrorCodes.IMAGE_NOT_GRAY8IMAGE, im.toString(), null, null);
         }
@@ -83,10 +83,10 @@ public class Gray8Fft extends PipelineStage {
             fft.setMaxWidth(Math.max(nWidth, nHeight));
         }
         
-        final Gray8Image gray = (Gray8Image) im;
+        final Gray8Image<?> gray = (Gray8Image<?>) im;
         final Byte data[] = gray.getData();
         // create output
-        final Complex32Image cxmResult = new Complex32Image(nWidth, nHeight);
+        final Complex32Image<?> cxmResult = new Complex32Image<>(nWidth, nHeight);
         // take FFT of each row
         int nIndex = 0;
         final Complex cxRow[] = new Complex[nWidth];

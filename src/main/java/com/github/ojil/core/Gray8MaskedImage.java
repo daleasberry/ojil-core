@@ -33,8 +33,8 @@ package com.github.ojil.core;
  * 
  * @author webb
  */
-public class Gray8MaskedImage extends Gray8Image {
-    private final Gray8Image imMask;
+public class Gray8MaskedImage<T extends Object> extends Gray8Image<T> {
+    private final Gray8Image<?> imMask;
     
     /**
      * Creates a new instance of Gray8MaskedImage
@@ -46,7 +46,7 @@ public class Gray8MaskedImage extends Gray8Image {
      */
     public Gray8MaskedImage(final int cWidth, final int cHeight) {
         super(cWidth, cHeight);
-        imMask = new Gray8Image(cWidth, cHeight);
+        imMask = new Gray8Image<>(cWidth, cHeight);
     }
     
     /**
@@ -61,7 +61,7 @@ public class Gray8MaskedImage extends Gray8Image {
      *             If either input is not a Gray8Image or the sizes are not the
      *             same.
      */
-    public Gray8MaskedImage(final Gray8Image imData, final Gray8Image imMask) throws ImageError {
+    public Gray8MaskedImage(final Gray8Image<?> imData, final Gray8Image<?> imMask) throws ImageError {
         super(imData.getWidth(), imData.getHeight());
         if ((imData.getWidth() != imMask.getWidth()) || (imData.getHeight() != imMask.getHeight())) {
             throw new ImageError(ImageError.PACKAGE.CORE, ErrorCodes.IMAGE_MASK_SIZE_MISMATCH, imData.toString(), imMask.toString(), null);
@@ -82,11 +82,11 @@ public class Gray8MaskedImage extends Gray8Image {
      *             If either input is not a Gray8Image or the sizes are not the
      *             same.
      */
-    public Gray8MaskedImage(final Gray8Image imData) throws ImageError {
+    public Gray8MaskedImage(final Gray8Image<?> imData) throws ImageError {
         super(imData.getWidth(), imData.getHeight());
         System.arraycopy(imData.getData(), 0, getData(), 0, getWidth() * getHeight());
         // initialize mask, setting everything unmasked
-        imMask = new Gray8Image(imData.getWidth(), imData.getHeight(), Byte.MIN_VALUE);
+        imMask = new Gray8Image<>(imData.getWidth(), imData.getHeight(), Byte.MIN_VALUE);
     }
     
     /**
@@ -96,19 +96,10 @@ public class Gray8MaskedImage extends Gray8Image {
      */
     @Override
     public Object clone() {
-        final Gray8MaskedImage image = new Gray8MaskedImage(getWidth(), getHeight());
-        System.arraycopy(getImage().getData(), 0, image.getImage().getData(), 0, getWidth() * getHeight());
+        final Gray8MaskedImage<?> image = new Gray8MaskedImage<>(getWidth(), getHeight());
+        System.arraycopy(getData(), 0, image.getData(), 0, getWidth() * getHeight());
         System.arraycopy(getMask().getData(), 0, image.getMask().getData(), 0, getWidth() * getHeight());
         return image;
-    }
-    
-    /**
-     * Returns the input Gray8Image.
-     * 
-     * @return the input image
-     */
-    public Gray8Image getImage() {
-        return this;
     }
     
     /**
@@ -116,7 +107,7 @@ public class Gray8MaskedImage extends Gray8Image {
      * 
      * @return the input mask
      */
-    public Gray8Image getMask() {
+    public Gray8Image<?> getMask() {
         return imMask;
     }
     
@@ -151,7 +142,7 @@ public class Gray8MaskedImage extends Gray8Image {
      *            column of pixel
      * @return modified Gray8Image (this)
      */
-    public Gray8MaskedImage setMask(final int nRow, final int nCol) {
+    public Gray8MaskedImage<?> setMask(final int nRow, final int nCol) {
         imMask.getData()[(nRow * imMask.getWidth()) + nCol] = Byte.MAX_VALUE;
         return this;
     }
@@ -176,9 +167,8 @@ public class Gray8MaskedImage extends Gray8Image {
      *            column of pixel
      * @return modified Gray8Image (this)
      */
-    public Gray8MaskedImage unsetMask(final int nRow, final int nCol) {
+    public Gray8MaskedImage<?> unsetMask(final int nRow, final int nCol) {
         imMask.getData()[(nRow * imMask.getWidth()) + nCol] = Byte.MIN_VALUE;
         return this;
     }
-    
 }

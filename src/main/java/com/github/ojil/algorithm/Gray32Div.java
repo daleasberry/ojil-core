@@ -59,11 +59,11 @@ public class Gray32Div extends PipelineStage {
      *             if the image is not a gray 32-bit image.
      */
     @Override
-    public void push(final Image<?> image) throws ImageError {
+    public void push(final Image<?, ?> image) throws ImageError {
         if (!(image instanceof Gray32Image)) {
             throw new ImageError(ImageError.PACKAGE.CORE, AlgorithmErrorCodes.IMAGE_NOT_GRAY32IMAGE, image.toString(), null, null);
         }
-        final Gray32Image gray = (Gray32Image) image;
+        final Gray32Image<?> gray = (Gray32Image<?>) image;
         final Integer[] data = gray.getData();
         for (int i = 0; i < data.length; i++) {
             data[i] = data[i] / nDivisor;

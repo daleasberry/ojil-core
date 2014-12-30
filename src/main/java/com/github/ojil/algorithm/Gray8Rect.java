@@ -70,11 +70,11 @@ public class Gray8Rect extends PipelineStage {
      *             if the input is not a Gray8Image.
      */
     @Override
-    public void push(final Image<?> image) throws ImageError {
+    public void push(final Image<?, ?> image) throws ImageError {
         if (!(image instanceof Gray8Image)) {
             throw new ImageError(ImageError.PACKAGE.ALGORITHM, AlgorithmErrorCodes.IMAGE_NOT_GRAY8IMAGE, image.toString(), null, null);
         }
-        final Gray8Image input = (Gray8Image) image;
+        final Gray8Image<?> input = (Gray8Image<?>) image;
         final Byte[] data = input.getData();
         final int nLimitY = Math.min(input.getHeight(), cY + nHeight);
         final int nLimitX = Math.min(input.getWidth(), cX + nWidth);

@@ -70,7 +70,7 @@ public class Gray16LinComb implements Ladder.Join {
      * @return the resulting Gray16Image.
      */
     @Override
-    public Image<?> doJoin(final Image<?> imageFirst, final Image<?> imageSecond) throws ImageError {
+    public Image<?, ?> doJoin(final Image<?, ?> imageFirst, final Image<?, ?> imageSecond) throws ImageError {
         if (!(imageFirst instanceof Gray16Image)) {
             throw new ImageError(ImageError.PACKAGE.ALGORITHM, AlgorithmErrorCodes.IMAGE_NOT_GRAY16IMAGE, imageFirst.toString(), null, null);
         }
@@ -80,8 +80,8 @@ public class Gray16LinComb implements Ladder.Join {
         if ((imageFirst.getWidth() != imageSecond.getWidth()) || (imageFirst.getHeight() != imageSecond.getHeight())) {
             throw new ImageError(ImageError.PACKAGE.ALGORITHM, AlgorithmErrorCodes.IMAGE_SIZES_DIFFER, imageFirst.toString(), imageSecond.toString(), null);
         }
-        final Short[] dataFirst = ((Gray16Image) imageFirst).getData();
-        final Short[] dataSecond = ((Gray16Image) imageSecond).getData();
+        final Short[] dataFirst = ((Gray16Image<?>) imageFirst).getData();
+        final Short[] dataSecond = ((Gray16Image<?>) imageSecond).getData();
         for (int i = 0; i < dataFirst.length; i++) {
             dataFirst[i] = (short) (((nA * dataFirst[i]) + (nB * dataSecond[i])) / nC);
         }

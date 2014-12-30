@@ -65,7 +65,7 @@ public class Gray8Reduce extends PipelineStage {
      *             not evenly divide the image size.
      */
     @Override
-    public void push(final Image<?> image) throws ImageError {
+    public void push(final Image<?, ?> image) throws ImageError {
         if (!(image instanceof Gray8Image)) {
             throw new ImageError(ImageError.PACKAGE.ALGORITHM, AlgorithmErrorCodes.IMAGE_NOT_GRAY8IMAGE, image.toString(), null, null);
         }
@@ -75,11 +75,11 @@ public class Gray8Reduce extends PipelineStage {
         if ((image.getHeight() % cReduceHeight) != 0) {
             throw new ImageError(ImageError.PACKAGE.ALGORITHM, AlgorithmErrorCodes.REDUCE_INPUT_IMAGE_NOT_MULTIPLE_OF_OUTPUT_SIZE, image.toString(), toString(), null);
         }
-        final Gray8Image gray = (Gray8Image) image;
+        final Gray8Image<?> gray = (Gray8Image<?>) image;
         final Byte[] bIn = gray.getData();
         final int cReducedHeight = image.getHeight() / cReduceHeight;
         final int cReducedWidth = image.getWidth() / cReduceWidth;
-        final Gray8Image result = new Gray8Image(cReducedWidth, cReducedHeight);
+        final Gray8Image<?> result = new Gray8Image<>(cReducedWidth, cReducedHeight);
         final Byte[] bOut = result.getData();
         for (int i = 0; i < cReducedHeight; i++) {
             for (int j = 0; j < cReducedWidth; j++) {

@@ -48,7 +48,7 @@ public class Ladder extends PipelineStage {
          *             typically, when the two images are not the expected type
          *             or are of other than the required size.
          */
-        Image<?> doJoin(Image<?> imageFirst, Image<?> imageSecond) throws ImageError;
+        Image<?, ?> doJoin(Image<?, ?> imageFirst, Image<?, ?> imageSecond) throws ImageError;
     }
     
     /**
@@ -91,8 +91,8 @@ public class Ladder extends PipelineStage {
      *             supplied with the input.
      */
     @Override
-    public void push(final Image<?> image) throws ImageError {
-        final Image<?> imageCopy = (Image<?>) image.clone();
+    public void push(final Image<?, ?> image) throws ImageError {
+        final Image<?, ?> imageCopy = (Image<?, ?>) image.clone();
         pipeFirst.push(image);
         pipeSecond.push(imageCopy);
         if (pipeFirst.isEmpty()) {

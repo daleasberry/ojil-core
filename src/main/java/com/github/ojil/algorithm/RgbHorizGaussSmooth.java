@@ -63,14 +63,14 @@ public class RgbHorizGaussSmooth extends PipelineStage {
      *             if the input image is not an RgbImage
      */
     @Override
-    public void push(final Image<?> image) throws ImageError {
+    public void push(final Image<?, ?> image) throws ImageError {
         if (!(image instanceof RgbImage)) {
             throw new ImageError(ImageError.PACKAGE.ALGORITHM, AlgorithmErrorCodes.IMAGE_NOT_RGBIMAGE, image.toString(), null, null);
         }
         seqR.push(image);
         seqG.push(image);
         seqB.push(image);
-        super.setOutput(Gray3Bands2Rgb.push((Gray8Image) seqR.getFront(), (Gray8Image) seqG.getFront(), (Gray8Image) seqB.getFront()));
+        super.setOutput(Gray3Bands2Rgb.push((Gray8Image<?>) seqR.getFront(), (Gray8Image<?>) seqG.getFront(), (Gray8Image<?>) seqB.getFront()));
     }
     
     /**

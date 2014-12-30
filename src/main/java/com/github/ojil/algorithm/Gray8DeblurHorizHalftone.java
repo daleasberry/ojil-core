@@ -79,11 +79,11 @@ public class Gray8DeblurHorizHalftone extends PipelineStage {
      *             if the input is not of type Gray8Image.
      */
     @Override
-    public void push(final Image<?> im) throws ImageError {
+    public void push(final Image<?, ?> im) throws ImageError {
         if (!(im instanceof Gray8Image)) {
             throw new ImageError(ImageError.PACKAGE.ALGORITHM, AlgorithmErrorCodes.IMAGE_NOT_GRAY8IMAGE, im.toString(), null, null);
         }
-        final Byte[] bData = ((Gray8Image) im).getData();
+        final Byte[] bData = ((Gray8Image<?>) im).getData();
         for (int i = 0; i < im.getHeight(); i++) {
             final int nRow = i * im.getWidth();
             for (int j = 0; j < im.getWidth(); j++) {

@@ -58,15 +58,15 @@ public class Gray8HorizSum extends PipelineStage {
      *             if the input is not a Gray8Image.
      */
     @Override
-    public void push(final Image<?> imageInput) throws ImageError {
+    public void push(final Image<?, ?> imageInput) throws ImageError {
         if (!(imageInput instanceof Gray8Image)) {
             throw new ImageError(ImageError.PACKAGE.ALGORITHM, AlgorithmErrorCodes.IMAGE_NOT_GRAY8IMAGE, imageInput.toString(), null, null);
         }
         final Gray8QmSum gqs = new Gray8QmSum();
         gqs.push(imageInput);
-        final Gray32Image gSum = (Gray32Image) gqs.getFront();
+        final Gray32Image<?> gSum = (Gray32Image<?>) gqs.getFront();
         final Integer[] sData = gSum.getData();
-        final Gray32Image gResult = new Gray32Image(imageInput.getWidth(), imageInput.getHeight());
+        final Gray32Image<?> gResult = new Gray32Image<>(imageInput.getWidth(), imageInput.getHeight());
         final Integer[] gData = gResult.getData();
         for (int i = 1; i < imageInput.getHeight(); i++) {
             for (int j = 0; j < nSumWidth; j++) {

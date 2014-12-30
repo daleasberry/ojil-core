@@ -59,11 +59,11 @@ public class Gray8HistEq extends PipelineStage {
      *             if the input image is not gray.
      */
     @Override
-    public void push(final Image<?> image) throws com.github.ojil.core.ImageError {
+    public void push(final Image<?, ?> image) throws com.github.ojil.core.ImageError {
         if (!(image instanceof Gray8Image)) {
             throw new ImageError(ImageError.PACKAGE.ALGORITHM, AlgorithmErrorCodes.IMAGE_NOT_GRAY8IMAGE, image.toString(), null, null);
         }
-        final Gray8Image gray = (Gray8Image) image;
+        final Gray8Image<?> gray = (Gray8Image<?>) image;
         /*
          * In order to avoid recreating histMatch every call, we recompute the
          * target histogram only when the image size (total # pixels) changes.

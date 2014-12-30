@@ -102,7 +102,7 @@ public class Gray8HistMatch extends PipelineStage {
      *             if the input image is not gray.
      */
     @Override
-    public void push(final Image<?> image) throws ImageError {
+    public void push(final Image<?, ?> image) throws ImageError {
         if (!(image instanceof Gray8Image)) {
             throw new ImageError(ImageError.PACKAGE.ALGORITHM, AlgorithmErrorCodes.IMAGE_NOT_GRAY8IMAGE, image.toString(), null, null);
             
@@ -114,7 +114,7 @@ public class Gray8HistMatch extends PipelineStage {
          * a working lookup table, in any case, though the histogram won't quite
          * match what was intended.
          */
-        final Gray8Image input = (Gray8Image) image;
+        final Gray8Image<?> input = (Gray8Image<?>) image;
         // get the input histogram
         final Integer[] histCum = Gray8Hist.computeHistogram(input);
         // for the purposes of computation below we need a cumulative

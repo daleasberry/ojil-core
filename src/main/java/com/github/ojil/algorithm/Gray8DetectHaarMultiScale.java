@@ -108,10 +108,10 @@ public class Gray8DetectHaarMultiScale extends PipelineStage {
      */
     
     @Override
-    public void push(final Image<?> image) throws ImageError {
-        Gray8Image imGray;
+    public void push(final Image<?, ?> image) throws ImageError {
+        Gray8Image<?> imGray;
         if (image instanceof Gray8Image) {
-            imGray = (Gray8Image) image;
+            imGray = (Gray8Image<?>) image;
         } else {
             throw new ImageError(ImageError.PACKAGE.ALGORITHM, AlgorithmErrorCodes.IMAGE_NOT_GRAY8IMAGE, image.toString(), null, null);
         }
@@ -120,20 +120,20 @@ public class Gray8DetectHaarMultiScale extends PipelineStage {
         }
         int nScale = Math.min(nMaxScale, Math.min(image.getWidth() / hcc.getWidth(), image.getHeight() / hcc.getHeight()));
         // Zero the mask
-        Gray8Image imMask = new Gray8Image(1, 1, Byte.MIN_VALUE);
+        Gray8Image<?> imMask = new Gray8Image<>(1, 1, Byte.MIN_VALUE);
         while (nScale >= nMinScale) {
             // shrink the input image
             final int nTargetWidth = imGray.getWidth() / nScale;
             final int nTargetHeight = imGray.getHeight() / nScale;
             final Gray8Shrink gs = new Gray8Shrink(nTargetWidth, nTargetHeight);
             gs.push(imGray);
-            final Gray8Image imShrunk = (Gray8Image) gs.getFront();
+            final Gray8Image<?> imShrunk = (Gray8Image<?>) gs.getFront();
             // scale the mask to the new size
             final Gray8RectStretch grs = new Gray8RectStretch(nTargetWidth, nTargetHeight);
             grs.push(imMask);
-            imMask = (Gray8Image) grs.getFront();
+            imMask = (Gray8Image<?>) grs.getFront();
             // combine the image and mask to make a masked image
-            final Gray8MaskedImage gmi = new Gray8MaskedImage(imShrunk, imMask);
+            final Gray8MaskedImage<?> gmi = new Gray8MaskedImage<>(imShrunk, imMask);
             // pass the masked image to a subimage generator
             final MaskedGray8SubImgGen mgsi = new MaskedGray8SubImgGen(hcc.getWidth(), hcc.getHeight(), Math.max(1, gmi.getWidth() / 30), Math.max(1, gmi.getHeight() / 30));
             mgsi.push(gmi);
@@ -141,7 +141,7 @@ public class Gray8DetectHaarMultiScale extends PipelineStage {
             int nxLastFound = -hcc.getWidth();
             int nyLastFound = -hcc.getHeight();
             while (!mgsi.isEmpty()) {
-                final Gray8OffsetImage imSub = (Gray8OffsetImage) mgsi.getFront();
+                final Gray8OffsetImage<?> imSub = (Gray8OffsetImage<?>) mgsi.getFront();
                 // if we've found a feature recently we skip forward until
                 // we're outside the masked region. There's no point rerunning
                 // the detector
@@ -154,7 +154,7 @@ public class Gray8DetectHaarMultiScale extends PipelineStage {
                         // search it again
                         final Gray8Rect gr = new Gray8Rect(nxLastFound, nyLastFound, hcc.getWidth(), hcc.getHeight(), Byte.MAX_VALUE);
                         gr.push(imMask);
-                        imMask = (Gray8Image) gr.getFront();
+                        imMask = (Gray8Image<?>) gr.getFront();
                     }
                 }
             }

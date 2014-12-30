@@ -194,12 +194,12 @@ public class Gray8GaussSmoothVert extends PipelineStage {
      *             if image is not a Gray8Image
      */
     @Override
-    public void push(final Image<?> image) throws ImageError {
+    public void push(final Image<?, ?> image) throws ImageError {
         if (!(image instanceof Gray8Image)) {
             throw new ImageError(ImageError.PACKAGE.ALGORITHM, AlgorithmErrorCodes.IMAGE_NOT_GRAY8IMAGE, image.toString(), null, null);
         }
-        final Gray8Image input = (Gray8Image) image;
-        final Gray8Image result = new Gray8Image(image.getWidth(), image.getHeight());
+        final Gray8Image<?> input = (Gray8Image<?>) image;
+        final Gray8Image<?> result = new Gray8Image<>(image.getWidth(), image.getHeight());
         final Byte[] bIn = input.getData();
         final Byte[] bResult = result.getData();
         final Integer[] wCoeff = nCoeff[cSigma];

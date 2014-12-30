@@ -55,12 +55,12 @@ public class Complex32Gray32 extends PipelineStage {
      *             if the input is not of type Complex32Image.
      */
     @Override
-    public void push(final Image<?> im) throws com.github.ojil.core.ImageError {
+    public void push(final Image<?, ?> im) throws com.github.ojil.core.ImageError {
         if (!(im instanceof Complex32Image)) {
             throw new ImageError(ImageError.PACKAGE.ALGORITHM, AlgorithmErrorCodes.IMAGE_NOT_COMPLEX32IMAGE, im.toString(), null, null);
         }
-        final Gray32Image imResult = new Gray32Image(im.getWidth(), im.getHeight());
-        final Complex cData[] = ((Complex32Image) im).getData();
+        final Gray32Image<?> imResult = new Gray32Image<>(im.getWidth(), im.getHeight());
+        final Complex cData[] = ((Complex32Image<?>) im).getData();
         final Integer nData[] = imResult.getData();
         for (int i = 0; i < (im.getWidth() * im.getHeight()); i++) {
             nData[i] = cData[i].magnitude();

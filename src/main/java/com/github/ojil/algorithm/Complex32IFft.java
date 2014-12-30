@@ -67,7 +67,7 @@ public class Complex32IFft extends PipelineStage {
      *             Complex32Image.
      */
     @Override
-    public void push(final Image<?> im) throws com.github.ojil.core.ImageError {
+    public void push(final Image<?, ?> im) throws com.github.ojil.core.ImageError {
         if (!(im instanceof Complex32Image)) {
             throw new ImageError(ImageError.PACKAGE.ALGORITHM, AlgorithmErrorCodes.IMAGE_NOT_COMPLEX32IMAGE, im.toString(), null, null);
         }
@@ -87,10 +87,10 @@ public class Complex32IFft extends PipelineStage {
             fft.setMaxWidth(Math.max(nWidth, nHeight));
         }
         // get access to the complex image
-        final Complex32Image cxmIn = (Complex32Image) im;
+        final Complex32Image<?> cxmIn = (Complex32Image<?>) im;
         final Complex data[] = cxmIn.getData();
         // create output
-        final Complex32Image cxmResult = new Complex32Image(nWidth, nHeight);
+        final Complex32Image<?> cxmResult = new Complex32Image<>(nWidth, nHeight);
         // take inverse FFT of each row
         final Complex cxRow[] = new Complex[nWidth];
         for (int i = 0; i < nHeight; i++) {
@@ -116,7 +116,7 @@ public class Complex32IFft extends PipelineStage {
         }
         // convert back to a gray image
         // first convert it to an integer image
-        final Gray32Image imInteger = new Gray32Image(nWidth, nHeight);
+        final Gray32Image<?> imInteger = new Gray32Image<>(nWidth, nHeight);
         final Complex cxData[] = cxmResult.getData();
         final Integer nData[] = imInteger.getData();
         int nMinVal = Integer.MAX_VALUE;
@@ -134,7 +134,7 @@ public class Complex32IFft extends PipelineStage {
         // compute range of values in image and avoid division by 0 later
         final int nDiff = Math.max(nMaxVal - nMinVal, 1);
         // this inverts the operation in Gray8Fft. The two must be kept in sync.
-        final Gray8Image imResult = new Gray8Image(nWidth, nHeight);
+        final Gray8Image<?> imResult = new Gray8Image<>(nWidth, nHeight);
         final Byte bData[] = imResult.getData();
         if (bScale) {
             for (int i = 0; i < (nWidth * nHeight); i++) {

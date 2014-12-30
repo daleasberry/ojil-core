@@ -89,18 +89,18 @@ public class Gray8Shrink extends PipelineStage {
      *             size.
      */
     @Override
-    public void push(final Image<?> image) throws ImageError {
+    public void push(final Image<?, ?> image) throws ImageError {
         if (!(image instanceof Gray8Image)) {
             throw new ImageError(ImageError.PACKAGE.ALGORITHM, AlgorithmErrorCodes.IMAGE_NOT_GRAY8IMAGE, image.toString(), null, null);
         }
         if ((image.getWidth() < cWidth) || (image.getHeight() < cHeight)) {
             throw new ImageError(ImageError.PACKAGE.ALGORITHM, AlgorithmErrorCodes.SHRINK_OUTPUT_LARGER_THAN_INPUT, image.toString(), toString(), null);
         }
-        final Gray8Image input = (Gray8Image) image;
+        final Gray8Image<?> input = (Gray8Image<?>) image;
         /* horizontal shrink */
-        final Gray32Image horiz = shrinkHoriz(input);
+        final Gray32Image<?> horiz = shrinkHoriz(input);
         /* vertical shrink */
-        final Gray8Image result = shrinkVert(horiz);
+        final Gray8Image<?> result = shrinkVert(horiz);
         super.setOutput(result);
     }
     
@@ -145,9 +145,9 @@ public class Gray8Shrink extends PipelineStage {
      *            the input image
      * @return the shrunk image
      */
-    private Gray32Image shrinkHoriz(final Gray8Image input) {
+    private Gray32Image<?> shrinkHoriz(final Gray8Image<?> input) {
         /* horizontal shrink */
-        final Gray32Image horiz = new Gray32Image(cWidth, input.getHeight());
+        final Gray32Image<?> horiz = new Gray32Image<>(cWidth, input.getHeight());
         final Byte[] inData = input.getData();
         final Integer[] outData = horiz.getData();
         final Integer[] nPixelSum = new Integer[input.getHeight()];
@@ -185,9 +185,9 @@ public class Gray8Shrink extends PipelineStage {
      *            the input image.
      * @returns the shrunk image.
      */
-    private Gray8Image shrinkVert(final Gray32Image input) {
+    private Gray8Image<?> shrinkVert(final Gray32Image<?> input) {
         /* vertical shrink */
-        final Gray8Image vert = new Gray8Image(input.getWidth(), cHeight);
+        final Gray8Image<?> vert = new Gray8Image<>(input.getWidth(), cHeight);
         final Integer[] inData = input.getData();
         final Byte[] outData = vert.getData();
         final Integer[] nPixelSum = new Integer[input.getWidth()];

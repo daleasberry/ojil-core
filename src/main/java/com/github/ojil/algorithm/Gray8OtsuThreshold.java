@@ -45,11 +45,11 @@ public class Gray8OtsuThreshold extends PipelineStage {
      *            the input Gray8Image. This image is overwritten on output.
      */
     @Override
-    public void push(final Image<?> imageInput) throws ImageError {
+    public void push(final Image<?, ?> imageInput) throws ImageError {
         if (!(imageInput instanceof Gray8Image)) {
             throw new ImageError(ImageError.PACKAGE.ALGORITHM, AlgorithmErrorCodes.IMAGE_NOT_GRAY8IMAGE, imageInput.toString(), null, null);
         }
-        final Gray8Image g8i = (Gray8Image) imageInput;
+        final Gray8Image<?> g8i = (Gray8Image<?>) imageInput;
         /* compute histogram */
         final Integer[] rnHistogram = Gray8Hist.computeHistogram(g8i);
         /* calculate Otsu threshold */

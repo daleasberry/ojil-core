@@ -46,7 +46,7 @@ import com.github.ojil.core.PipelineStage;
  * @author webb
  */
 public class Gray8SubImageGenerator extends PipelineStage {
-    Gray8Image imageInput; // input image
+    Gray8Image<?> imageInput; // input image
     int nHeight; // target height
     int nHorizLimit = 0; // number of subimages generated horizontally
     int nVertLimit = 0; // number of subimages generated vertically
@@ -79,7 +79,7 @@ public class Gray8SubImageGenerator extends PipelineStage {
         // create an output image. We'll reuse this
         // image, changing the contents and offset,
         // for every Gray8OffsetImage we output.
-        super.imageOutput = new Gray8OffsetImage(this.nWidth, this.nHeight, 0, 0);
+        super.imageOutput = new Gray8OffsetImage<>(this.nWidth, this.nHeight, 0, 0);
     }
     
     // We are done producing images when the last row is done
@@ -105,7 +105,7 @@ public class Gray8SubImageGenerator extends PipelineStage {
      *             return true.)
      */
     @Override
-    public Image<?> getFront() throws ImageError {
+    public Image<?, ?> getFront() throws ImageError {
         // offset of first pixel of the subimage within the
         // larget image.
         final int nHOffset = nXOffset * nHorizIndex;
@@ -116,7 +116,7 @@ public class Gray8SubImageGenerator extends PipelineStage {
         if (!(super.imageOutput instanceof Gray8OffsetImage)) {
             throw new ImageError(ImageError.PACKAGE.ALGORITHM, AlgorithmErrorCodes.IMAGE_NOT_GRAY8IMAGE, imageOutput.toString(), null, null);
         }
-        final Gray8OffsetImage imageResult = (Gray8OffsetImage) super.imageOutput;
+        final Gray8OffsetImage<?> imageResult = (Gray8OffsetImage<?>) super.imageOutput;
         imageResult.setXOffset(nHOffset);
         imageResult.setYOffset(nVOffset);
         final Byte[] dataOut = imageResult.getData();
@@ -144,14 +144,14 @@ public class Gray8SubImageGenerator extends PipelineStage {
      *             generating).
      */
     @Override
-    public void push(final Image<?> image) throws ImageError {
+    public void push(final Image<?, ?> image) throws ImageError {
         if (!(image instanceof Gray8Image)) {
             throw new ImageError(ImageError.PACKAGE.ALGORITHM, AlgorithmErrorCodes.IMAGE_NOT_GRAY8IMAGE, image.toString(), null, null);
         }
         if ((image.getWidth() < nWidth) || (image.getHeight() < nHeight)) {
             throw new ImageError(ImageError.PACKAGE.ALGORITHM, AlgorithmErrorCodes.IMAGE_TOO_SMALL, image.toString(), new Integer(nWidth).toString(), new Integer(nHeight).toString());
         }
-        imageInput = (Gray8Image) image;
+        imageInput = (Gray8Image<?>) image;
         // we want to find the largest integer l such that
         // (l-1) * w + w < iw
         // where l = computed limit on index

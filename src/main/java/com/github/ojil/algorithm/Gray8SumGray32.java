@@ -53,19 +53,19 @@ public class Gray8SumGray32 extends PipelineStage {
      *             if the input is not a Gray8Image.
      */
     @Override
-    public void push(final Image<?> image) throws ImageError {
+    public void push(final Image<?, ?> image) throws ImageError {
         if (!(image instanceof Gray8Image)) {
             throw new ImageError(ImageError.PACKAGE.ALGORITHM, AlgorithmErrorCodes.IMAGE_NOT_GRAY8IMAGE, image.toString(), null, null);
         }
-        Gray32Image imageResult;
+        Gray32Image<?> imageResult;
         if (image instanceof Gray8OffsetImage) {
-            final Gray8OffsetImage sub = (Gray8OffsetImage) image;
-            imageResult = new Gray32OffsetImage(sub.getWidth(), sub.getHeight(), sub.getXOffset(), sub.getYOffset());
+            final Gray8OffsetImage<?> sub = (Gray8OffsetImage<?>) image;
+            imageResult = new Gray32OffsetImage<>(sub.getWidth(), sub.getHeight(), sub.getXOffset(), sub.getYOffset());
         } else {
             // must be a Gray8Image
-            imageResult = new Gray32Image(image.getWidth(), image.getHeight());
+            imageResult = new Gray32Image<>(image.getWidth(), image.getHeight());
         }
-        final Byte[] inData = ((Gray8Image) image).getData();
+        final Byte[] inData = ((Gray8Image<?>) image).getData();
         // pointer to output data area, whether Gray32Image or Gray32OffsetImage
         final Integer[] outData = imageResult.getData();
         // initialize first row

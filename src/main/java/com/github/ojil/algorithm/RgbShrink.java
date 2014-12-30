@@ -92,7 +92,7 @@ public class RgbShrink extends PipelineStage {
      *             target image either horizontally or vertically.
      */
     @Override
-    public void push(final Image<?> image) throws ImageError {
+    public void push(final Image<?, ?> image) throws ImageError {
         if (!(image instanceof RgbImage)) {
             throw new ImageError(ImageError.PACKAGE.ALGORITHM, AlgorithmErrorCodes.IMAGE_NOT_RGBIMAGE, image.toString(), null, null);
         }
@@ -105,7 +105,7 @@ public class RgbShrink extends PipelineStage {
         seqG.push(image);
         /* shrink B band */
         seqB.push(image);
-        super.setOutput(Gray3Bands2Rgb.push((Gray8Image) seqR.getFront(), (Gray8Image) seqG.getFront(), (Gray8Image) seqB.getFront()));
+        super.setOutput(Gray3Bands2Rgb.push((Gray8Image<?>) seqR.getFront(), (Gray8Image<?>) seqG.getFront(), (Gray8Image<?>) seqB.getFront()));
     }
     
     /**

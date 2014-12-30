@@ -52,13 +52,13 @@ public class Gray32Gray8 extends PipelineStage {
      *             if the input is not a Gray8Image
      */
     @Override
-    public void push(final Image<?> image) throws ImageError {
+    public void push(final Image<?, ?> image) throws ImageError {
         if (!(image instanceof Gray32Image)) {
             throw new ImageError(ImageError.PACKAGE.ALGORITHM, AlgorithmErrorCodes.IMAGE_NOT_GRAY32IMAGE, image.toString(), null, null);
             
         }
-        final Gray32Image gray32 = (Gray32Image) image;
-        final Gray8Image gray8 = new Gray8Image(image.getWidth(), image.getHeight());
+        final Gray32Image<?> gray32 = (Gray32Image<?>) image;
+        final Gray8Image<?> gray8 = new Gray8Image<>(image.getWidth(), image.getHeight());
         final Integer[] gray32Data = gray32.getData();
         final Byte[] gray8Data = gray8.getData();
         for (int i = 0; i < (gray32.getWidth() * gray32.getHeight()); i++) {

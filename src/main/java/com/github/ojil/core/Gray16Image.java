@@ -29,12 +29,7 @@ package com.github.ojil.core;
  *
  * @author webb
  */
-public final class Gray16Image extends Image<Object> {
-    /**
-     * A pointer to the image data
-     */
-    private final Short[] wImage;
-    
+public final class Gray16Image<T extends Object> extends Image<Short, T> {
     /**
      * Creates a new instance of Gray16Image
      *
@@ -44,8 +39,7 @@ public final class Gray16Image extends Image<Object> {
      *            the image height
      */
     public Gray16Image(final int cWidth, final int cHeight) {
-        super(cWidth, cHeight);
-        wImage = new Short[getWidth() * getHeight()];
+        super(cWidth, cHeight, ImageType.BYTE_GRAY, new Short[cWidth*cHeight]);
     }
     
     /**
@@ -60,9 +54,9 @@ public final class Gray16Image extends Image<Object> {
      */
     public Gray16Image(final int cWidth, final int cHeight, final Short wValue) {
         super(cWidth, cHeight);
-        wImage = new Short[getWidth() * getHeight()];
+        imageData = new Short[getWidth() * getHeight()];
         for (int i = 0; i < (getWidth() * getHeight()); i++) {
-            wImage[i] = wValue;
+            imageData[i] = wValue;
         }
     }
     
@@ -73,29 +67,8 @@ public final class Gray16Image extends Image<Object> {
      */
     @Override
     public Object clone() {
-        final Gray16Image image = new Gray16Image(getWidth(), getHeight());
+        final Gray16Image<?> image = new Gray16Image<>(getWidth(), getHeight());
         System.arraycopy(getData(), 0, image.getData(), 0, getWidth() * getHeight());
         return image;
-    }
-    
-    /**
-     * Return a pointer to the image data.
-     *
-     * @return the data pointer.
-     */
-    @Override
-    public Short[] getData() {
-        return wImage;
-    }
-    
-    /**
-     * Return a string describing the image.
-     *
-     * @return the string.
-     */
-    @Override
-    public String toString() {
-        return super.toString() + " (" + getWidth() + "x" + getHeight() + //$NON-NLS-1$ //$NON-NLS-2$
-                ")"; //$NON-NLS-1$
     }
 }

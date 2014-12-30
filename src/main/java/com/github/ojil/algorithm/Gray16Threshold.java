@@ -39,7 +39,7 @@ import com.github.ojil.core.PipelineStage;
  */
 public class Gray16Threshold extends PipelineStage {
     int nThreshold;
-    Gray8Image imageOutput = null;
+    Gray8Image<?> imageOutput = null;
     
     /**
      * Creates a new instance of Gray16Threshold
@@ -61,14 +61,14 @@ public class Gray16Threshold extends PipelineStage {
      *             if the image is not a Gray16Image.
      */
     @Override
-    public void push(final Image<?> image) throws ImageError {
+    public void push(final Image<?, ?> image) throws ImageError {
         if (!(image instanceof Gray16Image)) {
             throw new ImageError(ImageError.PACKAGE.ALGORITHM, AlgorithmErrorCodes.IMAGE_NOT_GRAY16IMAGE, image.toString(), null, null);
         }
         if ((imageOutput == null) || (imageOutput.getWidth() != image.getWidth()) || (imageOutput.getHeight() != image.getHeight())) {
-            imageOutput = new Gray8Image(image.getWidth(), image.getHeight());
+            imageOutput = new Gray8Image<>(image.getWidth(), image.getHeight());
         }
-        final Gray16Image gray = (Gray16Image) image;
+        final Gray16Image<?> gray = (Gray16Image<?>) image;
         final Short[] data = gray.getData();
         final Byte[] dataOut = imageOutput.getData();
         for (int i = 0; i < data.length; i++) {

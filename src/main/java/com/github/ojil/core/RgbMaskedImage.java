@@ -66,7 +66,7 @@ public class RgbMaskedImage<T> extends RgbImage<Object> {
      * @param rgb
      *            input RgbImage to use as a source.
      */
-    public RgbMaskedImage(final RgbImage<?> rgb, final Gray8Image grayMask) {
+    public RgbMaskedImage(final RgbImage<?> rgb, final Gray8Image<?> grayMask) {
         super(rgb.getWidth(), rgb.getHeight());
         // simply ocpy the RGB values into my array. The
         // A value will always be set to 0 in an RgbImage so

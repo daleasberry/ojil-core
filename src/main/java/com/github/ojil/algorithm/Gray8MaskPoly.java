@@ -174,12 +174,12 @@ public class Gray8MaskPoly extends PipelineStage {
      *             the sorting throws.
      */
     @Override
-    public void push(final Image<?> imageInput) throws ImageError {
+    public void push(final Image<?, ?> imageInput) throws ImageError {
         if (!(imageInput instanceof Gray8Image)) {
             throw new ImageError(ImageError.PACKAGE.ALGORITHM, AlgorithmErrorCodes.IMAGE_NOT_RGBIMAGE, imageInput.toString(), null, null);
         }
-        final Gray8Image grayInput = (Gray8Image) imageInput;
-        final Gray8MaskedImage grayOutput = new Gray8MaskedImage(grayInput);
+        final Gray8Image<?> grayInput = (Gray8Image<?>) imageInput;
+        final Gray8MaskedImage<?> grayOutput = new Gray8MaskedImage<>(grayInput);
         buildVector(grayInput.getWidth(), grayInput.getHeight());
         for (int i = 0; i < grayInput.getHeight(); i++) {
             if (rnX[i] != null) {

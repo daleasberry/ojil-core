@@ -53,11 +53,11 @@ public class Gray8Statistics {
      * @throws ImageError
      *             if the input image is not gray.
      */
-    public void push(final Image<?> image) throws ImageError {
+    public void push(final Image<?, ?> image) throws ImageError {
         if (!(image instanceof Gray8Image)) {
             throw new ImageError(ImageError.PACKAGE.ALGORITHM, AlgorithmErrorCodes.IMAGE_NOT_GRAY8IMAGE, image.toString(), null, null);
         }
-        final Gray8Image gray = (Gray8Image) image;
+        final Gray8Image<?> gray = (Gray8Image<?>) image;
         int nSum = 0, nSumSq = 0;
         final Byte[] data = gray.getData();
         for (int i = 0; i < gray.getHeight(); i++) {

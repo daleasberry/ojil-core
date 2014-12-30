@@ -73,11 +73,11 @@ public class Gray8Lookup extends PipelineStage {
      *             if image is not a Gray8Image.
      */
     @Override
-    public void push(final Image<?> image) throws ImageError {
+    public void push(final Image<?, ?> image) throws ImageError {
         if (!(image instanceof Gray8Image)) {
             throw new ImageError(ImageError.PACKAGE.ALGORITHM, AlgorithmErrorCodes.IMAGE_NOT_GRAY8IMAGE, image.toString(), null, null);
         }
-        final Gray8Image input = (Gray8Image) image;
+        final Gray8Image<?> input = (Gray8Image<?>) image;
         final Byte[] data = input.getData();
         for (int i = 0; i < data.length; i++) {
             data[i] = table[data[i] + 128];

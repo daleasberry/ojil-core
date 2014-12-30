@@ -50,7 +50,7 @@ public class Gray8And implements Ladder.Join {
      *             different sizes.
      */
     @Override
-    public Image<?> doJoin(final Image<?> imageFirst, final Image<?> imageSecond) throws ImageError {
+    public Image<?, ?> doJoin(final Image<?, ?> imageFirst, final Image<?, ?> imageSecond) throws ImageError {
         if (!(imageFirst instanceof Gray8Image)) {
             throw new ImageError(ImageError.PACKAGE.ALGORITHM, AlgorithmErrorCodes.IMAGE_NOT_GRAY8IMAGE, imageFirst.toString(), null, null);
         }
@@ -61,8 +61,8 @@ public class Gray8And implements Ladder.Join {
             throw new ImageError(ImageError.PACKAGE.ALGORITHM, AlgorithmErrorCodes.IMAGE_SIZES_DIFFER, imageFirst.toString(), imageSecond.toString(), null);
             
         }
-        final Gray8Image gray1 = (Gray8Image) imageFirst;
-        final Gray8Image gray2 = (Gray8Image) imageSecond;
+        final Gray8Image<?> gray1 = (Gray8Image<?>) imageFirst;
+        final Gray8Image<?> gray2 = (Gray8Image<?>) imageSecond;
         final Byte[] data1 = gray1.getData();
         final Byte[] data2 = gray2.getData();
         for (int i = 0; i < data1.length; i++) {

@@ -86,7 +86,7 @@ public class Gray8AffineWarp extends PipelineStage {
      *             specified extends outside its bounds.
      */
     @Override
-    public void push(final Image<?> image) throws ImageError {
+    public void push(final Image<?, ?> image) throws ImageError {
         if (!(image instanceof Gray8Image)) {
             throw new ImageError(ImageError.PACKAGE.ALGORITHM, AlgorithmErrorCodes.IMAGE_NOT_GRAY8IMAGE, image.toString(), null, null);
         }
@@ -102,17 +102,17 @@ public class Gray8AffineWarp extends PipelineStage {
         nXOffset = -nMinX;
         nYOffset = -nMinY;
         if (nWarpOrder == Gray8AffineWarp.WARP_X_FIRST) {
-            final Gray8Image grayX = warpX((Gray8Image) image);
-            // super.setOutput(new Gray8OffsetImage(grayX, this.nXOffset,
+            final Gray8Image<?> grayX = warpX((Gray8Image<?>) image);
+            // super.setOutput(new Gray8OffsetImage<>(grayX, this.nXOffset,
             // this.nYOffset));
-            final Gray8Image grayY = warpY(grayX);
-            super.setOutput(new Gray8OffsetImage(grayY, nXOffset, nYOffset));
+            final Gray8Image<?> grayY = warpY(grayX);
+            super.setOutput(new Gray8OffsetImage<>(grayY, nXOffset, nYOffset));
         } else {
-            final Gray8Image grayY = warpY((Gray8Image) image);
-            // super.setOutput(new Gray8OffsetImage(grayY, this.nXOffset,
+            final Gray8Image<?> grayY = warpY((Gray8Image<?>) image);
+            // super.setOutput(new Gray8OffsetImage<>(grayY, this.nXOffset,
             // this.nYOffset));
-            final Gray8Image grayX = warpX(grayY);
-            super.setOutput(new Gray8OffsetImage(grayX, nXOffset, nYOffset));
+            final Gray8Image<?> grayX = warpX(grayY);
+            super.setOutput(new Gray8OffsetImage<>(grayX, nXOffset, nYOffset));
         }
     }
     
@@ -182,9 +182,9 @@ public class Gray8AffineWarp extends PipelineStage {
                         return new Vec2(x, y);
     }
     
-    private Gray8Image warpX(final Gray8Image grayIn) {
+    private Gray8Image<?> warpX(final Gray8Image<?> grayIn) {
         // allocate image. it is implicitly offset by nMinX
-        final Gray8Image grayOut = new Gray8Image(nMaxX - nMinX, grayIn.getHeight(), Byte.MIN_VALUE);
+        final Gray8Image<?> grayOut = new Gray8Image<>(nMaxX - nMinX, grayIn.getHeight(), Byte.MIN_VALUE);
         // pointer to input
         final Byte[] bDataIn = grayIn.getData();
         final Byte[] bDataOut = grayOut.getData();
@@ -211,9 +211,9 @@ public class Gray8AffineWarp extends PipelineStage {
         return grayOut;
     }
     
-    private Gray8Image warpY(final Gray8Image grayIn) {
+    private Gray8Image<?> warpY(final Gray8Image<?> grayIn) {
         // allocate image. it is implicitly offset by nMinY
-        final Gray8Image grayOut = new Gray8Image(grayIn.getWidth(), nMaxY - nMinY, Byte.MIN_VALUE);
+        final Gray8Image<?> grayOut = new Gray8Image<>(grayIn.getWidth(), nMaxY - nMinY, Byte.MIN_VALUE);
         // pointer to input
         final Byte[] bDataIn = grayIn.getData();
         final Byte[] bDataOut = grayOut.getData();

@@ -31,9 +31,7 @@ package com.github.ojil.core;
  *
  * @author webb
  */
-public class Gray8Image extends Image<Object> {
-    private final Byte bImage[];
-    
+public class Gray8Image<T extends Object> extends Image<Byte, T> {
     /**
      * Creates a new instance of Gray8Image
      * 
@@ -43,13 +41,11 @@ public class Gray8Image extends Image<Object> {
      *            Height of the image (rows)
      */
     public Gray8Image(final int cWidth, final int cHeight) {
-        super(cWidth, cHeight);
-        bImage = new Byte[getWidth() * getHeight()];
+        super(cWidth, cHeight, ImageType.BYTE_GRAY, new Byte[cWidth * cHeight]);
     }
     
     public Gray8Image(final int cWidth, final int cHeight, final Byte[] rbData) {
-        super(cWidth, cHeight);
-        bImage = rbData;
+        super(cWidth, cHeight, ImageType.BYTE_GRAY, rbData);
     }
     
     /**
@@ -64,9 +60,9 @@ public class Gray8Image extends Image<Object> {
      */
     public Gray8Image(final int cWidth, final int cHeight, final Byte bValue) {
         super(cWidth, cHeight);
-        bImage = new Byte[getWidth() * getHeight()];
+        imageData = new Byte[getWidth() * getHeight()];
         for (int i = 0; i < (getWidth() * getHeight()); i++) {
-            bImage[i] = bValue;
+            imageData[i] = bValue;
         }
     }
     
@@ -77,7 +73,7 @@ public class Gray8Image extends Image<Object> {
      */
     @Override
     public Object clone() {
-        final Gray8Image image = new Gray8Image(getWidth(), getHeight());
+        final Gray8Image<?> image = new Gray8Image<>(getWidth(), getHeight());
         System.arraycopy(getData(), 0, image.getData(), 0, getWidth() * getHeight());
         return image;
     }
@@ -92,34 +88,12 @@ public class Gray8Image extends Image<Object> {
      *            the value to assign
      * @return modified Gray8Image (this)
      */
-    public Gray8Image fill(final Rect r, final Byte bVal) {
+    public Gray8Image<?> fill(final Rect r, final Byte bVal) {
         for (int i = r.getTop(); i < r.getBottom(); i++) {
             for (int j = r.getLeft(); j < r.getRight(); j++) {
-                bImage[(i * getWidth()) + j] = bVal;
+                imageData[(i * getWidth()) + j] = bVal;
             }
         }
         return this;
     }
-    
-    /**
-     * Return a pointer to the Byte image data.
-     *
-     * @return the data pointer.
-     */
-    @Override
-    public Byte[] getData() {
-        return bImage;
-    }
-    
-    /**
-     * Return a string describing the image.
-     *
-     * @return the string.
-     */
-    @Override
-    public String toString() {
-        return super.toString() + " (" + getWidth() + "x" + getHeight() + //$NON-NLS-1$ //$NON-NLS-2$
-                ")"; //$NON-NLS-1$
-    }
-    
 }

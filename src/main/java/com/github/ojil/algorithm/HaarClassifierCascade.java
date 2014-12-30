@@ -133,7 +133,7 @@ public abstract class HaarClassifierCascade implements Serializable {
      * @throws ImageError
      *             if the input image is not a Gray8Image or is the wrong size.
      */
-    public abstract boolean eval(Image<?> i) throws ImageError;
+    public abstract boolean eval(Image<?, ?> i) throws ImageError;
     
     /**
      * Support method for reading integers from an input stream. The
@@ -207,7 +207,7 @@ public abstract class HaarClassifierCascade implements Serializable {
             
             // eval returns the rectangle feature value for the current image.
             // input image is the cumulative sum of the original
-            protected abstract int eval(Gray32Image i);
+            protected abstract int eval(Gray32Image<?> i);
             
             // We precompute the indices of the features so we have to
             // change their values whenever the image width changes.
@@ -229,7 +229,7 @@ public abstract class HaarClassifierCascade implements Serializable {
             }
             
             @Override
-            protected int eval(final Gray32Image i) {
+            protected int eval(final Gray32Image<?> i) {
                 return 0;
             }
             
@@ -266,7 +266,7 @@ public abstract class HaarClassifierCascade implements Serializable {
             }
             
             @Override
-            protected int eval(final Gray32Image image) {
+            protected int eval(final Gray32Image<?> image) {
                 final Integer[] data = image.getData();
                 return weight * ((data[n1] + data[n2]) - data[n3] - data[n4]);
             }
@@ -310,7 +310,7 @@ public abstract class HaarClassifierCascade implements Serializable {
             }
             
             @Override
-            protected int eval(final Gray32Image image) {
+            protected int eval(final Gray32Image<?> image) {
                 final Integer[] data = image.getData();
                 
                 return weight * (data[n2] - data[n3]);
@@ -354,7 +354,7 @@ public abstract class HaarClassifierCascade implements Serializable {
             }
             
             @Override
-            protected int eval(final Gray32Image image) {
+            protected int eval(final Gray32Image<?> image) {
                 final Integer[] data = image.getData();
                 
                 return weight * (data[n2] - data[n4]);
@@ -395,7 +395,7 @@ public abstract class HaarClassifierCascade implements Serializable {
             }
             
             @Override
-            protected int eval(final Gray32Image image) {
+            protected int eval(final Gray32Image<?> image) {
                 final Integer[] data = image.getData();
                 
                 return weight * (data[n2]);
@@ -500,7 +500,7 @@ public abstract class HaarClassifierCascade implements Serializable {
          * @return the integer equal to the result of convolving the rectangles
          *         in the feature with the image.
          */
-        public int eval(final Gray32Image image) {
+        public int eval(final Gray32Image<?> image) {
             int nSum = 0;
             for (final HaarRect element : rect) {
                 nSum += element.eval(image);
@@ -551,7 +551,7 @@ public abstract class HaarClassifierCascade implements Serializable {
          *            Input image.
          * @return The result of applying the weak classifier to the image.
          */
-        public int eval(Gray32Image image);
+        public int eval(Gray32Image<?> image);
     };
     
     /**
@@ -572,7 +572,7 @@ public abstract class HaarClassifierCascade implements Serializable {
          * @return true if the input image passes this stage of the classifer,
          *         false if not.
          */
-        public boolean eval(Gray32Image image);
+        public boolean eval(Gray32Image<?> image);
     };
     
     /**
@@ -645,7 +645,7 @@ class HaarClassifierTreeBase extends HaarClassifierCascade implements Serializab
         private int alpha; // return result if successor = 0
         
         @Override
-        public int eval(final Gray32Image image) {
+        public int eval(final Gray32Image<?> image) {
             final int nHf = feature.eval(image);
             HaarWeakClassifier hcNext;
             if (nHf < threshold) {
@@ -679,11 +679,11 @@ class HaarClassifierTreeBase extends HaarClassifierCascade implements Serializab
     private HaarClassifierTreeBase parent;
     
     @Override
-    public boolean eval(final Image<?> image) throws ImageError {
+    public boolean eval(final Image<?, ?> image) throws ImageError {
         if (!(image instanceof Gray32Image)) {
             throw new ImageError(ImageError.PACKAGE.ALGORITHM, AlgorithmErrorCodes.IMAGE_NOT_GRAY32IMAGE, image.toString(), null, null);
         }
-        final Gray32Image g32 = (Gray32Image) image;
+        final Gray32Image<?> g32 = (Gray32Image<?>) image;
         int nSumHc = 0;
         for (final HaarWeakClassifier hc : classifier) {
             nSumHc += hc.eval(g32);
@@ -758,7 +758,7 @@ class HaarClassifierStumpBase extends HaarClassifierCascade implements Serializa
         }
         
         @Override
-        public int eval(final Gray32Image image) {
+        public int eval(final Gray32Image<?> image) {
             final int nHf = feature.eval(image) << 12;
             if (nHf < modThreshold) {
                 return a;
@@ -827,7 +827,7 @@ class HaarClassifierStumpBase extends HaarClassifierCascade implements Serializa
         }
         
         @Override
-        public boolean eval(final Gray32Image image) {
+        public boolean eval(final Gray32Image<?> image) {
             int stageSum = 0;
             for (final HaarWeakClassifierStump hwc : hwcs) {
                 stageSum += hwc.eval(image);
@@ -859,7 +859,7 @@ class HaarClassifierStumpBase extends HaarClassifierCascade implements Serializa
     };
     
     @Override
-    public boolean eval(final Image<?> image) throws ImageError {
+    public boolean eval(final Image<?, ?> image) throws ImageError {
         if (!(image instanceof Gray8Image)) {
             throw new ImageError(ImageError.PACKAGE.ALGORITHM, AlgorithmErrorCodes.IMAGE_NOT_GRAY8IMAGE, image.toString(), null, null);
         }
@@ -878,7 +878,7 @@ class HaarClassifierStumpBase extends HaarClassifierCascade implements Serializa
         // form the cumulative sum of the image
         final Gray8QmSum gcs = new Gray8QmSum(); // for forming cumulative sum
         gcs.push(image);
-        final Gray32Image g32 = (Gray32Image) gcs.getFront();
+        final Gray32Image<?> g32 = (Gray32Image<?>) gcs.getFront();
         for (int i = 0; i < hsc.length; i++) {
             hsc[i].setStdDev(stdDev);
             if (!hsc[i].eval(g32)) {
