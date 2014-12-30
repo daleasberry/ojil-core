@@ -38,17 +38,21 @@ public class RgbImage<T extends Object> extends Image<Integer, T> {
     /**
      * Creates a new instance of RgbImage
      *
-     * @param cWidth
+     * @param theWidth
      *            the image width
-     * @param cHeight
+     * @param theHeight
      *            the image height
      */
-    public RgbImage(final int cWidth, final int cHeight) {
-        super(cWidth, cHeight, ImageType.INT_RGB, new Integer[cWidth * cHeight], null);
+    public RgbImage(final int theWidth, final int theHeight) {
+        super(theWidth, theHeight, ImageType.INT_RGB, new Integer[theWidth * theHeight], null);
     }
     
-    public RgbImage(final int cWidth, final int cHeight, final Integer[] rnData) {
-        super(cWidth, cHeight, ImageType.INT_RGB, rnData, null);
+    public RgbImage(final int theWidth, final int theHeight, final Integer[] theImageData) {
+        super(theWidth, theHeight, ImageType.INT_RGB, theImageData, null);
+    }
+    
+    public RgbImage(final int theWidth, final int theHeight, final Integer[] theImageData, final T thePlatformImage) {
+        super(theWidth, theHeight, ImageType.INT_RGB, theImageData, thePlatformImage);
     }
     
     /**
@@ -60,13 +64,13 @@ public class RgbImage<T extends Object> extends Image<Integer, T> {
      *            the green color value to be assigned.
      * @param bB
      *            the blue color value to be assigned.
-     * @param cWidth
+     * @param theWidth
      *            the image width
-     * @param cHeight
+     * @param theHeight
      *            the image height
      */
-    public RgbImage(final int cWidth, final int cHeight, final byte bR, final byte bG, final byte bB) {
-        super(cWidth, cHeight, ImageType.INT_RGB);
+    public RgbImage(final int theWidth, final int theHeight, final byte bR, final byte bG, final byte bB) {
+        super(theWidth, theHeight, ImageType.INT_RGB);
         imageData = new Integer[getWidth() * getHeight()];
         final int nRgb = RgbVal.toRgb(bR, bG, bB);
         for (int i = 0; i < (getWidth() * getHeight()); i++) {
@@ -79,13 +83,13 @@ public class RgbImage<T extends Object> extends Image<Integer, T> {
      * 
      * @param nRgb
      *            the packed RGB value to assign
-     * @param cWidth
+     * @param theWidth
      *            the image width
-     * @param cHeight
+     * @param theHeight
      *            the image height
      */
-    public RgbImage(final int cWidth, final int cHeight, final int nRgb) {
-        super(cWidth, cHeight, ImageType.INT_RGB);
+    public RgbImage(final int theWidth, final int theHeight, final int nRgb) {
+        super(theWidth, theHeight, ImageType.INT_RGB);
         imageData = new Integer[getWidth() * getHeight()];
         for (int i = 0; i < (getWidth() * getHeight()); i++) {
             imageData[i] = nRgb;
