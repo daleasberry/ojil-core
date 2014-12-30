@@ -22,15 +22,20 @@
  *    You should have received a copy of the Lesser GNU General Public License
  *    along with this program.  If not, see <http://www.gnu.org/licenses/>.
  *
-*/
+ */
 
 package com.github.ojil.algorithm;
-import com.github.ojil.core.ImageError;
+
+import com.github.ojil.core.ErrorCodes;
 import com.github.ojil.core.Gray8Image;
+import com.github.ojil.core.ImageError;
 import com.github.ojil.core.RgbImage;
 import com.github.ojil.core.RgbVal;
-/** RgbGray8ApplyMask shows a mask on an RgbImage by making all the unmasked pixels gray.
- *   This is not a pipeline stage since it takes two images.
+
+/**
+ * RgbGray8ApplyMask shows a mask on an RgbImage by making all the unmasked
+ * pixels gray. This is not a pipeline stage since it takes two images.
+ * 
  * @author webb
  */
 public class RgbGray8ApplyMask {
@@ -40,45 +45,41 @@ public class RgbGray8ApplyMask {
     }
     
     /**
-     * Highlights an area in a RgbImage by turning the non-masked areas gray and dimming them.
+     * Highlights an area in a RgbImage by turning the non-masked areas gray and
+     * dimming them.
+     * 
      * @return the masked color image.
-     * @param imRgb the input RgbImage.
-     * @param imMask The input mask. Pixels with the value Byte.MIN_VALUE are 
-     * unmasked. Everything else is considered to be masked.
-     * @throws com.github.ojil.core.ImageError if the input sizes do not match
+     * @param imRgb
+     *            the input RgbImage.
+     * @param imMask
+     *            The input mask. Pixels with the value Byte.MIN_VALUE are
+     *            unmasked. Everything else is considered to be masked.
+     * @throws ImageError
+     *             if the input sizes do not match
      */
-    public RgbImage push(
-            RgbImage imRgb,
-            Gray8Image imMask) throws com.github.ojil.core.ImageError {
-        if (imRgb.getWidth() != imMask.getWidth() ||
-            imRgb.getHeight() != imMask.getHeight()) {
-            throw new ImageError(
-                            ImageError.PACKAGE.CORE,
-                            com.github.ojil.core.ErrorCodes.IMAGE_MASK_SIZE_MISMATCH,
-                            imRgb.toString(),
-                            imMask.toString(),
-                            null);
+    public RgbImage push(final RgbImage imRgb, final Gray8Image imMask) throws ImageError {
+        if ((imRgb.getWidth() != imMask.getWidth()) || (imRgb.getHeight() != imMask.getHeight())) {
+            throw new ImageError(ImageError.PACKAGE.CORE, ErrorCodes.IMAGE_MASK_SIZE_MISMATCH, imRgb.toString(), imMask.toString(), null);
         }
-        Integer[] rgbData = imRgb.getData();
-        Byte[] maskData = imMask.getData();
-        for (int i=0; i<imRgb.getWidth() * imRgb.getHeight(); i++) {
+        final Integer[] rgbData = imRgb.getData();
+        final Byte[] maskData = imMask.getData();
+        for (int i = 0; i < (imRgb.getWidth() * imRgb.getHeight()); i++) {
             if (maskData[i] == Byte.MIN_VALUE) {
-                /* get individual r, g, and b values, unmasking them from the
+                /*
+                 * get individual r, g, and b values, unmasking them from the
                  * ARGB word and converting to an unsigned byte.
                  */
-                int r = RgbVal.getR(rgbData[i]) - Byte.MIN_VALUE;
-                int g = RgbVal.getG(rgbData[i]) - Byte.MIN_VALUE;
-                int b = RgbVal.getB(rgbData[i]) - Byte.MIN_VALUE;
+                final int r = RgbVal.getR(rgbData[i]) - Byte.MIN_VALUE;
+                final int g = RgbVal.getG(rgbData[i]) - Byte.MIN_VALUE;
+                final int b = RgbVal.getB(rgbData[i]) - Byte.MIN_VALUE;
                 // also darken unmasked pixels
-                int gray = (r + g + b) / 5;
-                /* average the values to get the grayvalue
+                final int gray = (r + g + b) / 5;
+                /*
+                 * average the values to get the grayvalue
                  */
-                    /* Create ARGB word */
-                    rgbData[i] = 
-                            ((gray)<<16) | 
-                            ((gray)<<8) | 
-                            gray;
-
+                /* Create ARGB word */
+                rgbData[i] = ((gray) << 16) | ((gray) << 8) | gray;
+                
             }
         }
         return imRgb;

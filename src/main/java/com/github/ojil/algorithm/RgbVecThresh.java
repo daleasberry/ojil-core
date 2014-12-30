@@ -17,86 +17,85 @@
 
 package com.github.ojil.algorithm;
 
-import com.github.ojil.core.ImageError;
 import com.github.ojil.core.Gray8Image;
 import com.github.ojil.core.Image;
+import com.github.ojil.core.ImageError;
 import com.github.ojil.core.PipelineStage;
 import com.github.ojil.core.RgbImage;
 import com.github.ojil.core.RgbVal;
 
 /**
- * Thresholds an RgbImage based on a given RGB value and another
- * RGB value that represents the masimum RGB distance from the
- * first value that a pixel can lie in to be considered within
- * the threshold.
- * The computation is analogous to a vector distance from a given
- * point. It can be described as </br>
- *  (rgb - rgbTarget) &middot rgbVec  &lt; threshold
+ * Thresholds an RgbImage based on a given RGB value and another RGB value that
+ * represents the masimum RGB distance from the first value that a pixel can lie
+ * in to be considered within the threshold. The computation is analogous to a
+ * vector distance from a given point. It can be described as </br> (rgb -
+ * rgbTarget) &middot rgbVec &lt; threshold
+ * 
  * @author webb
  */
 public class RgbVecThresh extends PipelineStage {
-    private int nR, nG, nB;
-    private int nRVec, nGVec, nBVec;
-    private int nThresh;
-    private boolean bWithin;
+    private final int nR, nG, nB;
+    private final int nRVec, nGVec, nBVec;
+    private final int nThresh;
+    private final boolean bWithin;
     
     /**
-     * Initialize class to filter based on given target rgb value
-     * and vector distance from the target value measured along
-     * a particular vector. The bWithin parameter allows the 
-     * threshold test to be reversed -- bWithin = false causes
-     * true (Byte.MAX_VALUE) to be output for rgb values &gt; than
+     * Initialize class to filter based on given target rgb value and vector
+     * distance from the target value measured along a particular vector. The
+     * bWithin parameter allows the threshold test to be reversed -- bWithin =
+     * false causes true (Byte.MAX_VALUE) to be output for rgb values &gt; than
      * the test.
-     * @param rgbTarget target RGB value
-     * @param rgbVec direction and distance of test
-     * @param nThresh threshold to compare with
-     * @param bWithin if true result is true if &lt; test; if false,
-     * result is true if &gt; than the test.
+     * 
+     * @param rgbTarget
+     *            target RGB value
+     * @param rgbVec
+     *            direction and distance of test
+     * @param nThresh
+     *            threshold to compare with
+     * @param bWithin
+     *            if true result is true if &lt; test; if false, result is true
+     *            if &gt; than the test.
      */
-    public RgbVecThresh(int rgbTarget, int rgbVec, int nThresh, boolean bWithin) {
-        this.nR = RgbVal.getR(rgbTarget) - Byte.MIN_VALUE;
-        this.nG = RgbVal.getG(rgbTarget) - Byte.MIN_VALUE;
-        this.nB = RgbVal.getB(rgbTarget) - Byte.MIN_VALUE;
-        this.nRVec = RgbVal.getR(rgbVec);
-        this.nGVec = RgbVal.getG(rgbVec);
-        this.nBVec = RgbVal.getB(rgbVec);
+    public RgbVecThresh(final int rgbTarget, final int rgbVec, final int nThresh, final boolean bWithin) {
+        nR = RgbVal.getR(rgbTarget) - Byte.MIN_VALUE;
+        nG = RgbVal.getG(rgbTarget) - Byte.MIN_VALUE;
+        nB = RgbVal.getB(rgbTarget) - Byte.MIN_VALUE;
+        nRVec = RgbVal.getR(rgbVec);
+        nGVec = RgbVal.getG(rgbVec);
+        nBVec = RgbVal.getB(rgbVec);
         this.nThresh = nThresh;
         this.bWithin = bWithin;
     }
-
+    
     /**
      * Perform thresholding operation. Output is a gray image.
-     * @param imageInput input RgbImage to be thresholded.
-     * @throws com.github.ojil.core.ImageError if input is not an RgbImage.
+     * 
+     * @param imageInput
+     *            input RgbImage to be thresholded.
+     * @throws ImageError
+     *             if input is not an RgbImage.
      */
-    public void push(Image imageInput) throws ImageError {
+    @Override
+    public void push(final Image<?> imageInput) throws ImageError {
         if (!(imageInput instanceof RgbImage)) {
-            throw new ImageError(
-                            ImageError.PACKAGE.ALGORITHM,
-                            AlgorithmErrorCodes.IMAGE_NOT_RGBIMAGE,
-                            imageInput.toString(),
-                            null,
-                            null);
+            throw new ImageError(ImageError.PACKAGE.ALGORITHM, AlgorithmErrorCodes.IMAGE_NOT_RGBIMAGE, imageInput.toString(), null, null);
         }
-        RgbImage rgb = (RgbImage) imageInput;
-        Integer[] nData = rgb.getData();
-        Gray8Image imageResult = new Gray8Image(rgb.getWidth(), rgb.getHeight());
-        Byte[] bData = imageResult.getData();
-        for (int i=0; i<rgb.getWidth()*rgb.getHeight(); i++) {
-            int nRCurr = RgbVal.getR(nData[i]) - Byte.MIN_VALUE;
-            int nGCurr = RgbVal.getG(nData[i]) - Byte.MIN_VALUE;
-            int nBCurr = RgbVal.getB(nData[i]) - Byte.MIN_VALUE;
-            int nRDiff = nRCurr - this.nR;
-            int nGDiff = nGCurr - this.nG;
-            int nBDiff = nBCurr - this.nB;
-            int nDot = Math.abs(nRDiff * this.nRVec + 
-                    nGDiff * this.nGVec +
-                    nBDiff * this.nBVec);
-            bData[i] = ((nDot < this.nThresh) == this.bWithin)
-                    ? Byte.MAX_VALUE : Byte.MIN_VALUE;
+        final RgbImage rgb = (RgbImage) imageInput;
+        final Integer[] nData = rgb.getData();
+        final Gray8Image imageResult = new Gray8Image(rgb.getWidth(), rgb.getHeight());
+        final Byte[] bData = imageResult.getData();
+        for (int i = 0; i < (rgb.getWidth() * rgb.getHeight()); i++) {
+            final int nRCurr = RgbVal.getR(nData[i]) - Byte.MIN_VALUE;
+            final int nGCurr = RgbVal.getG(nData[i]) - Byte.MIN_VALUE;
+            final int nBCurr = RgbVal.getB(nData[i]) - Byte.MIN_VALUE;
+            final int nRDiff = nRCurr - nR;
+            final int nGDiff = nGCurr - nG;
+            final int nBDiff = nBCurr - nB;
+            final int nDot = Math.abs((nRDiff * nRVec) + (nGDiff * nGVec) + (nBDiff * nBVec));
+            bData[i] = ((nDot < nThresh) == bWithin) ? Byte.MAX_VALUE : Byte.MIN_VALUE;
             
         }
         super.setOutput(imageResult);
     }
-
+    
 }

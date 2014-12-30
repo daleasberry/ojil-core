@@ -27,144 +27,139 @@
  */
 
 package com.github.ojil.algorithm;
-import com.github.ojil.core.ImageError;
+
 import com.github.ojil.core.Gray8Image;
 import com.github.ojil.core.Image;
+import com.github.ojil.core.ImageError;
 import com.github.ojil.core.PipelineStage;
 import com.github.ojil.core.RgbImage;
 import com.github.ojil.core.Sequence;
+
 /**
- * Shrinks a color (RgbImage) to a given size. Each band is shrunk independently.
- * The pixels that each pixel maps to are averaged. There is no between-target-pixel
- * smoothing. The output image must be smaller than or equal to the size of the 
- * input.
+ * Shrinks a color (RgbImage) to a given size. Each band is shrunk
+ * independently. The pixels that each pixel maps to are averaged. There is no
+ * between-target-pixel smoothing. The output image must be smaller than or
+ * equal to the size of the input.
+ * 
  * @author webb
  */
 public class RgbShrink extends PipelineStage {
     private int cHeight;
     private int cWidth;
     private Sequence seqR, seqG, seqB;
-    /** Creates a new instance of RgbShrink. 
+    
+    /**
+     * Creates a new instance of RgbShrink.
      *
-     * @param cWidth new image width
-     * @param cHeight new image height
-     * @throws com.github.ojil.core.ImageError if either is less than or equal to zero.
+     * @param cWidth
+     *            new image width
+     * @param cHeight
+     *            new image height
+     * @throws ImageError
+     *             if either is less than or equal to zero.
      */
-    public RgbShrink(int cWidth, int cHeight) 
-        throws com.github.ojil.core.ImageError {
+    public RgbShrink(final int cWidth, final int cHeight) throws ImageError {
         setWidth(cWidth);
         setHeight(cHeight);
         setupPipeline();
     }
-         
-    /** Gets current target height 
+    
+    /**
+     * Gets current target height
      *
      * @return current height
      */
     public int getHeight() {
-        return this.cHeight;
+        return cHeight;
     }
     
-    /** Gets current target width
+    /**
+     * Gets current target width
      *
      * @return current width
      */
     public int getWidth() {
-        return this.cWidth;
+        return cWidth;
     }
     
     /**
      * Process an image.
-     * @param image the input RgbImage.
-     * @throws com.github.ojil.core.ImageError if the input is not an RgbImage, or is smaller than the target image either
-     * horizontally or vertically.
+     * 
+     * @param image
+     *            the input RgbImage.
+     * @throws ImageError
+     *             if the input is not an RgbImage, or is smaller than the
+     *             target image either horizontally or vertically.
      */
-    public void push(Image image) throws com.github.ojil.core.ImageError {
+    @Override
+    public void push(final Image<?> image) throws ImageError {
         if (!(image instanceof RgbImage)) {
-            throw new ImageError(
-                			ImageError.PACKAGE.ALGORITHM,
-                			AlgorithmErrorCodes.IMAGE_NOT_RGBIMAGE,
-                			image.toString(),
-                			null,
-                			null);
+            throw new ImageError(ImageError.PACKAGE.ALGORITHM, AlgorithmErrorCodes.IMAGE_NOT_RGBIMAGE, image.toString(), null, null);
         }
-        if (image.getWidth() < this.cWidth || image.getHeight() < this.cHeight) {
-            throw new ImageError(
-                			ImageError.PACKAGE.ALGORITHM,
-                			AlgorithmErrorCodes.SHRINK_OUTPUT_LARGER_THAN_INPUT,
-                			image.toString(),
-                			this.toString(),
-                			null);
+        if ((image.getWidth() < cWidth) || (image.getHeight() < cHeight)) {
+            throw new ImageError(ImageError.PACKAGE.ALGORITHM, AlgorithmErrorCodes.SHRINK_OUTPUT_LARGER_THAN_INPUT, image.toString(), toString(), null);
         }
         /* shrink R band */
-        this.seqR.push(image);
+        seqR.push(image);
         /* shrink G band */
-        this.seqG.push(image);
+        seqG.push(image);
         /* shrink B band */
-        this.seqB.push(image);
-        super.setOutput(Gray3Bands2Rgb.push(
-                (Gray8Image)this.seqR.getFront(), 
-                (Gray8Image)this.seqG.getFront(), 
-                (Gray8Image)this.seqB.getFront()));
+        seqB.push(image);
+        super.setOutput(Gray3Bands2Rgb.push((Gray8Image) seqR.getFront(), (Gray8Image) seqG.getFront(), (Gray8Image) seqB.getFront()));
     }
-        
-    /** Changes target height
+    
+    /**
+     * Changes target height
      * 
-     * @param cHeight the new target height.
-     * @throws com.github.ojil.core.ImageError if height is not positive
+     * @param cHeight
+     *            the new target height.
+     * @throws ImageError
+     *             if height is not positive
      */
-    private void setHeight(int cHeight) throws com.github.ojil.core.ImageError {
+    private void setHeight(final int cHeight) throws ImageError {
         if (cHeight <= 0) {
-            throw new ImageError(
-        			ImageError.PACKAGE.ALGORITHM,
-        			AlgorithmErrorCodes.OUTPUT_IMAGE_SIZE_NEGATIVE,
-        			new Integer(cHeight).toString(),
-        			null,
-        			null);
+            throw new ImageError(ImageError.PACKAGE.ALGORITHM, AlgorithmErrorCodes.OUTPUT_IMAGE_SIZE_NEGATIVE, new Integer(cHeight).toString(), null, null);
         }
         this.cHeight = cHeight;
     }
     
-    private void setupPipeline() throws com.github.ojil.core.ImageError
-    {
+    private void setupPipeline() throws ImageError {
         RgbSelectGray sel = new RgbSelectGray(RgbSelectGray.RED);
-        this.seqR = new Sequence(sel);
+        seqR = new Sequence(sel);
         Gray8Shrink gs = new Gray8Shrink(cWidth, cHeight);
-        this.seqR.add(gs);
+        seqR.add(gs);
         sel = new RgbSelectGray(RgbSelectGray.GREEN);
-        this.seqG = new Sequence(sel);
+        seqG = new Sequence(sel);
         gs = new Gray8Shrink(cWidth, cHeight);
-        this.seqG.add(gs);
+        seqG.add(gs);
         sel = new RgbSelectGray(RgbSelectGray.BLUE);
-        this.seqB = new Sequence(sel);
+        seqB = new Sequence(sel);
         gs = new Gray8Shrink(cWidth, cHeight);
-        this.seqB.add(gs);
+        seqB.add(gs);
     }
     
-    /** Changes target width
+    /**
+     * Changes target width
      * 
-     * @param cWidth the new target width.
-     * @throws com.github.ojil.core.ImageError if height is not positive
+     * @param cWidth
+     *            the new target width.
+     * @throws ImageError
+     *             if height is not positive
      */
-    private void setWidth(int cWidth) throws com.github.ojil.core.ImageError {
+    private void setWidth(final int cWidth) throws ImageError {
         if (cWidth <= 0) {
-            throw new ImageError(
-                			ImageError.PACKAGE.ALGORITHM,
-                			AlgorithmErrorCodes.OUTPUT_IMAGE_SIZE_NEGATIVE,
-                			new Integer(cWidth).toString(),
-                			null,
-                			null);
+            throw new ImageError(ImageError.PACKAGE.ALGORITHM, AlgorithmErrorCodes.OUTPUT_IMAGE_SIZE_NEGATIVE, new Integer(cWidth).toString(), null, null);
         }
         this.cWidth = cWidth;
     }
     
-   
-        
-    /** Return a string describing the shrinking operation.
+    /**
+     * Return a string describing the shrinking operation.
      *
      * @return the string describing the shrinking operation.
      */
+    @Override
     public String toString() {
-        return super.toString() + " (" + this.cWidth + "," + this.cHeight + ")"; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+        return super.toString() + " (" + cWidth + "," + cHeight + ")"; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
     }
 }

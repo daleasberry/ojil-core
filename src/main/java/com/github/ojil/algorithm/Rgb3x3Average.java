@@ -23,14 +23,15 @@
  */
 package com.github.ojil.algorithm;
 
-import com.github.ojil.core.ImageError;
 import com.github.ojil.core.Image;
+import com.github.ojil.core.ImageError;
 import com.github.ojil.core.PipelineStage;
 import com.github.ojil.core.RgbImage;
 import com.github.ojil.core.RgbVal;
 
 /**
  * Pipeline stage performs a 3x3 RGB average of the input.
+ * 
  * @author webb
  */
 public class Rgb3x3Average extends PipelineStage {
@@ -40,42 +41,38 @@ public class Rgb3x3Average extends PipelineStage {
      */
     public Rgb3x3Average() {
     }
-       
+    
     /**
-     * Do a color 3x3 average of the input image. The red, green, and blue
-     * bands are averaged independently. The code has been written to be
-     * as efficient as possible. Borders are handled by duplicating the
-     * first or last row, and replacing the first and last column
-     * with 0, when doing the average.
+     * Do a color 3x3 average of the input image. The red, green, and blue bands
+     * are averaged independently. The code has been written to be as efficient
+     * as possible. Borders are handled by duplicating the first or last row,
+     * and replacing the first and last column with 0, when doing the average.
      *
-     * @param imageInput the input image
-     * @throws com.github.ojil.core.ImageError if imageInput is not an RgbImage
+     * @param imageInput
+     *            the input image
+     * @throws ImageError
+     *             if imageInput is not an RgbImage
      */
-    public void push(Image imageInput) throws com.github.ojil.core.ImageError 
-   {
-        if (!(imageInput instanceof RgbImage)) 
-        {
-            throw new ImageError(
-                			ImageError.PACKAGE.ALGORITHM,
-                			AlgorithmErrorCodes.IMAGE_NOT_RGBIMAGE,
-                			imageInput.toString(),
-                			null,
-                			null);
+    @Override
+    public void push(final Image<?> imageInput) throws ImageError {
+        if (!(imageInput instanceof RgbImage)) {
+            throw new ImageError(ImageError.PACKAGE.ALGORITHM, AlgorithmErrorCodes.IMAGE_NOT_RGBIMAGE, imageInput.toString(), null, null);
         }
         
-        int cWidth  = imageInput.getWidth();
-        int cHeight = imageInput.getHeight();
-        Integer[] rgbInput = ((RgbImage)imageInput).getData();
+        final int cWidth = imageInput.getWidth();
+        final int cHeight = imageInput.getHeight();
+        final Integer[] rgbInput = ((RgbImage) imageInput).getData();
         
-        RgbImage imageResult = new RgbImage(cWidth, cHeight);
-        Integer[] rgbOutput = imageResult.getData();
+        final RgbImage imageResult = new RgbImage(cWidth, cHeight);
+        final Integer[] rgbOutput = imageResult.getData();
         
-        for(int i=0;i<cHeight;i++) {
-            /* declare and initialize integers which will hold the r, g, and b
-             * pixel values. The variables are named and numbered as if
-             * they were array indices for three different 3x3 arrays.
-             * They are set to -128 because this represents black in the
-             * signed byte representation of a pixel.
+        for (int i = 0; i < cHeight; i++) {
+            /*
+             * declare and initialize integers which will hold the r, g, and b
+             * pixel values. The variables are named and numbered as if they
+             * were array indices for three different 3x3 arrays. They are set
+             * to -128 because this represents black in the signed byte
+             * representation of a pixel.
              */
             byte r00 = -128, r01 = -128, r02 = -128;
             byte g00 = -128, g01 = -128, g02 = -128;
@@ -86,17 +83,18 @@ public class Rgb3x3Average extends PipelineStage {
             byte r20 = -128, r21 = -128, r22 = -128;
             byte g20 = -128, g21 = -128, g22 = -128;
             byte b20 = -128, b21 = -128, b22 = -128;
-          
-            /* set column indices into this row
-             * for first row use row 0 instead of row -1
-             * for last row use row cHeight-1 instead of row cHeight
-             */
-            int pos0 = (i==0) ? 0 : (i-1) * cWidth;
-            int pos1 = i * cWidth;
-            int pos2 = (i==cHeight-1) ? i * cWidth : (i+1) * cWidth;
             
-            /* initialize the (*,2) variables so the initial step to
-             * the right does the right thing.
+            /*
+             * set column indices into this row for first row use row 0 instead
+             * of row -1 for last row use row cHeight-1 instead of row cHeight
+             */
+            int pos0 = (i == 0) ? 0 : (i - 1) * cWidth;
+            int pos1 = i * cWidth;
+            int pos2 = (i == (cHeight - 1)) ? i * cWidth : (i + 1) * cWidth;
+            
+            /*
+             * initialize the (*,2) variables so the initial step to the right
+             * does the right thing.
              */
             r02 = RgbVal.getR(rgbInput[pos0]);
             g02 = RgbVal.getG(rgbInput[pos0]);
@@ -108,9 +106,10 @@ public class Rgb3x3Average extends PipelineStage {
             g22 = RgbVal.getG(rgbInput[pos2]);
             b22 = RgbVal.getB(rgbInput[pos2]);
             
-            for(int j=0;j<cWidth;j++) {
+            for (int j = 0; j < cWidth; j++) {
                 
-                /* move one step to the right
+                /*
+                 * move one step to the right
                  */
                 r00 = r01;
                 r01 = r02;
@@ -133,53 +132,51 @@ public class Rgb3x3Average extends PipelineStage {
                 b20 = b21;
                 b21 = b22;
                 
-                /* get new RGB pixel value. 
-                 * In this code the r, g, or b value is treated as an
-                 * unsigned value from 0 to 255, rather than as a signed
-                 * value from -128 to 127, as it is in the byte image code.
-                 * This is mathematically equivalent for averaging and 
+                /*
+                 * get new RGB pixel value. In this code the r, g, or b value is
+                 * treated as an unsigned value from 0 to 255, rather than as a
+                 * signed value from -128 to 127, as it is in the byte image
+                 * code. This is mathematically equivalent for averaging and
                  * requires less computation than doing sign extension.
                  */
-                if (j < cWidth-1) {
-                    r02 = RgbVal.getR(rgbInput[pos0+1]);
-                    g02 = RgbVal.getG(rgbInput[pos0+1]);
-                    b02 = RgbVal.getB(rgbInput[pos0+1]);
-                    r12 = RgbVal.getR(rgbInput[pos1+1]);
-                    g12 = RgbVal.getG(rgbInput[pos1+1]);
-                    b12 = RgbVal.getB(rgbInput[pos1+1]);
-                    r22 = RgbVal.getR(rgbInput[pos2+1]);
-                    g22 = RgbVal.getG(rgbInput[pos2+1]);
-                    b22 = RgbVal.getB(rgbInput[pos2+1]);
+                if (j < (cWidth - 1)) {
+                    r02 = RgbVal.getR(rgbInput[pos0 + 1]);
+                    g02 = RgbVal.getG(rgbInput[pos0 + 1]);
+                    b02 = RgbVal.getB(rgbInput[pos0 + 1]);
+                    r12 = RgbVal.getR(rgbInput[pos1 + 1]);
+                    g12 = RgbVal.getG(rgbInput[pos1 + 1]);
+                    b12 = RgbVal.getB(rgbInput[pos1 + 1]);
+                    r22 = RgbVal.getR(rgbInput[pos2 + 1]);
+                    g22 = RgbVal.getG(rgbInput[pos2 + 1]);
+                    b22 = RgbVal.getB(rgbInput[pos2 + 1]);
                 } else {
-                    /* we use black (-128) as the border in the last column 
+                    /*
+                     * we use black (-128) as the border in the last column
                      */
-                    r02 = g02 = b02 = r12 = g12 = b12 =
-                            r22 = g22 = b22 = -128;
+                    r02 = g02 = b02 = r12 = g12 = b12 = r22 = g22 = b22 = -128;
                 }
                 
-                /* calculate average r, g, and b values
+                /*
+                 * calculate average r, g, and b values
                  */
-                byte r = (byte) ((r00 + r01 + r02 + 
-                                  r10 + r11 + r12 + 
-                                  r20 + r21 + r22) / 9);
-                byte g = (byte) ((g00 + g01 + g02 + 
-                                  g10 + g11 + g12 + 
-                                  g20 + g21 + g22) / 9);
-                byte b = (byte) ((b00 + b01 + b02 + 
-                                  b10 + b11 + b12 + 
-                                  b20 + b21 + b22) / 9);
-                /* note r, g, and b will always be between 0 and 255 so
-                 * it is not necessary to mask etc.
+                final byte r = (byte) ((r00 + r01 + r02 + r10 + r11 + r12 + r20 + r21 + r22) / 9);
+                final byte g = (byte) ((g00 + g01 + g02 + g10 + g11 + g12 + g20 + g21 + g22) / 9);
+                final byte b = (byte) ((b00 + b01 + b02 + b10 + b11 + b12 + b20 + b21 + b22) / 9);
+                /*
+                 * note r, g, and b will always be between 0 and 255 so it is
+                 * not necessary to mask etc.
                  */
                 rgbOutput[pos1] = RgbVal.toRgb(r, g, b);
-                /* advance column indices to next position
+                /*
+                 * advance column indices to next position
                  */
                 pos0++;
                 pos1++;
                 pos2++;
             }
         }
-        /* send output to PipelineStage
+        /*
+         * send output to PipelineStage
          */
         super.setOutput(imageResult);
     }

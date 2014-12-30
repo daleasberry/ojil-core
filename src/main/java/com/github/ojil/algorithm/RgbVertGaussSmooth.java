@@ -23,75 +23,83 @@
  */
 
 package com.github.ojil.algorithm;
-import com.github.ojil.core.ImageError;
+
 import com.github.ojil.core.Gray8Image;
 import com.github.ojil.core.Image;
+import com.github.ojil.core.ImageError;
 import com.github.ojil.core.PipelineStage;
 import com.github.ojil.core.RgbImage;
 import com.github.ojil.core.Sequence;
 
 /**
  * This PipelineStage blurs an RgbImage using a Gaussian blur.
+ * 
  * @author webb
  */
 public class RgbVertGaussSmooth extends PipelineStage {
-   private Sequence seqR, seqG, seqB;
-   int nSigma;
+    private Sequence seqR, seqG, seqB;
+    int nSigma;
     
-    /** Smooth an image vertically using a Gaussian blur.
-     * @param nSigma the sigma value of window to smooth over
-     * @throws com.github.ojil.core.ImageError if sigma is out of range
+    /**
+     * Smooth an image vertically using a Gaussian blur.
+     * 
+     * @param nSigma
+     *            the sigma value of window to smooth over
+     * @throws ImageError
+     *             if sigma is out of range
      */
-    public RgbVertGaussSmooth(int nSigma) throws com.github.ojil.core.ImageError {
+    public RgbVertGaussSmooth(final int nSigma) throws ImageError {
         setWidth(nSigma);
     }
     
-    
     /**
      * Smooth an RgbImage vertically using a Gaussian blur operator
-     * @param image the input RgbImage image.
-     * @throws com.github.ojil.core.ImageError if the input is not an RgbImage
+     * 
+     * @param image
+     *            the input RgbImage image.
+     * @throws ImageError
+     *             if the input is not an RgbImage
      */
-    public void push(Image image) throws com.github.ojil.core.ImageError {
+    @Override
+    public void push(final Image<?> image) throws ImageError {
         if (!(image instanceof RgbImage)) {
-            throw new ImageError(
-    				ImageError.PACKAGE.ALGORITHM,
-    				AlgorithmErrorCodes.IMAGE_NOT_RGBIMAGE,
-    				image.toString(),
-    				null,
-    				null);
+            throw new ImageError(ImageError.PACKAGE.ALGORITHM, AlgorithmErrorCodes.IMAGE_NOT_RGBIMAGE, image.toString(), null, null);
         }
-        this.seqR.push(image);
-        this.seqG.push(image);
-        this.seqB.push(image);
-        super.setOutput(Gray3Bands2Rgb.push(
-                (Gray8Image)this.seqR.getFront(), 
-                (Gray8Image)this.seqG.getFront(), 
-                (Gray8Image)this.seqB.getFront()));
+        seqR.push(image);
+        seqG.push(image);
+        seqB.push(image);
+        super.setOutput(Gray3Bands2Rgb.push((Gray8Image) seqR.getFront(), (Gray8Image) seqG.getFront(), (Gray8Image) seqB.getFront()));
     }
     
-    /** Set sigma value of Gaussian blur
-     * @param nSigma the sigma of the window to blur over
-     * @throws com.github.ojil.core.ImageError if nSigma is out of range.
+    /**
+     * Set sigma value of Gaussian blur
+     * 
+     * @param nSigma
+     *            the sigma of the window to blur over
+     * @throws ImageError
+     *             if nSigma is out of range.
      */
-    public void setWidth(int nSigma) throws com.github.ojil.core.ImageError {
+    public void setWidth(final int nSigma) throws ImageError {
         this.nSigma = nSigma;
-        this.seqR = new Sequence(new RgbSelectGray(RgbSelectGray.RED));
-        this.seqR.add(new Gray8GaussSmoothVert(nSigma));
-        this.seqG = new Sequence(new RgbSelectGray(RgbSelectGray.GREEN));
-        this.seqG.add(new Gray8GaussSmoothVert(nSigma));
-        this.seqB = new Sequence(new RgbSelectGray(RgbSelectGray.BLUE));
-        this.seqB.add(new Gray8GaussSmoothVert(nSigma));
+        seqR = new Sequence(new RgbSelectGray(RgbSelectGray.RED));
+        seqR.add(new Gray8GaussSmoothVert(nSigma));
+        seqG = new Sequence(new RgbSelectGray(RgbSelectGray.GREEN));
+        seqG.add(new Gray8GaussSmoothVert(nSigma));
+        seqB = new Sequence(new RgbSelectGray(RgbSelectGray.BLUE));
+        seqB.add(new Gray8GaussSmoothVert(nSigma));
     }
     
     /**
      * Returns a string describing the current instance. All the constructor
      * parameters are returned in the order specified in the constructor.
-     * @return The string describing the current instance. The string is of the form 
-     * "jjil.algorithm.RgbVertGaussSmoothxxx (startRow,endRow,leftColStart,
-     * rightColStart,leftColEnd,rightColEnd)"
+     * 
+     * @return The string describing the current instance. The string is of the
+     *         form "jjil.algorithm.RgbVertGaussSmoothxxx
+     *         (startRow,endRow,leftColStart,
+     *         rightColStart,leftColEnd,rightColEnd)"
      */
+    @Override
     public String toString() {
-        return super.toString() + " (" + this.nSigma + ")"; //$NON-NLS-1$
+        return super.toString() + " (" + nSigma + ")"; //$NON-NLS-1$
     }
 }

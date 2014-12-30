@@ -23,69 +23,67 @@
  */
 
 package com.github.ojil.algorithm;
-import com.github.ojil.core.ImageError;
+
 import com.github.ojil.core.Gray8Image;
 import com.github.ojil.core.Image;
+import com.github.ojil.core.ImageError;
 import com.github.ojil.core.PipelineStage;
 import com.github.ojil.core.RgbImage;
 import com.github.ojil.core.RgbVal;
 
 /**
  * Pipeline stage converts an ARGB color image into a Gray8Image by measuring
- * difference from a defined color. Pixels equal to the defined color get
- * value Byte.MIN_VALUE. Other pixels get sum of absolute difference between
- * their color and the defined color.<p>
+ * difference from a defined color. Pixels equal to the defined color get value
+ * Byte.MIN_VALUE. Other pixels get sum of absolute difference between their
+ * color and the defined color.
+ * <p>
  * For use when looking for objects of a given color. Thresholding or edge
  * detection should isolate the object.
+ * 
  * @author webb
  */
 public class RgbAbsDiffGray extends PipelineStage {
     int nR, nG, nB;
     
     /** Creates a new instance of RgbAvgGray */
-    public RgbAbsDiffGray(int nRGB) {
-        this.nR = RgbVal.getR(nRGB);
-        this.nG = RgbVal.getG(nRGB);
-        this.nB = RgbVal.getB(nRGB);
+    public RgbAbsDiffGray(final int nRGB) {
+        nR = RgbVal.getR(nRGB);
+        nG = RgbVal.getG(nRGB);
+        nB = RgbVal.getB(nRGB);
     }
     
-    /** Implementation of push operation from PipelineStage.
-     * Averages the R, G, and B values to create a gray image of
-     * the same size. Note that the RGB->Gray conversion involves
-     * changing the data range of each pixel from 0->255 to -128->127
-     * because byte is a signed type.
+    /**
+     * Implementation of push operation from PipelineStage. Averages the R, G,
+     * and B values to create a gray image of the same size. Note that the
+     * RGB->Gray conversion involves changing the data range of each pixel from
+     * 0->255 to -128->127 because byte is a signed type.
      *
-     * @param image the input image
-     * @throws com.github.ojil.core.ImageError if image is not an RgbImage
+     * @param image
+     *            the input image
+     * @throws ImageError
+     *             if image is not an RgbImage
      */
-    public void push(Image image) throws com.github.ojil.core.ImageError {
+    @Override
+    public void push(final Image<?> image) throws ImageError {
         if (!(image instanceof RgbImage)) {
-            throw new ImageError(
-            				ImageError.PACKAGE.ALGORITHM,
-            				AlgorithmErrorCodes.IMAGE_NOT_RGBIMAGE,
-            				image.toString(),
-            				null,
-            				null);
+            throw new ImageError(ImageError.PACKAGE.ALGORITHM, AlgorithmErrorCodes.IMAGE_NOT_RGBIMAGE, image.toString(), null, null);
         }
-        RgbImage rgb = (RgbImage) image;
-        Integer[] rgbData = rgb.getData();
-        Gray8Image gray = new Gray8Image(image.getWidth(), image.getHeight());
-        Byte[] grayData = gray.getData();
-        for (int i=0; i<image.getWidth() * image.getHeight(); i++) {
-            /* get individual r, g, and b values, unmasking them from the
-             * ARGB word. 
+        final RgbImage rgb = (RgbImage) image;
+        final Integer[] rgbData = rgb.getData();
+        final Gray8Image gray = new Gray8Image(image.getWidth(), image.getHeight());
+        final Byte[] grayData = gray.getData();
+        for (int i = 0; i < (image.getWidth() * image.getHeight()); i++) {
+            /*
+             * get individual r, g, and b values, unmasking them from the ARGB
+             * word.
              */
-            byte r = RgbVal.getR(rgbData[i]);
-            byte g = RgbVal.getG(rgbData[i]);
-            byte b = RgbVal.getB(rgbData[i]);
-            /* average the values to get the grayvalue
+            final byte r = RgbVal.getR(rgbData[i]);
+            final byte g = RgbVal.getG(rgbData[i]);
+            final byte b = RgbVal.getB(rgbData[i]);
+            /*
+             * average the values to get the grayvalue
              */
-            grayData[i] = (byte) (
-                   Math.min(Byte.MAX_VALUE, 
-                        (Math.abs(r-this.nR) + 
-                         Math.abs(g-this.nG) +
-                         Math.abs(b-this.nB)) / 3 + 
-                         Byte.MIN_VALUE));
+            grayData[i] = (byte) (Math.min(Byte.MAX_VALUE, ((Math.abs(r - nR) + Math.abs(g - nG) + Math.abs(b - nB)) / 3) + Byte.MIN_VALUE));
         }
         super.setOutput(gray);
     }

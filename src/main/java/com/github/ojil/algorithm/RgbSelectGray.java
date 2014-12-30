@@ -23,101 +23,108 @@
  */
 
 package com.github.ojil.algorithm;
-import com.github.ojil.core.ImageError;
+
 import com.github.ojil.core.Gray8Image;
 import com.github.ojil.core.Image;
+import com.github.ojil.core.ImageError;
 import com.github.ojil.core.PipelineStage;
 import com.github.ojil.core.RgbImage;
 import com.github.ojil.core.RgbVal;
 
 /**
  * <p>
- * Transforms a RgbImage into a Gray8Image by selecting one of the three
- * bands. The pixel value chosen is adjusted from the range 0&rarr;255 to the
- * range -128&rarr;127.
+ * Transforms a RgbImage into a Gray8Image by selecting one of the three bands.
+ * The pixel value chosen is adjusted from the range 0&rarr;255 to the range
+ * -128&rarr;127.
  * </p>
  * <p>
- *    Usage: <br>
+ * Usage: <br>
  * 
- *    <CODE>
+ * <CODE>
  *        RgbImage imageRgb = ...;<br>
  *        RgbSelectGray rgb = new RgbSelectGray(RgbSelectGray.RED);<br>
  *        rgb.push(imageRgb);
  *    </CODE>
  * </p>
+ * 
  * @author webb
  */
 public class RgbSelectGray extends PipelineStage {
-    /* In the absence of enums in version 1.3 we use three empty singleton
+    /*
+     * In the absence of enums in version 1.3 we use three empty singleton
      * classes to represent the color choice.
      */
     /**
      * Used to represent the three colors red, green, or blue.
      */
     public static class ColorClass {
-        private String name;
+        private final String name;
         private static final ColorClass RED = new ColorClass("RED");
         private static final ColorClass GREEN = new ColorClass("GREEN");
         private static final ColorClass BLUE = new ColorClass("BLUE");
         
-        
-        private ColorClass(String name) {
+        private ColorClass(final String name) {
             this.name = name;
         }
         
         /**
          * Represents the color red.
+         * 
          * @return A ColorClass object that represents the color red.
          */
         public static ColorClass Red() {
-            return RED;
+            return ColorClass.RED;
         }
         
         /**
          * Represents the color green.
+         * 
          * @return A ColorClass object that represents the color green.
          */
         public static ColorClass Green() {
-            return GREEN;
+            return ColorClass.GREEN;
         }
         
         /**
          * Represents the color blue.
+         * 
          * @return A ColorClass object that represents the color blue.
          */
         public static ColorClass Blue() {
-            return BLUE;
+            return ColorClass.BLUE;
         }
         
         /**
          * Returns a string representation of the RgbSelectGray operation.
+         * 
          * @return a String representing the RgbSelectGray operation.
          */
+        @Override
         public String toString() {
             return name;
         }
-     };
-
+    };
+    
     /**
-     * The class represents the color red. It is used like an enumerated value when
-     * calling the RgbSelectGray constructor.
+     * The class represents the color red. It is used like an enumerated value
+     * when calling the RgbSelectGray constructor.
      */
     public static final ColorClass RED = ColorClass.Red();
-
+    
     /**
-     * The class represents the color green. It is used like an enumerated value when
-     * calling the RgbSelectGray constructor.
+     * The class represents the color green. It is used like an enumerated value
+     * when calling the RgbSelectGray constructor.
      */
     public static final ColorClass GREEN = ColorClass.Green();
     /**
-     * The class represents the color blue. It is used like an enumerated value when
-     * calling the RgbSelectGray constructor.
+     * The class represents the color blue. It is used like an enumerated value
+     * when calling the RgbSelectGray constructor.
      */
     public static final ColorClass BLUE = ColorClass.Blue();
     
     /**
-     * Aliases for red, green, and blue used when we're thinking of the RGB image
-     * as an HSV image.
+     * Aliases for red, green, and blue used when we're thinking of the RGB
+     * image as an HSV image.
      */
     public static final ColorClass HUE = ColorClass.Red();
     public static final ColorClass SATURATION = ColorClass.Green();
@@ -127,10 +134,14 @@ public class RgbSelectGray extends PipelineStage {
     
     /**
      * Creates a new instance of RgbSelectGray.
-     * @param color the color selected from the color image to create the gray image.
-     * @throws com.github.ojil.core.ImageError if color is not RED, GREEN, or BLUE.
+     * 
+     * @param color
+     *            the color selected from the color image to create the gray
+     *            image.
+     * @throws ImageError
+     *             if color is not RED, GREEN, or BLUE.
      */
-    public RgbSelectGray(ColorClass color) throws com.github.ojil.core.ImageError {
+    public RgbSelectGray(final ColorClass color) throws ImageError {
         setColor(color);
     }
     
@@ -140,84 +151,81 @@ public class RgbSelectGray extends PipelineStage {
      * @return the current color, as a ColorClass object.
      */
     public ColorClass getColor() {
-        return this.colorChosen;
+        return colorChosen;
     }
     
-    /** Convert a color image to gray by selecting one of the color
-     * bands: red, green, or blue. The band selected is chosen in the
-     * class constructor. The gray pixel value is adjusted so its range
-     * is from -128&rarr;127 instead of the 0-255 value in the ARGB word.
+    /**
+     * Convert a color image to gray by selecting one of the color bands: red,
+     * green, or blue. The band selected is chosen in the class constructor. The
+     * gray pixel value is adjusted so its range is from -128&rarr;127 instead
+     * of the 0-255 value in the ARGB word.
      *
-     * @param image the input image
-     * @throws com.github.ojil.core.ImageError if the input image is not a color
-     *   image.
+     * @param image
+     *            the input image
+     * @throws ImageError
+     *             if the input image is not a color image.
      */
-    public void push(Image image) throws com.github.ojil.core.ImageError {
+    @Override
+    public void push(final Image<?> image) throws ImageError {
         if (!(image instanceof RgbImage)) {
-            throw new ImageError(
-            			ImageError.PACKAGE.ALGORITHM,
-            			AlgorithmErrorCodes.IMAGE_NOT_RGBIMAGE,
-            			image.toString(),
-            			null,
-            			null);
+            throw new ImageError(ImageError.PACKAGE.ALGORITHM, AlgorithmErrorCodes.IMAGE_NOT_RGBIMAGE, image.toString(), null, null);
         }
-        RgbImage rgb = (RgbImage) image;
-        Integer[] rgbData = rgb.getData();
-        Gray8Image gray = new Gray8Image(image.getWidth(), image.getHeight());
-        Byte[] grayData = gray.getData();
-        if (colorChosen.equals(RED)) {
-            for (int i=0; i<image.getWidth() * image.getHeight(); i++) {
-                /* get individual color value, unmasking it from the
-                 * ARGB word
+        final RgbImage rgb = (RgbImage) image;
+        final Integer[] rgbData = rgb.getData();
+        final Gray8Image gray = new Gray8Image(image.getWidth(), image.getHeight());
+        final Byte[] grayData = gray.getData();
+        if (colorChosen.equals(RgbSelectGray.RED)) {
+            for (int i = 0; i < (image.getWidth() * image.getHeight()); i++) {
+                /*
+                 * get individual color value, unmasking it from the ARGB word
                  */
                 grayData[i] = RgbVal.getR(rgbData[i]);
             }
-        } else if (this.colorChosen.equals(GREEN)) {
-            for (int i=0; i<image.getWidth() * image.getHeight(); i++) {
-                /* get individual color value, unmasking it from the
-                 * ARGB word 
+        } else if (colorChosen.equals(RgbSelectGray.GREEN)) {
+            for (int i = 0; i < (image.getWidth() * image.getHeight()); i++) {
+                /*
+                 * get individual color value, unmasking it from the ARGB word
                  */
                 grayData[i] = RgbVal.getG(rgbData[i]);
             }
-        } else /* must be BLUE, from constructor */ {
-            for (int i=0; i<image.getWidth() * image.getHeight(); i++) {
-                /* get individual color value, unmasking it from the
-                 * ARGB word */
+        } else /* must be BLUE, from constructor */{
+            for (int i = 0; i < (image.getWidth() * image.getHeight()); i++) {
+                /*
+                 * get individual color value, unmasking it from the ARGB word
+                 */
                 grayData[i] = RgbVal.getB(rgbData[i]);
             }
         }
         super.setOutput(gray);
     }
-
+    
     /**
      * Changes the color selected.
-     * @param color the new color selected
-     * @throws com.github.ojil.core.ImageError if the input color is not ColorClass.RED, GREEN, or BLUE.
+     * 
+     * @param color
+     *            the new color selected
+     * @throws ImageError
+     *             if the input color is not ColorClass.RED, GREEN, or BLUE.
      */
-    public void setColor(ColorClass color) throws com.github.ojil.core.ImageError {
-        /* as I understand the language this can't happen, but just in
-         * case...
+    public void setColor(final ColorClass color) throws ImageError {
+        /*
+         * as I understand the language this can't happen, but just in case...
          */
-        if (!(color.equals(RgbSelectGray.RED) || 
-                color.equals(RgbSelectGray.GREEN) || 
-                color.equals(RgbSelectGray.BLUE))) {
-            throw new ImageError(
-        			ImageError.PACKAGE.ALGORITHM,
-        			AlgorithmErrorCodes.ILLEGAL_COLOR_CHOICE,
-        			color.toString(),
-        			null,
-        			null);
-
+        if (!(color.equals(RgbSelectGray.RED) || color.equals(RgbSelectGray.GREEN) || color.equals(RgbSelectGray.BLUE))) {
+            throw new ImageError(ImageError.PACKAGE.ALGORITHM, AlgorithmErrorCodes.ILLEGAL_COLOR_CHOICE, color.toString(), null, null);
+            
         }
-        this.colorChosen = color;
+        colorChosen = color;
     }
     
-    /** Return a string describing the RGB select operation.
+    /**
+     * Return a string describing the RGB select operation.
      *
      * @return the string describing the RGB select operation.
      */
+    @Override
     public String toString() {
-        return super.toString() + " (" + this.colorChosen.toString() +  //$NON-NLS-1$
+        return super.toString() + " (" + colorChosen.toString() + //$NON-NLS-1$
                 ")"; //$NON-NLS-1$
     }
     

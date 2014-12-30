@@ -23,15 +23,16 @@
  */
 
 package com.github.ojil.algorithm;
-import com.github.ojil.core.ImageError;
+
 import com.github.ojil.core.Gray8Image;
 import com.github.ojil.core.Image;
+import com.github.ojil.core.ImageError;
 import com.github.ojil.core.PipelineStage;
 
 /**
- * Pipeline stage applies a lookup table to an image. The lookup table
- * can be supplied through the constructor or by the setTable procedure.
- * This pipeline stage modifies its input.
+ * Pipeline stage applies a lookup table to an image. The lookup table can be
+ * supplied through the constructor or by the setTable procedure. This pipeline
+ * stage modifies its input.
  *
  * @author webb
  */
@@ -40,59 +41,63 @@ public class Gray8Lookup extends PipelineStage {
     
     /**
      * Creates a new instance of Gray8Lookup.
-     * @param table The mapping table. Element i maps gray value Byte.MinValue + i to table[i].
-     * @throws com.github.ojil.core.ImageError when table is not a 256-element array.
+     * 
+     * @param table
+     *            The mapping table. Element i maps gray value Byte.MinValue + i
+     *            to table[i].
+     * @throws ImageError
+     *             when table is not a 256-element array.
      */
-    public Gray8Lookup(Byte[] table) throws com.github.ojil.core.ImageError {
+    public Gray8Lookup(final Byte[] table) throws ImageError {
         setTable(table);
     }
     
     /**
      * Return the lookup table currently being used.
+     * 
      * @return the lookup table.
      */
     public Byte[] getTable() {
-        Byte[] result = new Byte[256];
-        System.arraycopy(this.table, 0, result, 0, this.table.length);
+        final Byte[] result = new Byte[256];
+        System.arraycopy(table, 0, result, 0, table.length);
         return result;
     }
     
     /**
-     * Maps input Gray8Image through the lookup table, replacing values in the image.
-     * @param image the input image (output replaces input).
-     * @throws com.github.ojil.core.ImageError if image is not a Gray8Image.
+     * Maps input Gray8Image through the lookup table, replacing values in the
+     * image.
+     * 
+     * @param image
+     *            the input image (output replaces input).
+     * @throws ImageError
+     *             if image is not a Gray8Image.
      */
-    public void push(Image image) throws com.github.ojil.core.ImageError {
+    @Override
+    public void push(final Image<?> image) throws ImageError {
         if (!(image instanceof Gray8Image)) {
-            throw new ImageError(
-            				ImageError.PACKAGE.ALGORITHM,
-            				AlgorithmErrorCodes.IMAGE_NOT_GRAY8IMAGE,
-            				image.toString(),
-            				null,
-            				null);
+            throw new ImageError(ImageError.PACKAGE.ALGORITHM, AlgorithmErrorCodes.IMAGE_NOT_GRAY8IMAGE, image.toString(), null, null);
         }
-        Gray8Image input = (Gray8Image) image;
-        Byte[] data = input.getData();
-        for (int i=0; i<data.length; i++) {
-            data[i] = this.table[data[i]+128];
+        final Gray8Image input = (Gray8Image) image;
+        final Byte[] data = input.getData();
+        for (int i = 0; i < data.length; i++) {
+            data[i] = table[data[i] + 128];
         }
         super.setOutput(input);
     }
     
     /**
-     * Assign a new lookup table. Images passed to push() after setTable is called
-     * will be mapped by the new image.
-     * @param table The lookup table. Input image value g is mapped to table[g + Byte.MinValue]
-     * @throws com.github.ojil.core.ImageError if table is not a 256-element array.
+     * Assign a new lookup table. Images passed to push() after setTable is
+     * called will be mapped by the new image.
+     * 
+     * @param table
+     *            The lookup table. Input image value g is mapped to table[g +
+     *            Byte.MinValue]
+     * @throws ImageError
+     *             if table is not a 256-element array.
      */
-    public void setTable(Byte[] table) throws com.github.ojil.core.ImageError {
+    public void setTable(final Byte[] table) throws ImageError {
         if (table.length != 256) {
-            throw new ImageError(
-            				ImageError.PACKAGE.ALGORITHM,
-            				AlgorithmErrorCodes.LOOKUP_TABLE_LENGTH_NOT_256,
-            				table.toString(),
-            				null,
-            				null);
+            throw new ImageError(ImageError.PACKAGE.ALGORITHM, AlgorithmErrorCodes.LOOKUP_TABLE_LENGTH_NOT_256, table.toString(), null, null);
         }
         this.table = new Byte[256];
         System.arraycopy(table, 0, this.table, 0, this.table.length);

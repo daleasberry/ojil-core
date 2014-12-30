@@ -23,12 +23,13 @@
  */
 
 package com.github.ojil.algorithm;
+
 import com.github.ojil.core.Gray8Image;
 
 /**
- * Forms the one-dimensional vector that is the vertical average
- * of the input gray image. Not a pipeline stage. The class may not
- * be instantiated; all members are static.
+ * Forms the one-dimensional vector that is the vertical average of the input
+ * gray image. Not a pipeline stage. The class may not be instantiated; all
+ * members are static.
  *
  * @author webb
  */
@@ -38,24 +39,25 @@ public class Gray8VertAvg {
     private Gray8VertAvg() {
     }
     
-    /** Form the one-dimensional byte vector that is the vertical
-     * average of the input gray image. 
+    /**
+     * Form the one-dimensional byte vector that is the vertical average of the
+     * input gray image.
      *
-     * @param image the input image.
-     * @return a byte vector of length equal to the image width.
-     * element i of this vector is the average of column i in the
-     * image.
+     * @param image
+     *            the input image.
+     * @return a byte vector of length equal to the image width. element i of
+     *         this vector is the average of column i in the image.
      */
-    public static Byte[] push(Gray8Image image) {
-        Integer[] sum = new Integer[image.getWidth()];
-        Byte[] data = image.getData();
-        for (int i=0; i<image.getHeight(); i++) {
-            for (int j=0; j<image.getWidth(); j++) {
-                sum[j] += data[i*image.getWidth() + j];
+    public static Byte[] push(final Gray8Image image) {
+        final Integer[] sum = new Integer[image.getWidth()];
+        final Byte[] data = image.getData();
+        for (int i = 0; i < image.getHeight(); i++) {
+            for (int j = 0; j < image.getWidth(); j++) {
+                sum[j] += data[(i * image.getWidth()) + j];
             }
         }
-        Byte[] result = new Byte[image.getWidth()];
-        for (int i=0; i<image.getWidth(); i++) {
+        final Byte[] result = new Byte[image.getWidth()];
+        for (int i = 0; i < image.getWidth(); i++) {
             result[i] = (byte) (sum[i] / image.getHeight());
         }
         return result;

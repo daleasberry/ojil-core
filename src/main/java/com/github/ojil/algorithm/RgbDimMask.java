@@ -22,16 +22,18 @@
  */
 
 package com.github.ojil.algorithm;
-import com.github.ojil.core.ImageError;
+
 import com.github.ojil.core.Image;
+import com.github.ojil.core.ImageError;
 import com.github.ojil.core.PipelineStage;
 import com.github.ojil.core.RgbImage;
 import com.github.ojil.core.RgbMaskedImage;
 import com.github.ojil.core.RgbVal;
 
 /**
- * Pipeline stage shows a masked area in an RgbMaskedImage by dimming
- * or brightening the color value in the masked area a specified amount.
+ * Pipeline stage shows a masked area in an RgbMaskedImage by dimming or
+ * brightening the color value in the masked area a specified amount.
+ * 
  * @author webb
  */
 public class RgbDimMask extends PipelineStage {
@@ -40,65 +42,59 @@ public class RgbDimMask extends PipelineStage {
     /**
      * Creates a new instance of RgbDimMask that will dim any RgbMaskedImage
      * according the to nDim parameter.
-     * @param nDim the amount to dim, scaled by 256. nDim > 256 actually
-     * brightens the mask area.
+     * 
+     * @param nDim
+     *            the amount to dim, scaled by 256. nDim > 256 actually
+     *            brightens the mask area.
      */
-    public RgbDimMask(int nDim) {
+    public RgbDimMask(final int nDim) {
         this.nDim = nDim;
     }
     
-
-    /** Dim the input RgbMaskedImage by the amount specified in the nDim
+    /**
+     * Dim the input RgbMaskedImage by the amount specified in the nDim
      * parameter in the constructor.
-     * @param image the input image.
-     * @throws com.github.ojil.core.ImageError if  the input image
-     *    is not an RgbImage.
+     * 
+     * @param image
+     *            the input image.
+     * @throws ImageError
+     *             if the input image is not an RgbImage.
      */
-    public void push(Image image) throws com.github.ojil.core.ImageError {
+    @Override
+    public void push(final Image<?> image) throws ImageError {
         if (!(image instanceof RgbMaskedImage)) {
-            throw new ImageError(
-                            ImageError.PACKAGE.ALGORITHM,
-                            AlgorithmErrorCodes.OBJECT_NOT_EXPECTED_TYPE,
-                            image.toString(),
-                            "RgbMaskedImage",
-                            null);
+            throw new ImageError(ImageError.PACKAGE.ALGORITHM, AlgorithmErrorCodes.OBJECT_NOT_EXPECTED_TYPE, image.toString(), "RgbMaskedImage", null);
         }
-        RgbMaskedImage rgbImage = (RgbMaskedImage) image;
-        Integer[] src = rgbImage.getData();
-        RgbImage rgbOutput = new RgbImage(rgbImage.getWidth(), rgbImage.getHeight());
-        Integer[] dst = rgbOutput.getData();
-        for (int i=0; i<rgbImage.getHeight(); i++) {
-            for (int j=0; j<rgbImage.getWidth(); j++) {
-                int nColorPixel = src[i*rgbImage.getWidth() + j];
+        final RgbMaskedImage rgbImage = (RgbMaskedImage) image;
+        final Integer[] src = rgbImage.getData();
+        final RgbImage rgbOutput = new RgbImage(rgbImage.getWidth(), rgbImage.getHeight());
+        final Integer[] dst = rgbOutput.getData();
+        for (int i = 0; i < rgbImage.getHeight(); i++) {
+            for (int j = 0; j < rgbImage.getWidth(); j++) {
+                final int nColorPixel = src[(i * rgbImage.getWidth()) + j];
                 if (rgbImage.isMasked(i, j)) {
                     int nRed = RgbVal.getR(nColorPixel);
                     int nGreen = RgbVal.getG(nColorPixel);
                     int nBlue = RgbVal.getB(nColorPixel);
-                    nRed = Math.max(Byte.MIN_VALUE, 
-                                Math.min(Byte.MAX_VALUE, 
-                                (nRed*this.nDim)>>8));
-                    nGreen = Math.max(Byte.MIN_VALUE, 
-                                Math.min(Byte.MAX_VALUE, 
-                                (nGreen*this.nDim)>>8));
-                    nBlue = Math.max(Byte.MIN_VALUE, 
-                                Math.min(Byte.MAX_VALUE, 
-                                (nBlue*this.nDim)>>8));
-                    dst[i*rgbImage.getWidth()+j] = 
-                        RgbVal.toRgb((byte)nRed, (byte)nGreen, (byte)nBlue);
+                    nRed = Math.max(Byte.MIN_VALUE, Math.min(Byte.MAX_VALUE, (nRed * nDim) >> 8));
+                    nGreen = Math.max(Byte.MIN_VALUE, Math.min(Byte.MAX_VALUE, (nGreen * nDim) >> 8));
+                    nBlue = Math.max(Byte.MIN_VALUE, Math.min(Byte.MAX_VALUE, (nBlue * nDim) >> 8));
+                    dst[(i * rgbImage.getWidth()) + j] = RgbVal.toRgb((byte) nRed, (byte) nGreen, (byte) nBlue);
                 } else {
-                    dst[i*rgbImage.getWidth()+j] = nColorPixel;
+                    dst[(i * rgbImage.getWidth()) + j] = nColorPixel;
                 }
             }
         }
         super.setOutput(rgbOutput);
     }
-        
-    /** Return a string describing the clipping operation.
+    
+    /**
+     * Return a string describing the clipping operation.
      *
      * @return the string describing the clipping operation.
      */
+    @Override
     public String toString() {
-        return super.toString() + " (" + 
-                new Integer(this.nDim).toString() + ")"; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
+        return super.toString() + " (" + new Integer(nDim).toString() + ")"; //$NON-NLS-1$
     }
 }

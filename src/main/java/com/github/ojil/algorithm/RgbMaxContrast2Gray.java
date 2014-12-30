@@ -23,66 +23,65 @@
  */
 
 package com.github.ojil.algorithm;
-import com.github.ojil.core.ImageError;
+
 import com.github.ojil.core.Gray8Image;
 import com.github.ojil.core.Image;
+import com.github.ojil.core.ImageError;
 import com.github.ojil.core.PipelineStage;
 import com.github.ojil.core.RgbImage;
 import com.github.ojil.core.RgbVal;
 
 /**
- * Pipeline stage converts an RgbImage into a Gray8Image. It does
- * this by choosing at each pixel the value that will give the maximum
- * contrast in the resulting image. That is, it computes 
- * the R, G, and B values at each pixel, and chooses the most extreme
- * value -- the one largest in absolute value.
+ * Pipeline stage converts an RgbImage into a Gray8Image. It does this by
+ * choosing at each pixel the value that will give the maximum contrast in the
+ * resulting image. That is, it computes the R, G, and B values at each pixel,
+ * and chooses the most extreme value -- the one largest in absolute value.
+ * 
  * @author webb
  */
 public class RgbMaxContrast2Gray extends PipelineStage {
     
-    /** Implementation of push operation from PipelineStage.
-     * Pipeline stage converts an ARGB color image into a Gray8Image. It does
-     * this by choosing at each pixel the value that will give the maximum
-     * contrast in the resulting image. That is, it computes 
-     * the R, G, and B values at each pixel, and chooses the most extreme
-     * value -- the one largest in absolute value. 
-     * Note that the RGB&rarr;Gray conversion involves
-     * changing the data range of each pixel from 0&rarr;255 to -128&rarr;127
-     * because byte is a signed type.
+    /**
+     * Implementation of push operation from PipelineStage. Pipeline stage
+     * converts an ARGB color image into a Gray8Image. It does this by choosing
+     * at each pixel the value that will give the maximum contrast in the
+     * resulting image. That is, it computes the R, G, and B values at each
+     * pixel, and chooses the most extreme value -- the one largest in absolute
+     * value. Note that the RGB&rarr;Gray conversion involves changing the data
+     * range of each pixel from 0&rarr;255 to -128&rarr;127 because byte is a
+     * signed type.
      *
-     * @param image the input image
-     * @throws com.github.ojil.core.ImageError if image is not an RgbImage
+     * @param image
+     *            the input image
+     * @throws ImageError
+     *             if image is not an RgbImage
      */
-    public void push(Image image) throws com.github.ojil.core.ImageError {
+    @Override
+    public void push(final Image<?> image) throws ImageError {
         if (!(image instanceof RgbImage)) {
-            throw new ImageError(
-        			ImageError.PACKAGE.CORE,
-        			AlgorithmErrorCodes.IMAGE_NOT_RGBIMAGE,
-        			image.toString(),
-        			null,
-        			null);
+            throw new ImageError(ImageError.PACKAGE.CORE, AlgorithmErrorCodes.IMAGE_NOT_RGBIMAGE, image.toString(), null, null);
         }
-        RgbImage rgb = (RgbImage) image;
-        Integer[] rgbData = rgb.getData();
-        Gray8Image gray = new Gray8Image(image.getWidth(), image.getHeight());
-        Byte[] grayData = gray.getData();
-        for (int i=0; i<image.getWidth() * image.getHeight(); i++) {
-            /* get individual r, g, and b values, unmasking them from the
-             * ARGB word. The r, g, and b values are signed values 
-             * from -128 to 127.
+        final RgbImage rgb = (RgbImage) image;
+        final Integer[] rgbData = rgb.getData();
+        final Gray8Image gray = new Gray8Image(image.getWidth(), image.getHeight());
+        final Byte[] grayData = gray.getData();
+        for (int i = 0; i < (image.getWidth() * image.getHeight()); i++) {
+            /*
+             * get individual r, g, and b values, unmasking them from the ARGB
+             * word. The r, g, and b values are signed values from -128 to 127.
              */
-            byte r = RgbVal.getR(rgbData[i]);
-            byte g = RgbVal.getG(rgbData[i]);
-            byte b = RgbVal.getB(rgbData[i]);
-            int nAR = Math.abs(r);
-            int nAG = Math.abs(g);
-            int nAB = Math.abs(b);
-            if (nAR >= nAG && nAR >= nAB) {
-            	grayData[i] = r;
+            final byte r = RgbVal.getR(rgbData[i]);
+            final byte g = RgbVal.getG(rgbData[i]);
+            final byte b = RgbVal.getB(rgbData[i]);
+            final int nAR = Math.abs(r);
+            final int nAG = Math.abs(g);
+            final int nAB = Math.abs(b);
+            if ((nAR >= nAG) && (nAR >= nAB)) {
+                grayData[i] = r;
             } else if (nAG >= nAB) {
-            	grayData[i] = g;
+                grayData[i] = g;
             } else {
-            	grayData[i] = b;
+                grayData[i] = b;
             }
         }
         super.setOutput(gray);

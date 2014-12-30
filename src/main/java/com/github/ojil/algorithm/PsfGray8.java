@@ -23,63 +23,75 @@
  */
 
 package com.github.ojil.algorithm;
+
 import com.github.ojil.core.Gray8Image;
+
 /**
  * Provides point spread functions for use in inverse filtering.
+ * 
  * @author webb
  */
 public class PsfGray8 {
-       
+    
     /**
-     * Computes a horizontal bar point spread function, with a given width.
-     * This corresponds to a horizontal blur. The output image is scaled so the sum
+     * Computes a horizontal bar point spread function, with a given width. This
+     * corresponds to a horizontal blur. The output image is scaled so the sum
      * of all values is 256.
-     * @param nImageWidth The image width of the image to create. The image is always square so this is
-     * also the height.
-     * @param nBarHalfWidth The width of the bar, divided by 2 and rounded down. The actual width is
-     * twice this width plus 1, centered on the center of the image.
-     * @return A Gray8Image that can be passed to InverseFilter to remove horizontal blur.
+     * 
+     * @param nImageWidth
+     *            The image width of the image to create. The image is always
+     *            square so this is also the height.
+     * @param nBarHalfWidth
+     *            The width of the bar, divided by 2 and rounded down. The
+     *            actual width is twice this width plus 1, centered on the
+     *            center of the image.
+     * @return A Gray8Image that can be passed to InverseFilter to remove
+     *         horizontal blur.
      */
-    public static Gray8Image horizBar(int nImageWidth, int nBarHalfWidth) {
-        Gray8Image imResult = new Gray8Image(nImageWidth, nImageWidth, Byte.MIN_VALUE);
-        Byte[] bData = imResult.getData();
-        int nC = nImageWidth / 2;
-        int nArea = 2 * nBarHalfWidth + 1;
-        int nRow = nC * nImageWidth;
+    public static Gray8Image horizBar(final int nImageWidth, final int nBarHalfWidth) {
+        final Gray8Image imResult = new Gray8Image(nImageWidth, nImageWidth, Byte.MIN_VALUE);
+        final Byte[] bData = imResult.getData();
+        final int nC = nImageWidth / 2;
+        final int nArea = (2 * nBarHalfWidth) + 1;
+        final int nRow = nC * nImageWidth;
         for (int j = -nBarHalfWidth; j <= nBarHalfWidth; j++) {
             bData[nRow + nC + j] = (byte) (Byte.MAX_VALUE / nArea);
         }
         return imResult;
     }
-       
+    
     /**
-     * Computes a disk-shaped point spread function that can be used to do deblurring
-     * for circular blur. The output image is scaled so the sum of the values is 256.
-     * @param nImageWidth The output image width. The image is always square so this is also the 
-     * height.
-     * @param nRadius The radius of the disk.
-     * @return A Gray8Image that can be passed to InverseFilter to remove circular blur,
-     * for example that due to defocus.
+     * Computes a disk-shaped point spread function that can be used to do
+     * deblurring for circular blur. The output image is scaled so the sum of
+     * the values is 256.
+     * 
+     * @param nImageWidth
+     *            The output image width. The image is always square so this is
+     *            also the height.
+     * @param nRadius
+     *            The radius of the disk.
+     * @return A Gray8Image that can be passed to InverseFilter to remove
+     *         circular blur, for example that due to defocus.
      */
-    public static Gray8Image disk(int nImageWidth, int nRadius) {
-        Gray8Image imResult = new Gray8Image(nImageWidth, nImageWidth, Byte.MIN_VALUE);
-        Byte[] bData = imResult.getData();
-        int nC = nImageWidth / 2;
-        int nRadiusSq = nRadius * nRadius;
+    public static Gray8Image disk(final int nImageWidth, final int nRadius) {
+        final Gray8Image imResult = new Gray8Image(nImageWidth, nImageWidth, Byte.MIN_VALUE);
+        final Byte[] bData = imResult.getData();
+        final int nC = nImageWidth / 2;
+        final int nRadiusSq = nRadius * nRadius;
         int nArea = 0;
         // compute area of the disk. The rounding is tricky so I decided
         // to just count.
         for (int i = -nRadius; i <= nRadius; i++) {
             for (int j = -nRadius; j <= nRadius; j++) {
-                if (i*i + j*j <= nRadiusSq) {
-                    nArea ++;
+                if (((i * i) + (j * j)) <= nRadiusSq) {
+                    nArea++;
                 }
             }
         }
-         for (int i = -nRadius; i <= nRadius; i++) {
-            int nRow = (nC + i) * nImageWidth;
+        for (int i = -nRadius; i <= nRadius; i++) {
+            final int nRow = (nC + i) * nImageWidth;
             for (int j = -nRadius; j <= nRadius; j++) {
-                if (i*i + j*j <= nRadiusSq) {
+                if (((i * i) + (j * j)) <= nRadiusSq) {
                     bData[nRow + nC + j] = (byte) (Byte.MAX_VALUE / nArea);
                 }
             }

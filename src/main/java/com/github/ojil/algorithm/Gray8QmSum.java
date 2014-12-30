@@ -23,19 +23,23 @@
  */
 
 package com.github.ojil.algorithm;
-import com.github.ojil.core.ImageError;
+
 import com.github.ojil.core.Gray32Image;
 import com.github.ojil.core.Gray8Image;
 import com.github.ojil.core.Image;
+import com.github.ojil.core.ImageError;
 import com.github.ojil.core.PipelineStage;
+
 /**
- * Gray8QmSum forms the cumulative sum of an image.
- * <blockquote> Output(i,j) = &sum;<sub>k &le; i, l &le; j</sub> Input(k,l). </blockquote>
- *  Output is a 32-bit gray image.
- *  Input is an 8-bit gray image.<p>
+ * Gray8QmSum forms the cumulative sum of an image. <blockquote> Output(i,j) =
+ * &sum;<sub>k &le; i, l &le; j</sub> Input(k,l). </blockquote> Output is a
+ * 32-bit gray image. Input is an 8-bit gray image.
+ * <p>
  * Note that since the output is 32 bits the input image cannot have more than
- * 2<sup>24</sup> pixels without risking overflow. For example, an image larger than
- * 4096 &times; 4096 (=2<sup>12</sup> &times; 2<sup>12</sup>) might overflow.
+ * 2<sup>24</sup> pixels without risking overflow. For example, an image larger
+ * than 4096 &times; 4096 (=2<sup>12</sup> &times; 2<sup>12</sup>) might
+ * overflow.
+ * 
  * @author webb
  */
 public class Gray8QmSum extends PipelineStage {
@@ -46,51 +50,48 @@ public class Gray8QmSum extends PipelineStage {
     public Gray8QmSum() {
     }
     
-    /** Forms the cumulative sum of an image.
-     *  Output(i,j) = &sum;<sub>k &le; i, l &le; j</sub> Input(k,l)).
-     *  Output is 32-bit gray image.
-     *  Input is 8-bit gray image.
+    /**
+     * Forms the cumulative sum of an image. Output(i,j) = &sum;<sub>k &le; i, l
+     * &le; j</sub> Input(k,l)). Output is 32-bit gray image. Input is 8-bit
+     * gray image.
      *
-     * @param image the input image.
-     * @throws com.github.ojil.core.ImageError if the input is not a Gray8Image
+     * @param image
+     *            the input image.
+     * @throws ImageError
+     *             if the input is not a Gray8Image
      */
-    public void push(Image image) throws com.github.ojil.core.ImageError {
+    @Override
+    public void push(final Image<?> image) throws ImageError {
         if (!(image instanceof Gray8Image)) {
-            throw new ImageError(
-            				ImageError.PACKAGE.ALGORITHM,
-            				AlgorithmErrorCodes.IMAGE_NOT_GRAY8IMAGE,
-            				image.toString(),
-            				null,
-            				null);
+            throw new ImageError(ImageError.PACKAGE.ALGORITHM, AlgorithmErrorCodes.IMAGE_NOT_GRAY8IMAGE, image.toString(), null, null);
         }
-        Gray8Image gray = (Gray8Image) image;
-        Gray32Image gray32 = new Gray32Image(image.getWidth(), image.getHeight());
-        Byte[] grayData = gray.getData();
-        Integer[] gray32Data = gray32.getData();
+        final Gray8Image gray = (Gray8Image) image;
+        final Gray32Image gray32 = new Gray32Image(image.getWidth(), image.getHeight());
+        final Byte[] grayData = gray.getData();
+        final Integer[] gray32Data = gray32.getData();
         // First row
         int nSum = 0;
-        for (int j=0; j<gray.getWidth(); j++) {
-            /* Convert from signed byte value to unsigned byte for storage
-             * in the 32-bit image.
+        for (int j = 0; j < gray.getWidth(); j++) {
+            /*
+             * Convert from signed byte value to unsigned byte for storage in
+             * the 32-bit image.
              */
-            int grayUnsigned = (grayData[j]) - Byte.MIN_VALUE;
+            final int grayUnsigned = (grayData[j]) - Byte.MIN_VALUE;
             /* Assign 32-bit output */
             nSum += grayUnsigned;
             gray32Data[j] = nSum;
         }
         // Other rows
-        for (int i=1; i<gray.getHeight(); i++) {
+        for (int i = 1; i < gray.getHeight(); i++) {
             nSum = 0;
-            for (int j=0; j<gray.getWidth(); j++) {
-                /* Convert from signed byte value to unsigned byte for storage
+            for (int j = 0; j < gray.getWidth(); j++) {
+                /*
+                 * Convert from signed byte value to unsigned byte for storage
                  * in the 32-bit image.
                  */
-                int grayUnsigned = 
-                        (grayData[i*gray.getWidth()+j]) - Byte.MIN_VALUE;
+                final int grayUnsigned = (grayData[(i * gray.getWidth()) + j]) - Byte.MIN_VALUE;
                 nSum += grayUnsigned;
-                gray32Data[i*gray.getWidth()+j] = 
-                        gray32Data[(i-1)*gray.getWidth()+j] +
-                        nSum;
+                gray32Data[(i * gray.getWidth()) + j] = gray32Data[((i - 1) * gray.getWidth()) + j] + nSum;
             }
         }
         super.setOutput(gray32);

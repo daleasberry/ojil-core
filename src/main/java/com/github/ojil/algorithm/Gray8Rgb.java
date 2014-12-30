@@ -23,14 +23,17 @@
  */
 
 package com.github.ojil.algorithm;
-import com.github.ojil.core.ImageError;
+
 import com.github.ojil.core.Gray8Image;
 import com.github.ojil.core.Image;
+import com.github.ojil.core.ImageError;
 import com.github.ojil.core.PipelineStage;
 import com.github.ojil.core.RgbImage;
-/** Gray8Rgb converts an 8-bit gray image to RGB by replicating the 
- * gray values into R, G, and B. The signed byte values in the gray
- * image are changed into unsigned byte values in the ARGB word.
+
+/**
+ * Gray8Rgb converts an 8-bit gray image to RGB by replicating the gray values
+ * into R, G, and B. The signed byte values in the gray image are changed into
+ * unsigned byte values in the ARGB word.
  *
  * @author webb
  */
@@ -40,37 +43,33 @@ public class Gray8Rgb extends PipelineStage {
     public Gray8Rgb() {
     }
     
-    /** Converts an 8-bit gray image into an RGB image by replicating
-     * R, G, and B values. Also changes the data range of the bytes
-     * from -128->127 to 0->255.
+    /**
+     * Converts an 8-bit gray image into an RGB image by replicating R, G, and B
+     * values. Also changes the data range of the bytes from -128->127 to
+     * 0->255.
      *
-     * @param image the input image.
-     * @throws com.github.ojil.core.ImageError if the input is not a Gray8Image
+     * @param image
+     *            the input image.
+     * @throws ImageError
+     *             if the input is not a Gray8Image
      */
-    public void push(Image image) throws com.github.ojil.core.ImageError {
+    @Override
+    public void push(final Image<?> image) throws ImageError {
         if (!(image instanceof Gray8Image)) {
-            throw new ImageError(
-                	ImageError.PACKAGE.ALGORITHM,
-                	AlgorithmErrorCodes.IMAGE_NOT_GRAY8IMAGE,
-                	image.toString(),
-                	null,
-                	null);
+            throw new ImageError(ImageError.PACKAGE.ALGORITHM, AlgorithmErrorCodes.IMAGE_NOT_GRAY8IMAGE, image.toString(), null, null);
         }
-        Gray8Image gray = (Gray8Image) image;
-        RgbImage rgb = new RgbImage(image.getWidth(), image.getHeight());
-        Byte[] grayData = gray.getData();
-        Integer[] rgbData = rgb.getData();
-        for (int i=0; i<gray.getWidth() * gray.getHeight(); i++) {
-            /* Convert from signed byte value to unsigned byte for storage
-             * in the RGB image.
+        final Gray8Image gray = (Gray8Image) image;
+        final RgbImage rgb = new RgbImage(image.getWidth(), image.getHeight());
+        final Byte[] grayData = gray.getData();
+        final Integer[] rgbData = rgb.getData();
+        for (int i = 0; i < (gray.getWidth() * gray.getHeight()); i++) {
+            /*
+             * Convert from signed byte value to unsigned byte for storage in
+             * the RGB image.
              */
-            int grayUnsigned = (grayData[i]) - Byte.MIN_VALUE;
+            final int grayUnsigned = (grayData[i]) - Byte.MIN_VALUE;
             /* Create ARGB word */
-            rgbData[i] = 
-            		0xFF000000 |
-                    ((grayUnsigned)<<16) | 
-                    ((grayUnsigned)<<8) | 
-                    grayUnsigned;
+            rgbData[i] = 0xFF000000 | ((grayUnsigned) << 16) | ((grayUnsigned) << 8) | grayUnsigned;
         }
         super.setOutput(rgb);
     }

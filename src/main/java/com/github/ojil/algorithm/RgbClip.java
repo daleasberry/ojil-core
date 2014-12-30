@@ -23,20 +23,22 @@
  */
 
 package com.github.ojil.algorithm;
-import com.github.ojil.core.ImageError;
+
 import com.github.ojil.core.Image;
+import com.github.ojil.core.ImageError;
 import com.github.ojil.core.PipelineStage;
 import com.github.ojil.core.RgbImage;
 import com.github.ojil.core.RgbVal;
 
 /**
- * Pipeline stage performs color clipping, setting all pixels that
- * do not meet the threshold test to 0, otherwise leaving them alone.
+ * Pipeline stage performs color clipping, setting all pixels that do not meet
+ * the threshold test to 0, otherwise leaving them alone.
  * <p>
- * The test is abs(pixel.R - red) + abs(pixel.G - green) + abs(pixel.B - blue)
- * < limit.
+ * The test is abs(pixel.R - red) + abs(pixel.G - green) + abs(pixel.B - blue) <
+ * limit.
  * <p>
  * The test direction can be reversed using the dir parameter.
+ * 
  * @author webb
  */
 public class RgbClip extends PipelineStage {
@@ -50,111 +52,110 @@ public class RgbClip extends PipelineStage {
      * Creates a new instance of RgbClip. The clip test is defined here.
      * 
      * 
-     * @param r red value
-     * @param g green value
-     * @param b value
-     * @param l the threshold
-     * @param dir if true pixels that fail test are set to 0; if false
-     * pixels that pass test are set to 0.
+     * @param r
+     *            red value
+     * @param g
+     *            green value
+     * @param b
+     *            value
+     * @param l
+     *            the threshold
+     * @param dir
+     *            if true pixels that fail test are set to 0; if false pixels
+     *            that pass test are set to 0.
      */
-    public RgbClip(
-            byte r,
-            byte g,
-            byte b,
-            int l,
-            boolean dir) {
-        this.nR = r;
-        this.nG = g;
-        this.nB = b;
-        this.nLimit = l;
-        this.bDir = dir;
+    public RgbClip(final byte r, final byte g, final byte b, final int l, final boolean dir) {
+        nR = r;
+        nG = g;
+        nB = b;
+        nLimit = l;
+        bDir = dir;
     }
     
     /**
      * Creates a new instance of RgbClip. The clip test is defined here.
      * 
      * 
-     * @param rgb int value containg packed RGB
-     * @param l the threshold
-     * @param dir if true pixels that fail test are set to 0; if false
-     * pixels that pass test are set to 0.
+     * @param rgb
+     *            int value containg packed RGB
+     * @param l
+     *            the threshold
+     * @param dir
+     *            if true pixels that fail test are set to 0; if false pixels
+     *            that pass test are set to 0.
      */
-    public RgbClip(
-            int rgb,
-            int l,
-            boolean dir) {
-        this.nR = RgbVal.getR(rgb);
-        this.nG = RgbVal.getG(rgb);
-        this.nB = RgbVal.getB(rgb);
-        this.nLimit = l;
-        this.bDir = dir;
+    public RgbClip(final int rgb, final int l, final boolean dir) {
+        nR = RgbVal.getR(rgb);
+        nG = RgbVal.getG(rgb);
+        nB = RgbVal.getB(rgb);
+        nLimit = l;
+        bDir = dir;
     }
-
-    /** Clips the RGB image and sets all pixels that fail/pass the
-     * test (according to bDir) to 0.
+    
+    /**
+     * Clips the RGB image and sets all pixels that fail/pass the test
+     * (according to bDir) to 0.
      *
-     * @param image the input image.
-     * @throws com.github.ojil.core.ImageError if the cropping window
-     *    extends outside the input image, or the input image
-     *    is not an RgbImage.
+     * @param image
+     *            the input image.
+     * @throws ImageError
+     *             if the cropping window extends outside the input image, or
+     *             the input image is not an RgbImage.
      */
-    public void push(Image image) throws com.github.ojil.core.ImageError {
+    @Override
+    public void push(final Image<?> image) throws ImageError {
         if (!(image instanceof RgbImage)) {
-            throw new ImageError(
-                			ImageError.PACKAGE.ALGORITHM,
-                			AlgorithmErrorCodes.IMAGE_NOT_RGBIMAGE,
-                			image.toString(),
-                			null,
-                			null);
+            throw new ImageError(ImageError.PACKAGE.ALGORITHM, AlgorithmErrorCodes.IMAGE_NOT_RGBIMAGE, image.toString(), null, null);
         }
-        RgbImage rgbImage = (RgbImage) image;
-        Integer[] src = rgbImage.getData();
-        int nWidth = rgbImage.getWidth();
-        for (int i=0; i<rgbImage.getHeight(); i++) {
-            for (int j=0; j<rgbImage.getWidth(); j++) {
-                int nColorPixel = src[i*nWidth + j];
-                int nRed = RgbVal.getR(nColorPixel);
-                int nGreen = RgbVal.getG(nColorPixel);
-                int nBlue = RgbVal.getB(nColorPixel);
-                int nDiff = Math.abs(nRed - this.nR) + 
-                            Math.abs(nGreen - this.nG) + 
-                            Math.abs(nBlue - this.nB);
-                if ((nDiff < this.nLimit) != this.bDir) {
-                    src[i*nWidth+j] = 0;
+        final RgbImage rgbImage = (RgbImage) image;
+        final Integer[] src = rgbImage.getData();
+        final int nWidth = rgbImage.getWidth();
+        for (int i = 0; i < rgbImage.getHeight(); i++) {
+            for (int j = 0; j < rgbImage.getWidth(); j++) {
+                final int nColorPixel = src[(i * nWidth) + j];
+                final int nRed = RgbVal.getR(nColorPixel);
+                final int nGreen = RgbVal.getG(nColorPixel);
+                final int nBlue = RgbVal.getB(nColorPixel);
+                final int nDiff = Math.abs(nRed - nR) + Math.abs(nGreen - nG) + Math.abs(nBlue - nB);
+                if ((nDiff < nLimit) != bDir) {
+                    src[(i * nWidth) + j] = 0;
                 }
             }
         }
         super.setOutput(image);
     }
-        
+    
     /**
      * Change the threshold parameters.
-     * @param r red value
-     * @param g green value
-     * @param b value
-     * @param l the threshold
-     * @param dir if true pixels that fail test are set to 0; if false
-     * pixels that pass test are set to 0.
+     * 
+     * @param r
+     *            red value
+     * @param g
+     *            green value
+     * @param b
+     *            value
+     * @param l
+     *            the threshold
+     * @param dir
+     *            if true pixels that fail test are set to 0; if false pixels
+     *            that pass test are set to 0.
      */
-    public void setParameters(
-            byte r,
-            byte g,
-            byte b,
-            int l,
-            boolean dir) {
-        this.nR = r;
-        this.nG = g;
-        this.nB = b;
-        this.nLimit = l;
-        this.bDir = dir;
+    public void setParameters(final byte r, final byte g, final byte b, final int l, final boolean dir) {
+        nR = r;
+        nG = g;
+        nB = b;
+        nLimit = l;
+        bDir = dir;
     }
     
-    /** Return a string describing the clipping operation.
+    /**
+     * Return a string describing the clipping operation.
      *
      * @return the string describing the clipping operation.
      */
+    @Override
     public String toString() {
-        return super.toString() + " (" + this.nR + "," + this.nG +  //$NON-NLS-1$ //$NON-NLS-2$
-                "," + this.nB + "," + this.nLimit + "," + this.bDir + ")"; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
+        return super.toString() + " (" + nR + "," + nG + //$NON-NLS-1$ //$NON-NLS-2$
+                "," + nB + "," + nLimit + "," + bDir + ")"; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
     }
 }

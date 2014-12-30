@@ -19,8 +19,10 @@ package com.github.ojil.algorithm;
 import com.github.ojil.core.ImageError;
 import com.github.ojil.core.MathPlus;
 import com.github.ojil.core.Point;
+
 /**
  * Implementation of 2-dimensional vector.
+ * 
  * @author webb
  */
 public class Vec2 {
@@ -28,107 +30,128 @@ public class Vec2 {
     
     /**
      * Create a new Vec2, specinYing x and y values
-     * @param nX x value
-     * @param nY y value
+     * 
+     * @param nX
+     *            x value
+     * @param nY
+     *            y value
      */
-    public Vec2(int nX, int nY) {
+    public Vec2(final int nX, final int nY) {
         this.nX = nX;
         this.nY = nY;
     }
     
     /**
      * Copy constructor.
-     * @param v vector to copy.
+     * 
+     * @param v
+     *            vector to copy.
      */
-    public Vec2(Vec2 v) {
-        this.nX = v.nX;
-        this.nY = v.nY;
+    public Vec2(final Vec2 v) {
+        nX = v.nX;
+        nY = v.nY;
     }
     
     /**
      * Create a new Vec2 extending from one Point (p1) to another (p2).
-     * @param p1 starting Point
-     * @param p2 ending Point
+     * 
+     * @param p1
+     *            starting Point
+     * @param p2
+     *            ending Point
      */
-     public Vec2(Point p1, Point p2) {
-        this.nX = p2.getX() - p1.getX();
-        this.nY = p2.getY() - p1.getY();
+    public Vec2(final Point p1, final Point p2) {
+        nX = p2.getX() - p1.getX();
+        nY = p2.getY() - p1.getY();
     }
-     
-   /**
+    
+    /**
      * Add one Vec2 to this Vec2, modinYing and returning this Vec2.
-     * @param v Vec2 to add
+     * 
+     * @param v
+     *            Vec2 to add
      * @return modified Vec2
      */
-    public Vec2 add(Vec2 v) {
-        this.nX += v.nX;
-        this.nY += v.nY;
+    public Vec2 add(final Vec2 v) {
+        nX += v.nX;
+        nY += v.nY;
         return this;
     }
     
     /**
      * Add a vector to a point, returning the point
-     * @param p point to adjust by this vector
+     * 
+     * @param p
+     *            point to adjust by this vector
      * @return new point, offset by this Vec2
      */
-    public Point add(Point p) {
-        return new Point(p.getX() + (int)this.nX, p.getY() + (int)this.nY);
+    public Point add(final Point p) {
+        return new Point(p.getX() + nX, p.getY() + nY);
     }
- 
     
     /**
      * Divide a Vec2 by a scalar.
-     * @param n divisor
+     * 
+     * @param n
+     *            divisor
      * @return modified Vec2.
      */
-    public Vec2 div(int n) {
-        this.nX /= n;
-        this.nY /= n;
+    public Vec2 div(final int n) {
+        nX /= n;
+        nY /= n;
         return this;
     }
     
     /**
      * Form the scalar dot product of two Vec2's.
-     * @param v second Vec2.
+     * 
+     * @param v
+     *            second Vec2.
      * @return dot product of this and the second Vec2.
      */
-    public double dot(Vec2 v) {
-        return nX*v.nX + nY*v.nY;
+    public double dot(final Vec2 v) {
+        return (nX * v.nX) + (nY * v.nY);
     }
     
     public int getX() {
-        return this.nX;
+        return nX;
     }
     
     public int getY() {
-        return this.nY;
+        return nY;
     }
     
     /**
      * Calculate length of this Vec2.
+     * 
      * @return sqrt(nX<sup>2</sup> + nY<sup>2</sup>)
-     * @throws com.github.ojil.core.ImageError if sqrt does, due to coding error
+     * @throws ImageError
+     *             if sqrt does, due to coding error
      */
     public int length() throws ImageError {
-        return MathPlus.sqrt(nX * nX + nY * nY);
+        return MathPlus.sqrt((nX * nX) + (nY * nY));
     }
-      
+    
     /**
      * Multiply a Vec2 by a scalar
-     * @param n multiplicand
+     * 
+     * @param n
+     *            multiplicand
      * @return modified Vec2
      */
-    public Vec2 times(int n) {
-        this.nX *= n;
-        this.nY *= n;
+    public Vec2 times(final int n) {
+        nX *= n;
+        nY *= n;
         return this;
     }
     
     /**
      * Implement toString
+     * 
      * @return object name ( x, y)
      */
+    @Override
     public String toString() {
-        return super.toString() + "(" + this.nX + "," + this.nY + ")";
+        return super.toString() + "(" + nX + "," + nY + ")";
     }
 }

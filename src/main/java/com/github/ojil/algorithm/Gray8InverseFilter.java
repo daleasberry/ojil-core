@@ -23,100 +23,88 @@
  */
 
 package com.github.ojil.algorithm;
+
 import com.github.ojil.core.Complex;
 import com.github.ojil.core.Complex32Image;
-import com.github.ojil.core.ImageError;
 import com.github.ojil.core.Gray8Image;
 import com.github.ojil.core.Image;
+import com.github.ojil.core.ImageError;
 import com.github.ojil.core.MathPlus;
 import com.github.ojil.core.PipelineStage;
+
 /**
  * Computes the inverse filter of the input image, given an input point spread
  * function and noise level.
+ * 
  * @author webb
  */
 public class Gray8InverseFilter extends PipelineStage {
-    private int nGamma;
+    private final int nGamma;
     Gray8Fft fft;
     Complex32IFft ifft;
     Complex32Image cxmPsfInv;
-
+    
     /**
      * Creates a new instance of Gray8InverseFilter.
-     * @param psf The input point spread function. This must be a power of 2 in size.
-     * @param nGamma The gamma parameter from the inverse filter operation, corresponding to
-     * a noise level. Higher gamma values imply a higher noise level and keep
-     * the inverse filter from amplifying noisy components.
-     * @throws com.github.ojil.core.ImageError If the point spread function is not square or a power of 2 in size.
+     * 
+     * @param psf
+     *            The input point spread function. This must be a power of 2 in
+     *            size.
+     * @param nGamma
+     *            The gamma parameter from the inverse filter operation,
+     *            corresponding to a noise level. Higher gamma values imply a
+     *            higher noise level and keep the inverse filter from amplifying
+     *            noisy components.
+     * @throws ImageError
+     *             If the point spread function is not square or a power of 2 in
+     *             size.
      */
-    public Gray8InverseFilter(Gray8Image psf, int nGamma) throws com.github.ojil.core.ImageError {
+    public Gray8InverseFilter(final Gray8Image psf, final int nGamma) throws ImageError {
         if (psf.getWidth() != psf.getHeight()) {
-            throw new ImageError(
-            				ImageError.PACKAGE.ALGORITHM,
-            				AlgorithmErrorCodes.IMAGE_NOT_SQUARE,
-            				psf.toString(),
-            				null,
-            				null);
+            throw new ImageError(ImageError.PACKAGE.ALGORITHM, AlgorithmErrorCodes.IMAGE_NOT_SQUARE, psf.toString(), null, null);
         }
         if (!(psf instanceof Gray8Image)) {
-            throw new ImageError(
-            				ImageError.PACKAGE.ALGORITHM,
-            				AlgorithmErrorCodes.IMAGE_NOT_GRAY8IMAGE,
-            				psf.toString(),
-            				null,
-            				null);
+            throw new ImageError(ImageError.PACKAGE.ALGORITHM, AlgorithmErrorCodes.IMAGE_NOT_GRAY8IMAGE, psf.toString(), null, null);
         }
         this.nGamma = nGamma;
-        this.fft = new Gray8Fft();
-        this.fft.push(psf);
-        this.cxmPsfInv = (Complex32Image) this.fft.getFront();
-        this.ifft = new Complex32IFft(true);
+        fft = new Gray8Fft();
+        fft.push(psf);
+        cxmPsfInv = (Complex32Image) fft.getFront();
+        ifft = new Complex32IFft(true);
     }
     
     /**
      * Compute the inverse filter of the given image.
-     * @param im the Gray8Image to compute the inverse filter on.
-     * @throws com.github.ojil.core.ImageError If the input image is not a Gray8Image or not the same size as the 
-     * point spread function.
+     * 
+     * @param im
+     *            the Gray8Image to compute the inverse filter on.
+     * @throws ImageError
+     *             If the input image is not a Gray8Image or not the same size
+     *             as the point spread function.
      */
-    public void push(Image im) throws com.github.ojil.core.ImageError {
+    @Override
+    public void push(final Image<?> im) throws ImageError {
         if (im.getWidth() != im.getHeight()) {
-            throw new ImageError(
-            				ImageError.PACKAGE.ALGORITHM,
-            				AlgorithmErrorCodes.IMAGE_NOT_SQUARE,
-            				im.toString(),
-            				null,
-            				null);
+            throw new ImageError(ImageError.PACKAGE.ALGORITHM, AlgorithmErrorCodes.IMAGE_NOT_SQUARE, im.toString(), null, null);
         }
-        if (im.getWidth() != this.cxmPsfInv.getWidth() ||
-        	im.getHeight() != this.cxmPsfInv.getHeight()) {
-            throw new ImageError(
-            				ImageError.PACKAGE.ALGORITHM,
-            				AlgorithmErrorCodes.IMAGE_SIZES_DIFFER,
-            				im.toString(),
-            				this.cxmPsfInv.toString(),
-            				null);
+        if ((im.getWidth() != cxmPsfInv.getWidth()) || (im.getHeight() != cxmPsfInv.getHeight())) {
+            throw new ImageError(ImageError.PACKAGE.ALGORITHM, AlgorithmErrorCodes.IMAGE_SIZES_DIFFER, im.toString(), cxmPsfInv.toString(), null);
         }
         if (!(im instanceof Gray8Image)) {
-            throw new ImageError(
-            				ImageError.PACKAGE.ALGORITHM,
-            				AlgorithmErrorCodes.IMAGE_NOT_GRAY8IMAGE,
-            				im.toString(),
-            				null,
-            				null);
+            throw new ImageError(ImageError.PACKAGE.ALGORITHM, AlgorithmErrorCodes.IMAGE_NOT_GRAY8IMAGE, im.toString(), null, null);
         }
-        this.fft.push(im);
-        Complex32Image cxmIm = (Complex32Image) this.fft.getFront();
-        Complex cxIn[] = cxmIm.getData();
-        Complex32Image cxmResult = new Complex32Image(im.getWidth(), im.getHeight());
-        Complex cxOut[] = cxmResult.getData();
-        Complex cxPsfFft[] = this.cxmPsfInv.getData();
+        fft.push(im);
+        final Complex32Image cxmIm = (Complex32Image) fft.getFront();
+        final Complex cxIn[] = cxmIm.getData();
+        final Complex32Image cxmResult = new Complex32Image(im.getWidth(), im.getHeight());
+        final Complex cxOut[] = cxmResult.getData();
+        final Complex cxPsfFft[] = cxmPsfInv.getData();
         // compute inverse filter
-        for (int i=0; i<im.getWidth() * im.getHeight(); i++) {
-            int nMag = cxPsfFft[i].magnitude();
-            if (nMag * this.nGamma > MathPlus.SCALE) {
+        for (int i = 0; i < (im.getWidth() * im.getHeight()); i++) {
+            final int nMag = cxPsfFft[i].magnitude();
+            if ((nMag * nGamma) > MathPlus.SCALE) {
                 // cxPsfFft is the FFT of the point spread function, therefore
-                // multiplied by SCALE. We are dividing by it so we must 
+                // multiplied by SCALE. We are dividing by it so we must
                 // multiply by SCALE to maintain
                 // the same range.
                 cxOut[i] = cxIn[i].div(cxPsfFft[i]).times(MathPlus.SCALE);
@@ -126,8 +114,8 @@ public class Gray8InverseFilter extends PipelineStage {
             }
         }
         // inverse FFT to get result
-        this.ifft.push(cxmResult);
-        super.setOutput(this.ifft.getFront());
+        ifft.push(cxmResult);
+        super.setOutput(ifft.getFront());
     }
     
 }

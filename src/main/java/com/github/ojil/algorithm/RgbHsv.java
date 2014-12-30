@@ -5,55 +5,54 @@
 
 package com.github.ojil.algorithm;
 
-import com.github.ojil.core.ImageError;
 import com.github.ojil.core.Image;
+import com.github.ojil.core.ImageError;
 import com.github.ojil.core.PipelineStage;
 import com.github.ojil.core.RgbImage;
 import com.github.ojil.core.RgbVal;
 
 /**
- * Converts an RGB image to an HSV image. The HSV values are
- * scaled to fit in a byte and are stored in a packed word
- * like RGB with the bytes in the same order and position. 
- * (H&rarr;R, S&rarr;G, V&rarr;B).</br>
- * The output image replaces the input.</br>
- * Hue runs from Byte.MIN_VALUE to Byte.MIN_VALUE + 239. Hue
- * is divided into 3 80-value ranges in the order red, green, blue.
- * Saturation and value run from Byte.MIN_VALUE to Byte.MAX_VALUE.</br>
- * The code here was adapted from 
- * http://ilab.usc.edu/wiki/index.php/HSV_And_H2SV_Color_Space
- * with changes to scale everything so it fit in byte values.
+ * Converts an RGB image to an HSV image. The HSV values are scaled to fit in a
+ * byte and are stored in a packed word like RGB with the bytes in the same
+ * order and position. (H&rarr;R, S&rarr;G, V&rarr;B).</br> The output image
+ * replaces the input.</br> Hue runs from Byte.MIN_VALUE to Byte.MIN_VALUE +
+ * 239. Hue is divided into 3 80-value ranges in the order red, green, blue.
+ * Saturation and value run from Byte.MIN_VALUE to Byte.MAX_VALUE.</br> The code
+ * here was adapted from
+ * http://ilab.usc.edu/wiki/index.php/HSV_And_H2SV_Color_Space with changes to
+ * scale everything so it fit in byte values.
+ * 
  * @author webb
  */
 public class RgbHsv extends PipelineStage {
-
+    
     /**
-     * Converts an input RGB image into an HSV image. The input is replaced
-     * by the output.<p>
+     * Converts an input RGB image into an HSV image. The input is replaced by
+     * the output.
+     * <p>
      * The output is an RgbImage with the HSV values stored in the corresponding
      * RGB bytes.
-     * @param imageInput input RgbImage 
-     * @throws com.github.ojil.core.ImageError if input is not an RgbImage.
+     * 
+     * @param imageInput
+     *            input RgbImage
+     * @throws ImageError
+     *             if input is not an RgbImage.
      */
-    public void push(Image imageInput) throws ImageError {
+    @Override
+    public void push(final Image<?> imageInput) throws ImageError {
         if (!(imageInput instanceof RgbImage)) {
-            throw new ImageError(
-                			ImageError.PACKAGE.ALGORITHM,
-                			AlgorithmErrorCodes.IMAGE_NOT_RGBIMAGE,
-                			imageInput.toString(),
-                			null,
-                			null);
+            throw new ImageError(ImageError.PACKAGE.ALGORITHM, AlgorithmErrorCodes.IMAGE_NOT_RGBIMAGE, imageInput.toString(), null, null);
         }
-        RgbImage rgbInput = (RgbImage) imageInput;
-        Integer[] rgbData = rgbInput.getData();
-        for (int i=0; i<rgbInput.getWidth()*rgbInput.getHeight(); i++) {
-            int nR = RgbVal.getR(rgbData[i]);
-            int nG = RgbVal.getG(rgbData[i]);
-            int nB = RgbVal.getB(rgbData[i]);
+        final RgbImage rgbInput = (RgbImage) imageInput;
+        final Integer[] rgbData = rgbInput.getData();
+        for (int i = 0; i < (rgbInput.getWidth() * rgbInput.getHeight()); i++) {
+            final int nR = RgbVal.getR(rgbData[i]);
+            final int nG = RgbVal.getG(rgbData[i]);
+            final int nB = RgbVal.getB(rgbData[i]);
             int nMax, nMid, nMin;
             int nHueOffset;
             // determine color order
-            if (nR > nG && nR > nB) {
+            if ((nR > nG) && (nR > nB)) {
                 // red is max
                 nMax = nR;
                 nHueOffset = 0;
@@ -64,7 +63,7 @@ public class RgbHsv extends PipelineStage {
                     nMid = nB;
                     nMin = nG;
                 }
-            } else if (nG > nR && nG > nB) {
+            } else if ((nG > nR) && (nG > nB)) {
                 // green is max
                 nMax = nG;
                 nHueOffset = 80;
@@ -92,25 +91,17 @@ public class RgbHsv extends PipelineStage {
             if (nMax > Byte.MIN_VALUE) {
                 if (nMax == nMin) {
                     // color is gray. Hue, saturation are 0.
-                    rgbData[i] = RgbVal.toRgb(
-                            Byte.MIN_VALUE,
-                            Byte.MIN_VALUE,
-                            (byte) nMax);
+                    rgbData[i] = RgbVal.toRgb(Byte.MIN_VALUE, Byte.MIN_VALUE, (byte) nMax);
                 } else {
                     // compute hue scaled from 0-240.
-                    int nHue = Math.min(239, nHueOffset + (40 * (nMid - nMin)) 
-                            / (nMax - nMin));
+                    final int nHue = Math.min(239, nHueOffset + ((40 * (nMid - nMin)) / (nMax - nMin)));
                     // compute saturation scaled from 0-255.
-                    int nSat = Math.min(255, (256 * (nMax - nMin)) 
-                            / (nMax - Byte.MIN_VALUE));
-                    rgbData[i] = RgbVal.toRgb(
-                            (byte) (nHue + Byte.MIN_VALUE),
-                            (byte) (nSat + Byte.MIN_VALUE),
-                            (byte) nMax);
+                    final int nSat = Math.min(255, (256 * (nMax - nMin)) / (nMax - Byte.MIN_VALUE));
+                    rgbData[i] = RgbVal.toRgb((byte) (nHue + Byte.MIN_VALUE), (byte) (nSat + Byte.MIN_VALUE), (byte) nMax);
                 }
             }
         }
         super.setOutput(rgbInput);
     }
-
+    
 }

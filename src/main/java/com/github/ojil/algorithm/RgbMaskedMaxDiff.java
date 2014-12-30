@@ -19,96 +19,90 @@
 
 package com.github.ojil.algorithm;
 
-import com.github.ojil.core.ImageError;
 import com.github.ojil.core.Gray8Image;
 import com.github.ojil.core.Image;
+import com.github.ojil.core.ImageError;
 import com.github.ojil.core.PipelineStage;
 import com.github.ojil.core.RgbImage;
 import com.github.ojil.core.RgbMaskedImage;
 import com.github.ojil.core.RgbVal;
 
 /**
- * Compute the Gray8Image that is the max of absolute differences between
- * the background RgbMaskedImage specified in the constructor and the 
- * input RgbImage, in the unmasked areas only. The output in the unmasked areas
- * is Byte.MIN_VALUE.
+ * Compute the Gray8Image that is the max of absolute differences between the
+ * background RgbMaskedImage specified in the constructor and the input
+ * RgbImage, in the unmasked areas only. The output in the unmasked areas is
+ * Byte.MIN_VALUE.
+ * 
  * @author webb
  */
 public class RgbMaskedMaxDiff extends PipelineStage {
-    private RgbMaskedImage rgbBack;
-
+    private final RgbMaskedImage rgbBack;
+    
     /**
      * Set background image.
-     * @param rgbBack background RgbImage.
+     * 
+     * @param rgbBack
+     *            background RgbImage.
      */
-    public RgbMaskedMaxDiff(RgbMaskedImage rgbBack) {
+    public RgbMaskedMaxDiff(final RgbMaskedImage rgbBack) {
         this.rgbBack = rgbBack;
     }
     
     /**
-     * Process a foreground RgbMaskedImage and produce a Gray8Image in which each
-     * pixel is the sum of absolute differences between the foreground and
-     * background, in the masked areas. Outside the masked areas the output
-     * is Byte.MIN_VALUE.
-     * @param imInput input RgbImage
-     * @throws com.github.ojil.core.ImageError if imInput is not an RgbImage or is not the same
-     * size as the background image set in the constructor.
+     * Process a foreground RgbMaskedImage and produce a Gray8Image in which
+     * each pixel is the sum of absolute differences between the foreground and
+     * background, in the masked areas. Outside the masked areas the output is
+     * Byte.MIN_VALUE.
+     * 
+     * @param imInput
+     *            input RgbImage
+     * @throws ImageError
+     *             if imInput is not an RgbImage or is not the same size as the
+     *             background image set in the constructor.
      */
-    public void push(Image imInput) throws ImageError {
+    @Override
+    public void push(final Image<?> imInput) throws ImageError {
         {
-        if (!(imInput instanceof RgbImage)) 
-            throw new ImageError(
-                			ImageError.PACKAGE.ALGORITHM,
-                			AlgorithmErrorCodes.OBJECT_NOT_EXPECTED_TYPE,
-                			imInput.toString(),
-                			"RgbMaskedImage",
-                			null);
+            if (!(imInput instanceof RgbImage)) {
+                throw new ImageError(ImageError.PACKAGE.ALGORITHM, AlgorithmErrorCodes.OBJECT_NOT_EXPECTED_TYPE, imInput.toString(), "RgbMaskedImage", null);
+            }
         }
-        if (imInput.getWidth() != this.rgbBack.getWidth() ||
-        	imInput.getHeight() != this.rgbBack.getHeight()) {
-        	throw new ImageError(
-        				ImageError.PACKAGE.ALGORITHM,
-        				AlgorithmErrorCodes.IMAGE_SIZES_DIFFER,
-        				imInput.toString(),
-        				this.rgbBack.toString(),
-        				null);
-        
+        if ((imInput.getWidth() != rgbBack.getWidth()) || (imInput.getHeight() != rgbBack.getHeight())) {
+            throw new ImageError(ImageError.PACKAGE.ALGORITHM, AlgorithmErrorCodes.IMAGE_SIZES_DIFFER, imInput.toString(), rgbBack.toString(), null);
+            
         }
-        RgbImage rgbInput = (RgbImage)imInput;
-        Integer[] wInput = rgbInput.getData();
-        Integer[] wBack = this.rgbBack.getData();
-        Gray8Image grayOut = new Gray8Image(
-                this.rgbBack.getWidth(), 
-                this.rgbBack.getHeight());        
-        Byte[] bGray = grayOut.getData();
-        for (int i=0; i<imInput.getHeight(); i++) {
-            for (int j=0; j<imInput.getWidth(); j++) {
-                if (!this.rgbBack.isMasked(i,j)) {
-                    int rIn = RgbVal.getR(wInput[i*grayOut.getWidth()+j]);
-                    int gIn = RgbVal.getG(wInput[i*grayOut.getWidth()+j]);
-                    int bIn = RgbVal.getB(wInput[i*grayOut.getWidth()+j]);
-                    int rBack = RgbVal.getR(wBack[i*grayOut.getWidth()+j]);
-                    int gBack = RgbVal.getG(wBack[i*grayOut.getWidth()+j]);
-                    int bBack = RgbVal.getB(wBack[i*grayOut.getWidth()+j]);
-                    int gRes = Math.max(Math.abs(rIn-rBack),
-                            Math.max(Math.abs(gIn-gBack),
-                            Math.abs(bIn-bBack)));
-                    bGray[i*grayOut.getWidth()+j] = 
-                            (byte) Math.min(gRes, Byte.MAX_VALUE);
+        final RgbImage rgbInput = (RgbImage) imInput;
+        final Integer[] wInput = rgbInput.getData();
+        final Integer[] wBack = rgbBack.getData();
+        final Gray8Image grayOut = new Gray8Image(rgbBack.getWidth(), rgbBack.getHeight());
+        final Byte[] bGray = grayOut.getData();
+        for (int i = 0; i < imInput.getHeight(); i++) {
+            for (int j = 0; j < imInput.getWidth(); j++) {
+                if (!rgbBack.isMasked(i, j)) {
+                    final int rIn = RgbVal.getR(wInput[(i * grayOut.getWidth()) + j]);
+                    final int gIn = RgbVal.getG(wInput[(i * grayOut.getWidth()) + j]);
+                    final int bIn = RgbVal.getB(wInput[(i * grayOut.getWidth()) + j]);
+                    final int rBack = RgbVal.getR(wBack[(i * grayOut.getWidth()) + j]);
+                    final int gBack = RgbVal.getG(wBack[(i * grayOut.getWidth()) + j]);
+                    final int bBack = RgbVal.getB(wBack[(i * grayOut.getWidth()) + j]);
+                    final int gRes = Math.max(Math.abs(rIn - rBack), Math.max(Math.abs(gIn - gBack), Math.abs(bIn - bBack)));
+                    bGray[(i * grayOut.getWidth()) + j] = (byte) Math.min(gRes, Byte.MAX_VALUE);
                 } else {
                     bGray[i] = Byte.MIN_VALUE;
                 }
             }
-       }
-       super.setOutput(grayOut);
+        }
+        super.setOutput(grayOut);
     }
-
+    
     /**
      * Implement toString, providing the background image information.
-     * @return a string consisting of this class name followed by the
-     * background image description.
+     * 
+     * @return a string consisting of this class name followed by the background
+     *         image description.
      */
+    @Override
     public String toString() {
-        return super.toString() + "(" + this.rgbBack.toString() + ")";
+        return super.toString() + "(" + rgbBack.toString() + ")";
     }
 }

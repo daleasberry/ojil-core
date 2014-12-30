@@ -16,49 +16,58 @@
 
 package com.github.ojil.algorithm;
 
+import com.github.ojil.core.ImageError;
 import com.github.ojil.core.Point;
 import com.github.ojil.core.Quad;
 import com.github.ojil.core.Triangle;
 
 /**
- * Maps points in one quadtrilateral into another. <p>
+ * Maps points in one quadtrilateral into another.
+ * <p>
+ * 
  * @author webb
  */
 public class QuadMap {
-    private TriangleMap t[];
-    private Triangle t1, t2;
+    private final TriangleMap t[];
+    private final Triangle t1, t2;
     
     /**
-     * Create a map for mapping points in one quadrilateral into another.
-     * The points of the quadrilaterals must be specified in corresponding
-     * order. The quadrilateral map is broken down into two triangular maps and
-     * the two maps are not optimized.
-     * @param q1 source map
-     * @param q2 target map
-     * @throws com.github.ojil.core.ImageError if Triangle does, due to colinearity.
+     * Create a map for mapping points in one quadrilateral into another. The
+     * points of the quadrilaterals must be specified in corresponding order.
+     * The quadrilateral map is broken down into two triangular maps and the two
+     * maps are not optimized.
+     * 
+     * @param q1
+     *            source map
+     * @param q2
+     *            target map
+     * @throws ImageError
+     *             if Triangle does, due to colinearity.
      */
-    public QuadMap(Quad q1, Quad q2) throws com.github.ojil.core.ImageError {
-        // initialize the triangle maps. 
-        this.t = new TriangleMap[2];
-        this.t1 = new Triangle(q1.getCorner(0), q1.getCorner(1), q1.getCorner(2));
-        this.t[0] = new TriangleMap(t1, new Triangle(q2.getCorner(0), q2.getCorner(1), q2.getCorner(2)));
-        this.t2 = new Triangle(q1.getCorner(2), q1.getCorner(3), q1.getCorner(0));
-        this.t[1] = new TriangleMap(t2, new Triangle(q2.getCorner(2), q2.getCorner(3), q2.getCorner(0)));
+    public QuadMap(final Quad q1, final Quad q2) throws ImageError {
+        // initialize the triangle maps.
+        t = new TriangleMap[2];
+        t1 = new Triangle(q1.getCorner(0), q1.getCorner(1), q1.getCorner(2));
+        t[0] = new TriangleMap(t1, new Triangle(q2.getCorner(0), q2.getCorner(1), q2.getCorner(2)));
+        t2 = new Triangle(q1.getCorner(2), q1.getCorner(3), q1.getCorner(0));
+        t[1] = new TriangleMap(t2, new Triangle(q2.getCorner(2), q2.getCorner(3), q2.getCorner(0)));
     }
     
     /**
      * Map a point in the source quadrilateral into the target quadrilateral.
-     * @param p Point to map
+     * 
+     * @param p
+     *            Point to map
      * @return mapped Point
      */
-    public Point map(Point p) {
+    public Point map(final Point p) {
         // first we have to find out if p is in the first triangle or the second
-        if (this.t1.contains(p)) {
-            return this.t[0].map(p);
+        if (t1.contains(p)) {
+            return t[0].map(p);
         } else {
             // we're just assuming its in the second triangle, not testing --
             // should test
-            return this.t[1].map(p);
+            return t[1].map(p);
         }
     }
 }

@@ -23,15 +23,17 @@
  */
 
 package com.github.ojil.algorithm;
-import com.github.ojil.core.ImageError;
+
 import com.github.ojil.core.Gray8Image;
 import com.github.ojil.core.Image;
+import com.github.ojil.core.ImageError;
 import com.github.ojil.core.PipelineStage;
 
 /**
- * Threshold. Output is a Gray8Image with values less than threshold
- * set to Byte.MAX_VALUE, below threshold set to Byte.MIN_VALUE if
- * bWithin is true, opposite if bWithin is false.
+ * Threshold. Output is a Gray8Image with values less than threshold set to
+ * Byte.MAX_VALUE, below threshold set to Byte.MIN_VALUE if bWithin is true,
+ * opposite if bWithin is false.
+ * 
  * @author webb
  */
 public class Gray8Threshold extends PipelineStage {
@@ -40,38 +42,36 @@ public class Gray8Threshold extends PipelineStage {
     
     /**
      * Creates a new instance of Gray8Threshold
-     * @param nThreshold threshold value.
-     * @param bWithin direction of threshold. If true then
-     * output is true (Byte.MAX_VALUE) iff < threshold.
+     * 
+     * @param nThreshold
+     *            threshold value.
+     * @param bWithin
+     *            direction of threshold. If true then output is true
+     *            (Byte.MAX_VALUE) iff < threshold.
      */
-    public Gray8Threshold(int nThreshold, boolean bWithin) {
-    	this.nThreshold = nThreshold;
+    public Gray8Threshold(final int nThreshold, final boolean bWithin) {
+        this.nThreshold = nThreshold;
         this.bWithin = bWithin;
     }
     
-    /** Threshold gray image. Output is Byte.MAX_VALUE over threshold,
+    /**
+     * Threshold gray image. Output is Byte.MAX_VALUE over threshold,
      * Byte.MIN_VALUE under.
      *
-     * @param image the input image (and output)
-     * @throws com.github.ojil.core.ImageError if the image is not a gray 8-bit
-     * image.
+     * @param image
+     *            the input image (and output)
+     * @throws ImageError
+     *             if the image is not a gray 8-bit image.
      */
-    public void push(Image image)
-        throws com.github.ojil.core.ImageError
-    {
+    @Override
+    public void push(final Image<?> image) throws ImageError {
         if (!(image instanceof Gray8Image)) {
-            throw new ImageError(
-            				ImageError.PACKAGE.ALGORITHM,
-            				AlgorithmErrorCodes.IMAGE_NOT_GRAY8IMAGE,
-            				image.toString(),
-            				null,
-            				null);
+            throw new ImageError(ImageError.PACKAGE.ALGORITHM, AlgorithmErrorCodes.IMAGE_NOT_GRAY8IMAGE, image.toString(), null, null);
         }
-        Gray8Image gray = (Gray8Image) image;
-        Byte[] data = gray.getData();
-        for (int i=0; i<data.length; i++) {
-            data[i] = (((data[i]) < this.nThreshold)==this.bWithin) ?
-            		Byte.MAX_VALUE : Byte.MIN_VALUE;
+        final Gray8Image gray = (Gray8Image) image;
+        final Byte[] data = gray.getData();
+        for (int i = 0; i < data.length; i++) {
+            data[i] = (((data[i]) < nThreshold) == bWithin) ? Byte.MAX_VALUE : Byte.MIN_VALUE;
         }
         super.setOutput(image);
     }
@@ -80,8 +80,9 @@ public class Gray8Threshold extends PipelineStage {
      * 
      * @return String describing class instance.
      */
+    @Override
     public String toString() {
-    	return super.toString() + "(" + this.nThreshold + ")"; //$NON-NLS-1$ //$NON-NLS-2$
+        return super.toString() + "(" + nThreshold + ")"; //$NON-NLS-1$ //$NON-NLS-2$
     }
-
+    
 }

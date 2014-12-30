@@ -23,88 +23,84 @@
  */
 
 package com.github.ojil.algorithm;
-import com.github.ojil.core.ImageError;
+
 import com.github.ojil.core.Gray16Image;
 import com.github.ojil.core.Gray8Image;
 import com.github.ojil.core.Image;
+import com.github.ojil.core.ImageError;
 import com.github.ojil.core.PipelineStage;
 
 /**
- * Computes the variance of pixels vertically distributed around
- * the current pixel.
+ * Computes the variance of pixels vertically distributed around the current
+ * pixel.
+ * 
  * @author webb
  */
 public class Gray8VertVar extends PipelineStage {
-	/**
-	 * The window size -- pixels within nWindow of the current
-	 * pixel are included in the window.
-	 */
-	int nWindow;
-	/**
-	 * The output image.
-	 */
-	Gray16Image g16 = null;
+    /**
+     * The window size -- pixels within nWindow of the current pixel are
+     * included in the window.
+     */
+    int nWindow;
+    /**
+     * The output image.
+     */
+    Gray16Image g16 = null;
     
     /**
      * Creates a new instance of Gray8VertVar
-     * @param nWindow height of window to calculate variance over.
+     * 
+     * @param nWindow
+     *            height of window to calculate variance over.
      */
-    public Gray8VertVar(int nWindow) {
-    	this.nWindow = nWindow;
+    public Gray8VertVar(final int nWindow) {
+        this.nWindow = nWindow;
     }
     
-    /** Compute the vertical variance of pixels within nWindow
-     * of the current pixel.
-     * @param image the input Gray8Image
-     * @throws com.github.ojil.core.ImageError if image is not a Gray8Image
+    /**
+     * Compute the vertical variance of pixels within nWindow of the current
+     * pixel.
+     * 
+     * @param image
+     *            the input Gray8Image
+     * @throws ImageError
+     *             if image is not a Gray8Image
      */
-    public void push(Image image) throws com.github.ojil.core.ImageError {
+    @Override
+    public void push(final Image<?> image) throws ImageError {
         if (!(image instanceof Gray8Image)) {
-            throw new ImageError(
-    				ImageError.PACKAGE.ALGORITHM,
-    				AlgorithmErrorCodes.IMAGE_NOT_GRAY8IMAGE,
-    				image.toString(),
-    				null,
-    				null);
+            throw new ImageError(ImageError.PACKAGE.ALGORITHM, AlgorithmErrorCodes.IMAGE_NOT_GRAY8IMAGE, image.toString(), null, null);
         }
-        if (this.g16 == null || 
-        	this.g16.getWidth() != image.getWidth() ||
-        	this.g16.getHeight() != image.getHeight()) {
-        	this.g16 = new Gray16Image(
-        			image.getWidth(), 
-        			image.getHeight());
+        if ((g16 == null) || (g16.getWidth() != image.getWidth()) || (g16.getHeight() != image.getHeight())) {
+            g16 = new Gray16Image(image.getWidth(), image.getHeight());
         }
-        Gray8Image input = (Gray8Image) image;
-        Byte[] bIn = input.getData();
-        int cHeight = input.getHeight();
-        int cWidth = input.getWidth();
-        Short[] sOut = g16.getData();
-        for (int i=0; i<cWidth; i++) {
-	        int nSum = 0;
-	        int nSumSq = 0;
-	        int nCount = 0;
-	        for (int j=0; j<nWindow; j++) {
-	        	nSum += bIn[j*cWidth + i];
-	        	nSumSq += bIn[j*cWidth + i] * bIn[j*cWidth + i];
-	        	nCount ++;
-	        }
-            for (int j=0; j<cHeight; j++) {
-            	if (j + this.nWindow < cHeight) {
-            		nSum += bIn[(j + this.nWindow)*cWidth + i];
-            		nSumSq += bIn[(j + this.nWindow)*cWidth + i] *
-            			bIn[(j + this.nWindow)*cWidth + i];
-            		nCount ++;
-            	}
-            	if (j >= this.nWindow) {
-            		nSum -= bIn[(j - this.nWindow)*cWidth + i];
-            		nSumSq -= bIn[(j - this.nWindow)*cWidth + i] *
-            			bIn[(j - this.nWindow)*cWidth + i];
-            		nCount --;
-            	}
-            	short nVar = (short)
-            		Math.min(Short.MAX_VALUE, 
-            			(nSumSq - nSum * nSum / nCount) / (nCount - 1)); 
-            	sOut[j*cWidth + i] = nVar;
+        final Gray8Image input = (Gray8Image) image;
+        final Byte[] bIn = input.getData();
+        final int cHeight = input.getHeight();
+        final int cWidth = input.getWidth();
+        final Short[] sOut = g16.getData();
+        for (int i = 0; i < cWidth; i++) {
+            int nSum = 0;
+            int nSumSq = 0;
+            int nCount = 0;
+            for (int j = 0; j < nWindow; j++) {
+                nSum += bIn[(j * cWidth) + i];
+                nSumSq += bIn[(j * cWidth) + i] * bIn[(j * cWidth) + i];
+                nCount++;
+            }
+            for (int j = 0; j < cHeight; j++) {
+                if ((j + nWindow) < cHeight) {
+                    nSum += bIn[((j + nWindow) * cWidth) + i];
+                    nSumSq += bIn[((j + nWindow) * cWidth) + i] * bIn[((j + nWindow) * cWidth) + i];
+                    nCount++;
+                }
+                if (j >= nWindow) {
+                    nSum -= bIn[((j - nWindow) * cWidth) + i];
+                    nSumSq -= bIn[((j - nWindow) * cWidth) + i] * bIn[((j - nWindow) * cWidth) + i];
+                    nCount--;
+                }
+                final short nVar = (short) Math.min(Short.MAX_VALUE, (nSumSq - ((nSum * nSum) / nCount)) / (nCount - 1));
+                sOut[(j * cWidth) + i] = nVar;
             }
         }
         super.setOutput(g16);

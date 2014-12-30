@@ -1,4 +1,7 @@
 package com.github.ojil.algorithm;
+
+import com.github.ojil.core.ImageError;
+
 // The code in this file is from
 // http://www.java-tips.org/java-se-tips/java.lang/priority-queue-binary-heap-implementation-in-3.html
 
@@ -17,81 +20,94 @@ package com.github.ojil.algorithm;
 
 /**
  * PriorityQueue interface. A priority queue maintains a sorted list of items,
- * and makes it possible to add new items or return and remove the least item
- * in sorted order in O(log n) time, where n is the number of items.<br>
- * Some priority queues may support a decreaseKey operation,
- * but this is considered an advanced operation. If so,
- * a Position is returned by insert.
+ * and makes it possible to add new items or return and remove the least item in
+ * sorted order in O(log n) time, where n is the number of items.<br>
+ * Some priority queues may support a decreaseKey operation, but this is
+ * considered an advanced operation. If so, a Position is returned by insert.
  * Note that all "matching" is based on the compareTo method.
+ * 
  * @author Mark Allen Weiss
  */
 public interface PriorityQueue {
     /**
-     * The Position interface represents a type that can
-     * be used for the decreaseKey operation.
+     * The Position interface represents a type that can be used for the
+     * decreaseKey operation.
      */
     public interface Position {
         /**
          * Returns the value stored at this position.
+         * 
          * @return the value stored at this position.
          */
-        ComparableJ2me getValue( );
+        ComparableJ2me getValue();
     }
     
     /**
-     * Insert into the priority queue, maintaining heap order.
-     * Duplicates are allowed.
+     * Insert into the priority queue, maintaining heap order. Duplicates are
+     * allowed.
+     * 
      * @return may return a Position useful for decreaseKey.
-     * @param x the item to insert.
-     * @throws com.github.ojil.core.ImageError if x is not of the correct type or null.
+     * @param x
+     *            the item to insert.
+     * @throws ImageError
+     *             if x is not of the correct type or null.
      */
-    Position insert( ComparableJ2me x ) throws com.github.ojil.core.ImageError;
+    Position insert(ComparableJ2me x) throws ImageError;
     
     /**
      * Find the smallest item in the priority queue.
+     * 
      * @return the smallest item.
-     * @throws com.github.ojil.core.ImageError if the heap is empty.
+     * @throws ImageError
+     *             if the heap is empty.
      */
-    ComparableJ2me findMin( ) throws com.github.ojil.core.ImageError;
+    ComparableJ2me findMin() throws ImageError;
     
     /**
      * Remove and return the smallest item from the priority queue.
+     * 
      * @return the smallest item.
-     * @throws com.github.ojil.core.ImageError if empty.
+     * @throws ImageError
+     *             if empty.
      */
-    ComparableJ2me deleteMin( ) throws com.github.ojil.core.ImageError;
+    ComparableJ2me deleteMin() throws ImageError;
     
     /**
      * Test if the priority queue is logically empty.
+     * 
      * @return true if empty, false otherwise.
      */
-    boolean isEmpty( );
+    boolean isEmpty();
     
     /**
      * Make the priority queue logically empty.
      */
-    void makeEmpty( );
+    void makeEmpty();
     
     /**
      * Returns the size.
+     * 
      * @return current size.
      */
-    int size( );
+    int size();
     
     /**
-     * Change the value of the item stored in the pairing heap.
-     * This is considered an advanced operation and might not
-     * be supported by all priority queues. A priority queue
-     * will signal its intention to not support decreaseKey by
-     * having insert return null consistently.
-     * @param p any non-null Position returned by insert.
-     * @param newVal the new value, which must be smaller
-     *    than the currently stored value.
-     * @throws IllegalArgumentException if p invalid.
-     * @throws UnsupportedOperationException if appropriate.
+     * Change the value of the item stored in the pairing heap. This is
+     * considered an advanced operation and might not be supported by all
+     * priority queues. A priority queue will signal its intention to not
+     * support decreaseKey by having insert return null consistently.
+     * 
+     * @param p
+     *            any non-null Position returned by insert.
+     * @param newVal
+     *            the new value, which must be smaller than the currently stored
+     *            value.
+     * @throws IllegalArgumentException
+     *             if p invalid.
+     * @throws UnsupportedOperationException
+     *             if appropriate.
      */
-/*    void decreaseKey( Position p, ComparableJ2me newVal );
-*/
+    /*
+     * void decreaseKey( Position p, ComparableJ2me newVal );
+     */
 }
-
-

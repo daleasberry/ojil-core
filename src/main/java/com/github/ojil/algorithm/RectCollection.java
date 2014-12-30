@@ -20,13 +20,15 @@ package com.github.ojil.algorithm;
 import java.util.Enumeration;
 import java.util.Vector;
 
+import com.github.ojil.core.ImageError;
 import com.github.ojil.core.Point;
 import com.github.ojil.core.Rect;
 
 /**
- * RectCollection includes a data structure and algorithms to efficiently represent
- * a collection of axis-aligned rectangles and allow the fast (O(log n)) 
- * determination of whether a given point is in one of them.
+ * RectCollection includes a data structure and algorithms to efficiently
+ * represent a collection of axis-aligned rectangles and allow the fast (O(log
+ * n)) determination of whether a given point is in one of them.
+ * 
  * @author webb
  */
 public class RectCollection {
@@ -38,15 +40,15 @@ public class RectCollection {
     
     /**
      * treeHoriz is a collection of all the rectangles, projected horizontally.
-     * Each node in the tree contains the rectangles at that y-coordinate.
-     * There is one y-coordinate for each unique top or bottom position in a
+     * Each node in the tree contains the rectangles at that y-coordinate. There
+     * is one y-coordinate for each unique top or bottom position in a
      * rectangle.
      */
     private ThreadedBinaryTree treeHoriz = null;
     /**
      * treeVert is a collection of all the rectangles, projected vertically.
-     * Each node in the tree contains the rectangles at that x-coordinate.
-     * There is one x-coordinate for each unique left and right position in a
+     * Each node in the tree contains the rectangles at that x-coordinate. There
+     * is one x-coordinate for each unique left and right position in a
      * rectangle
      */
     private ThreadedBinaryTree treeVert = null;
@@ -59,28 +61,20 @@ public class RectCollection {
     
     /**
      * Add a new rectangle to the collection. This includes adding its top and
-     * bottom coordinates to the horizontal projection collection and its
-     * left and right coordinates to the vertical projection collection, and
-     * adding the rectangle itself to every rectangle list between its starting
-     * and ending coordinates.
-     * @param r the rectangle to add
-     * @throws com.github.ojil.core.ImageError in the case of type error (key wrong
-     * type)
+     * bottom coordinates to the horizontal projection collection and its left
+     * and right coordinates to the vertical projection collection, and adding
+     * the rectangle itself to every rectangle list between its starting and
+     * ending coordinates.
+     * 
+     * @param r
+     *            the rectangle to add
+     * @throws ImageError
+     *             in the case of type error (key wrong type)
      */
-    public void add(Rect r)
-    	throws com.github.ojil.core.ImageError
-    {
-        this.vAllRect.addElement(r);
-        this.treeHoriz =
-                addRect(r,
-                r.getLeft(),
-                r.getTop() + r.getHeight(),
-                this.treeHoriz);
-        this.treeVert =
-                addRect(r,
-                r.getLeft(),
-                r.getTop() + r.getWidth(),
-                this.treeVert);
+    public void add(final Rect r) throws ImageError {
+        vAllRect.addElement(r);
+        treeHoriz = addRect(r, r.getLeft(), r.getTop() + r.getHeight(), treeHoriz);
+        treeVert = addRect(r, r.getLeft(), r.getTop() + r.getWidth(), treeVert);
     }
     
     /**
@@ -88,23 +82,22 @@ public class RectCollection {
      * coordinate. First we get pointers to the nodes in the trees for the
      * starting and ending coordinates. Then we add the rectangle to all the
      * lists in the inorder traversal from the start to the end node.
-     * @param r the rectangle to add
-     * @param start starting coordinate
-     * @param end ending coordinate
-     * @param tbtRoot the root of the ThreadedBinaryTree that we are modifying
-     * @return the modified binary tree (= tbtRoot if it already exists, 
-     * otherwise it will be created)
-     * @throws com.github.ojil.core.ImageError in the case of type error (key wrong
-     * type)
+     * 
+     * @param r
+     *            the rectangle to add
+     * @param start
+     *            starting coordinate
+     * @param end
+     *            ending coordinate
+     * @param tbtRoot
+     *            the root of the ThreadedBinaryTree that we are modifying
+     * @return the modified binary tree (= tbtRoot if it already exists,
+     *         otherwise it will be created)
+     * @throws ImageError
+     *             in the case of type error (key wrong type)
      */
     @SuppressWarnings({ "unchecked", "rawtypes" })
-	private ThreadedBinaryTree addRect(
-            Rect r, 
-            int start, 
-            int end, 
-            ThreadedBinaryTree tbtRoot)
-    	throws com.github.ojil.core.ImageError
-    {
+    private ThreadedBinaryTree addRect(final Rect r, final int start, final int end, ThreadedBinaryTree tbtRoot) throws ImageError {
         // get lists of Rectangles enclosing the given rectangle start and end
         ThreadedBinaryTree tbtFind = null;
         if (tbtRoot != null) {
@@ -125,8 +118,7 @@ public class RectCollection {
         ThreadedBinaryTree tbtStart = null;
         // the ThreadedBinaryTree may not already exist. Create it if necessary
         if (tbtRoot == null) {
-            tbtRoot = tbtStart = 
-                    new ThreadedBinaryTree(new BinaryHeap.ComparableInt(start));
+            tbtRoot = tbtStart = new ThreadedBinaryTree(new BinaryHeap.ComparableInt(start));
         } else {
             // already exists, add or get the start node
             tbtStart = tbtRoot.add(new BinaryHeap.ComparableInt(start));
@@ -134,43 +126,37 @@ public class RectCollection {
             // if it doesn't already exist
             if (vExistingStart != null) {
                 if (tbtStart.getValue() == null) {
-                    Vector<Rect> v = new Vector<>();
-                    for (Enumeration<Rect> e = vExistingStart.elements();
-                        e.hasMoreElements();) {
-                        v.addElement(e.nextElement());
+                    final Vector<Rect> v = new Vector<>();
+                    for (final Rect rect : vExistingStart) {
+                        v.addElement(rect);
                     }
                     tbtStart.setValue(v);
                 }
             }
         }
         // add or get the end node
-        ThreadedBinaryTree tbtEnd = 
-                tbtRoot.add(new BinaryHeap.ComparableInt(end));
+        final ThreadedBinaryTree tbtEnd = tbtRoot.add(new BinaryHeap.ComparableInt(end));
         // add existing enclosing rectangles to this node's list
         // if it doesn't already exist
         if (vExistingEnd != null) {
             if (tbtEnd.getValue() == null) {
-                Vector<Rect> v = new Vector<>();
-                for (Enumeration<Rect> e = vExistingEnd.elements();
-                    e.hasMoreElements();) {
-                    v.addElement(e.nextElement());
+                final Vector<Rect> v = new Vector<>();
+                for (final Rect rect : vExistingEnd) {
+                    v.addElement(rect);
                 }
                 tbtEnd.setValue(v);
             }
         }
-        // now traverse the path from tbtStart to tbtEnd and add r to all 
+        // now traverse the path from tbtStart to tbtEnd and add r to all
         // rectangle lists
-        Vector<Rect> vTrav = 
-                tbtStart.inorderTraverse(tbtEnd);
-        // for eacn node in the inorder traversal, create the Vector of 
+        final Vector<Rect> vTrav = tbtStart.inorderTraverse(tbtEnd);
+        // for eacn node in the inorder traversal, create the Vector of
         // rectangles if necessary, and put this rectangle on it
-        for (Enumeration<?> e = 
-                vTrav.elements(); e.hasMoreElements();) {
-            ThreadedBinaryTree tbt = 
-                    (ThreadedBinaryTree) e.nextElement();
+        for (final Object name : vTrav) {
+            final ThreadedBinaryTree tbt = (ThreadedBinaryTree) name;
             // Vector doesn't exist
             if (tbt.getValue() == null) {
-				Vector v = new Vector();
+                final Vector v = new Vector();
                 v.addElement(r);
                 // set value
                 tbt.setValue(v);
@@ -187,9 +173,9 @@ public class RectCollection {
      * Clear collection.
      */
     public void clear() {
-    	this.vAllRect = new Vector<>();
-    	this.treeHoriz = null;
-    	this.treeVert = null;
+        vAllRect = new Vector<>();
+        treeHoriz = null;
+        treeVert = null;
     }
     
     /**
@@ -197,35 +183,33 @@ public class RectCollection {
      * of rectangles that the point projects into horizontally and vertically,
      * and then determining if the point lies in one of the rectangles in the
      * intersection.
-     * @param p the point to test
+     * 
+     * @param p
+     *            the point to test
      * @return a Rect that contains p if it is contained by any Rect, otherwise
-     * null
-     * @throws com.github.ojil.core.ImageError in the case of type error (key wrong
-     * type)
+     *         null
+     * @throws ImageError
+     *             in the case of type error (key wrong type)
      */
-    public Rect contains(Point p) 
-    	throws com.github.ojil.core.ImageError
-    {
+    public Rect contains(final Point p) throws ImageError {
         // if no rectangles are in collection answer is null
-        if (this.treeHoriz == null || this.treeVert == null) {
+        if ((treeHoriz == null) || (treeVert == null)) {
             return null;
         }
-        ThreadedBinaryTree tbtHorizProj =
-                this.treeHoriz.findNearest(new BinaryHeap.ComparableInt(p.getY()));
-        ThreadedBinaryTree tbtVertProj =
-                this.treeVert.findNearest(new BinaryHeap.ComparableInt(p.getX()));
+        final ThreadedBinaryTree tbtHorizProj = treeHoriz.findNearest(new BinaryHeap.ComparableInt(p.getY()));
+        final ThreadedBinaryTree tbtVertProj = treeVert.findNearest(new BinaryHeap.ComparableInt(p.getX()));
         // if no tree node is <= this point the return null
-        if (tbtHorizProj == null || tbtVertProj == null) {
+        if ((tbtHorizProj == null) || (tbtVertProj == null)) {
             return null;
         }
         // check for intersection between two lists; if non-empty check
         // for contains
-        Vector<?> vHoriz = (Vector<?>) tbtHorizProj.getValue();
-        Vector<?> vVert = (Vector<?>) tbtVertProj.getValue();
-        for (Enumeration<?> e = vHoriz.elements(); e.hasMoreElements();) {
-            Rect r = (Rect) e.nextElement();
-            for (Enumeration<?> f = vVert.elements(); f.hasMoreElements();) {
-                Rect s = (Rect) f.nextElement();
+        final Vector<?> vHoriz = (Vector<?>) tbtHorizProj.getValue();
+        final Vector<?> vVert = (Vector<?>) tbtVertProj.getValue();
+        for (final Object name : vHoriz) {
+            final Rect r = (Rect) name;
+            for (final Object name2 : vVert) {
+                final Rect s = (Rect) name2;
                 if (r == s) {
                     if (s.contains(p)) {
                         return s;
@@ -238,31 +222,33 @@ public class RectCollection {
     
     /**
      * Returns an enumeration of all rectangles in the collection
-     * @return Enumeration of all rectangles in order they were added to
-     * the collection.
+     * 
+     * @return Enumeration of all rectangles in order they were added to the
+     *         collection.
      */
     public Enumeration<Rect> elements() {
-        return this.vAllRect.elements();
+        return vAllRect.elements();
     }
     
     /**
      * Implement toString
      */
+    @Override
     public String toString() {
-    	String szRes = super.toString() + "(all=" + this.vAllRect.toString() + 
-    		",horiz=";
-    	if (this.treeHoriz != null) {
-    		szRes += this.treeHoriz.toString();
-    	} else {
-    		szRes += "null";
-    	}
-    	szRes += ",vert=";;
-    	if (this.treeVert != null) {
-    		szRes += this.treeVert.toString();
-    	} else {
-    		szRes += "null";
-    	}
-    	szRes += ")";
-    	return szRes;
+        String szRes = super.toString() + "(all=" + vAllRect.toString() + ",horiz=";
+        if (treeHoriz != null) {
+            szRes += treeHoriz.toString();
+        } else {
+            szRes += "null";
+        }
+        szRes += ",vert=";
+        ;
+        if (treeVert != null) {
+            szRes += treeVert.toString();
+        } else {
+            szRes += "null";
+        }
+        szRes += ")";
+        return szRes;
     }
 }

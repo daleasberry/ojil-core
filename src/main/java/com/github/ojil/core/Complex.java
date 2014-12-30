@@ -30,274 +30,295 @@ package com.github.ojil.core;
 
 /**
  * A simple implementation of complex numbers for use in FFT, etc.
+ * 
  * @author webb
  */
-public class Complex extends Number{
-	private static final long serialVersionUID = 777755552694276640L;
-	
-	private int nImag;
+public class Complex extends Number {
+    private static final long serialVersionUID = 777755552694276640L;
+    
+    private int nImag;
     private int nReal;
     
     /**
      * Default constructor.
      */
     public Complex() {
-        this.nReal = 0;
-        this.nImag = 0;
+        nReal = 0;
+        nImag = 0;
     }
-
+    
     /**
      * Copy constructor.
-     * @param cx the complex number to copy.
+     * 
+     * @param cx
+     *            the complex number to copy.
      */
-    public Complex(Complex cx) {
-        this.nReal = cx.nReal;
-        this.nImag = cx.nImag;
+    public Complex(final Complex cx) {
+        nReal = cx.nReal;
+        nImag = cx.nImag;
     }
-
+    
     /**
      * Creates a new instance of Complex from real and imaginary arguments.
-     * @param nReal Real component.
-     * @param nImag Imaginary component.
+     * 
+     * @param nReal
+     *            Real component.
+     * @param nImag
+     *            Imaginary component.
      */
-    public Complex(int nReal, int nImag) {
+    public Complex(final int nReal, final int nImag) {
         this.nReal = nReal;
         this.nImag = nImag;
     }
-
+    
     /**
-     * Create a new Complex number from a real number. The imaginary component will
-     * be 0.
-     * @param nReal The real component.
+     * Create a new Complex number from a real number. The imaginary component
+     * will be 0.
+     * 
+     * @param nReal
+     *            The real component.
      */
-    public Complex(int nReal) {
+    public Complex(final int nReal) {
         this.nReal = nReal;
-        this.nImag = 0;
+        nImag = 0;
     }
     
     /**
      * Complex conjugate
+     * 
      * @return the complex conjugate of this.
      */
     public Complex conjugate() {
-        this.nImag = -this.nImag;
-        return this;
-    }
-        
-    /**
-     * Divide the complex number by a real ineger.
-     * @param n the divisor.
-     * @return the Complex number resulting from the division (replaces this).
-     * @throws com.github.ojil.core.ImageError if n = 0
-     */
-    public Complex div(int n) throws com.github.ojil.core.ImageError {
-        if (n==0) {
-            throw new ImageError(
-            				ImageError.PACKAGE.CORE,
-            				ErrorCodes.MATH_DIVISION_ZERO, 
-            				this.toString(), 
-            				new Integer(n).toString(), 
-            				null);
-        }
-        this.nReal /= n;
-        this.nImag /= n;
+        nImag = -nImag;
         return this;
     }
     
-   /**
-     * Divides one complex number by another
-     * @param cx The complex number to divide by.
-     * @return the result of dividing this number by cx.
-     * @throws com.github.ojil.core.ImageError If division by 0 is attempted, i.e., cx.square() is 0.
+    /**
+     * Divide the complex number by a real ineger.
+     * 
+     * @param n
+     *            the divisor.
+     * @return the Complex number resulting from the division (replaces this).
+     * @throws ImageError
+     *             if n = 0
      */
-    public Complex div(Complex cx) throws com.github.ojil.core.ImageError {
+    public Complex div(final int n) throws ImageError {
+        if (n == 0) {
+            throw new ImageError(ImageError.PACKAGE.CORE, ErrorCodes.MATH_DIVISION_ZERO, toString(), new Integer(n).toString(), null);
+        }
+        nReal /= n;
+        nImag /= n;
+        return this;
+    }
+    
+    /**
+     * Divides one complex number by another
+     * 
+     * @param cx
+     *            The complex number to divide by.
+     * @return the result of dividing this number by cx.
+     * @throws ImageError
+     *             If division by 0 is attempted, i.e., cx.square() is 0.
+     */
+    public Complex div(Complex cx) throws ImageError {
         int nShift = 0;
-        if (Math.abs(cx.real()) >= MathPlus.SCALE ||
-            Math.abs(cx.imag()) >= MathPlus.SCALE) {
+        if ((Math.abs(cx.real()) >= MathPlus.SCALE) || (Math.abs(cx.imag()) >= MathPlus.SCALE)) {
             cx = new Complex(cx).rsh(MathPlus.SHIFT);
             nShift = MathPlus.SHIFT;
         }
-        int nSq = cx.square();
+        final int nSq = cx.square();
         if (nSq == 0) {
-            throw new ImageError(
-            				ImageError.PACKAGE.CORE,
-            				ErrorCodes.MATH_PRODUCT_TOO_LARGE,
-            				this.toString(),
-            				cx.toString(),
-            				null);
+            throw new ImageError(ImageError.PACKAGE.CORE, ErrorCodes.MATH_PRODUCT_TOO_LARGE, toString(), cx.toString(), null);
         }
-        // cx is right shifted by SHIFT bits. So multiplying by it and 
+        // cx is right shifted by SHIFT bits. So multiplying by it and
         // dividing by its square shifts left by SHIFT bits. We shift back to
         // compensate
-        int nR = ((this.nReal * cx.nReal + this.nImag * cx.nImag) / nSq) >> nShift;
-        int nI = ((this.nImag * cx.nReal - this.nReal * cx.nImag) / nSq) >> nShift;
-        this.nReal = nR;
-        this.nImag = nI;
+        final int nR = (((nReal * cx.nReal) + (nImag * cx.nImag)) / nSq) >> nShift;
+        final int nI = (((nImag * cx.nReal) - (nReal * cx.nImag)) / nSq) >> nShift;
+        nReal = nR;
+        nImag = nI;
         return this;
     }
     
     /**
      * Equality test.
-     * @param cx the Complex number to compare with.
+     * 
+     * @param cx
+     *            the Complex number to compare with.
      * @return true iff the two Complex numbers are equal.
      */
-    public boolean equals(Complex cx) {
-        return this.nReal == cx.nReal && this.nImag == cx.nImag;
+    public boolean equals(final Complex cx) {
+        return (nReal == cx.nReal) && (nImag == cx.nImag);
     }
     
     /**
      * The imaginary component of the complex number.
+     * 
      * @return the imaginary component.
      */
     public int imag() {
-        return this.nImag;
+        return nImag;
     }
-
+    
     /**
      * Shifts a complex number left a certain number of bits.
-     * @param n The number of bits to shift by.
-     * @return the result of shifting the complex number left the number of bits.
+     * 
+     * @param n
+     *            The number of bits to shift by.
+     * @return the result of shifting the complex number left the number of
+     *         bits.
      */
-    public Complex lsh(int n) {
-        this.nReal <<= n;
-        this.nImag <<= n;
+    public Complex lsh(final int n) {
+        nReal <<= n;
+        nImag <<= n;
         return this;
     }
-
+    
     /**
      * Complex magnitude.
+     * 
      * @return the magnitude of this number, i.e., sqrt(real**2 + imag**2)
-     * @throws com.github.ojil.core.ImageError if the square value computed is too large.
+     * @throws ImageError
+     *             if the square value computed is too large.
      */
-    public int magnitude() throws com.github.ojil.core.ImageError {
+    public int magnitude() throws ImageError {
         // special case when one component is 0
-        if (this.nReal == 0 || this.nImag == 0) {
-            return Math.abs(this.nReal) + Math.abs(this.nImag);
+        if ((nReal == 0) || (nImag == 0)) {
+            return Math.abs(nReal) + Math.abs(nImag);
         }
-        // try to extend the range of numbers we can take the magnitude of beyond
+        // try to extend the range of numbers we can take the magnitude of
+        // beyond
         // 2**16
-        if (Math.abs(this.nReal) > (MathPlus.SCALE >> 1) || 
-            Math.abs(this.nImag) > (MathPlus.SCALE >> 1)) {
+        if ((Math.abs(nReal) > (MathPlus.SCALE >> 1)) || (Math.abs(nImag) > (MathPlus.SCALE >> 1))) {
             // squaring the number will result in overflow
             // so we shift right first instead
-            int nR = this.nReal >> MathPlus.SHIFT;
-            int nI = this.nImag >> MathPlus.SHIFT;
-            return MathPlus.sqrt(nR * nR + nI * nI) << MathPlus.SHIFT;
+            final int nR = nReal >> MathPlus.SHIFT;
+            final int nI = nImag >> MathPlus.SHIFT;
+            return MathPlus.sqrt((nR * nR) + (nI * nI)) << MathPlus.SHIFT;
         } else {
-            return MathPlus.sqrt(square());           
+            return MathPlus.sqrt(square());
         }
     }
     
-     /**
+    /**
      * Subtracts one complex number from another.
-     * @param cx the complex number to subtract.
+     * 
+     * @param cx
+     *            the complex number to subtract.
      * @return the difference of the two complex numbers.
      */
-    public Complex minus(Complex cx) {
-        this.nReal -= cx.nReal;
-        this.nImag -= cx.nImag;
+    public Complex minus(final Complex cx) {
+        nReal -= cx.nReal;
+        nImag -= cx.nImag;
         return this;
     }
-
+    
     /**
      * Adds two complex numbers.
-     * @param cx the complex number to add.
+     * 
+     * @param cx
+     *            the complex number to add.
      * @return the sum of the two complex numbers.
      */
-    public Complex plus(Complex cx) {
-        this.nReal += cx.nReal;
-        this.nImag += cx.nImag;
+    public Complex plus(final Complex cx) {
+        nReal += cx.nReal;
+        nImag += cx.nImag;
         return this;
     }
-
+    
     /**
      * The real component of the complex number.
+     * 
      * @return the real component of the complex number.
      */
     public int real() {
-        return this.nReal;
+        return nReal;
     }
-
-     /**
+    
+    /**
      * Shifts a complex number right a certain number of bits.
-     * @param n The number of bits to shift by.
+     * 
+     * @param n
+     *            The number of bits to shift by.
      * @return the result of shifting the complex number the number of bits.
      */
-    public Complex rsh(int n) {
-        this.nReal >>= n;
-        this.nImag >>= n;
-        return this;
+    public Complex rsh(final int n) {
+        nReal >>= n;
+            nImag >>= n;
+            return this;
     }
-
+    
     /**
      * Computes the absolute square.
+     * 
      * @return The absolute square, i.e, real**2 + imag**2.
-     * @throws com.github.ojil.core.ImageError if Complex value is too large.
+     * @throws ImageError
+     *             if Complex value is too large.
      */
-    public int square() throws com.github.ojil.core.ImageError {
-        if (Math.abs(this.nReal) > MathPlus.SCALE ||
-            Math.abs(this.nImag) > MathPlus.SCALE) {
-            throw new ImageError(
-                            ImageError.PACKAGE.CORE,
-                            ErrorCodes.MATH_SQUARE_TOO_LARGE,
-                            this.toString(),
-                            null,
-                            null);
+    public int square() throws ImageError {
+        if ((Math.abs(nReal) > MathPlus.SCALE) || (Math.abs(nImag) > MathPlus.SCALE)) {
+            throw new ImageError(ImageError.PACKAGE.CORE, ErrorCodes.MATH_SQUARE_TOO_LARGE, toString(), null, null);
         }
-        return this.nReal * this.nReal + this.nImag * this.nImag;
+        return (nReal * nReal) + (nImag * nImag);
     }
     
     /**
      * Multiplies two complex numbers.
-         * @param cx The complex number to multiply by.
+     * 
+     * @param cx
+     *            The complex number to multiply by.
      * @return The product of the two numbers.
      */
-    public Complex times(Complex cx) {
-        int nR = this.nReal * cx.nReal - this.nImag * cx.nImag;
-        int nI = this.nReal * cx.nImag + this.nImag * cx.nReal;
-        this.nReal = nR;
-        this.nImag = nI;
+    public Complex times(final Complex cx) {
+        final int nR = (nReal * cx.nReal) - (nImag * cx.nImag);
+        final int nI = (nReal * cx.nImag) + (nImag * cx.nReal);
+        nReal = nR;
+        nImag = nI;
         return this;
     }
-
+    
     /**
      * Multiplies a complex number by a real number.
-         * @param nX The complex number to multiply by.
+     * 
+     * @param nX
+     *            The complex number to multiply by.
      * @return The product of the two numbers.
      */
-    public Complex times(int nX) {
-        int nR = this.nReal * nX;
-        int nI = this.nReal * nX;
-        this.nReal = nR;
-        this.nImag = nI;
+    public Complex times(final int nX) {
+        final int nR = nReal * nX;
+        final int nI = nReal * nX;
+        nReal = nR;
+        nImag = nI;
         return this;
     }
-
+    
     /**
      * Returns a String representation of the complex number
+     * 
      * @return the string (real, imag)
      */
+    @Override
     public String toString() {
-        return "(" + this.nReal + ", " + this.nImag + ")"; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+        return "(" + nReal + ", " + nImag + ")"; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
     }
-
-	@Override
-	public double doubleValue() {
-		return nReal;
-	}
-
-	@Override
-	public float floatValue() {
-		return nReal;
-	}
-
-	@Override
-	public int intValue() {
-		return nReal;
-	}
-
-	@Override
-	public long longValue() {
-		return nReal;
-	}
+    
+    @Override
+    public double doubleValue() {
+        return nReal;
+    }
+    
+    @Override
+    public float floatValue() {
+        return nReal;
+    }
+    
+    @Override
+    public int intValue() {
+        return nReal;
+    }
+    
+    @Override
+    public long longValue() {
+        return nReal;
+    }
 }

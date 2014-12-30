@@ -23,80 +23,87 @@
  */
 
 package com.github.ojil.algorithm;
-import com.github.ojil.core.ImageError;
+
 import com.github.ojil.core.Gray8Image;
 import com.github.ojil.core.Image;
+import com.github.ojil.core.ImageError;
 import com.github.ojil.core.PipelineStage;
 
 /**
  * Pipeline stage assigns a constant value to a rectangle in an input Gray8Image
  * to produce an output Gray8Image.
+ * 
  * @author webb
  */
 public class Gray8Rect extends PipelineStage {
     private int cX, cY, nWidth, nHeight;
-    private byte bValue;
+    private final byte bValue;
     
     /**
      * Creates a new instance of Gray8Rect.
-     * @param cX The horizontal offset of the rectangle.
-     * @param cY the vertical offset of the rectangle.
-     * @param nWidth the width of the rectangle.
-     * @param nHeight the height of the rectangle.
-     * @param bValue the value to be assigned to the rectangle.
-     * @throws com.github.ojil.core.ImageError if the height or width of the rectange is negative or zero.
+     * 
+     * @param cX
+     *            The horizontal offset of the rectangle.
+     * @param cY
+     *            the vertical offset of the rectangle.
+     * @param nWidth
+     *            the width of the rectangle.
+     * @param nHeight
+     *            the height of the rectangle.
+     * @param bValue
+     *            the value to be assigned to the rectangle.
+     * @throws ImageError
+     *             if the height or width of the rectange is negative or zero.
      */
-    public Gray8Rect(int cX, int cY, int nWidth, int nHeight, byte bValue) 
-    	throws com.github.ojil.core.ImageError {
-    	setWindow(cX, cY, nWidth, nHeight);
+    public Gray8Rect(final int cX, final int cY, final int nWidth, final int nHeight, final byte bValue) throws ImageError {
+        setWindow(cX, cY, nWidth, nHeight);
         this.bValue = bValue;
     }
-        
+    
     /**
-     * Assigns a constant rectangle to the input Gray8Image, replacing values in the image.
-     * @param image the input image (output replaces input).
-     * @throws com.github.ojil.core.ImageError if the input is not a Gray8Image.
+     * Assigns a constant rectangle to the input Gray8Image, replacing values in
+     * the image.
+     * 
+     * @param image
+     *            the input image (output replaces input).
+     * @throws ImageError
+     *             if the input is not a Gray8Image.
      */
-    public void push(Image image) throws com.github.ojil.core.ImageError {
+    @Override
+    public void push(final Image<?> image) throws ImageError {
         if (!(image instanceof Gray8Image)) {
-            throw new ImageError(
-            				ImageError.PACKAGE.ALGORITHM,
-            				AlgorithmErrorCodes.IMAGE_NOT_GRAY8IMAGE,
-            				image.toString(),
-            				null,
-            				null);
+            throw new ImageError(ImageError.PACKAGE.ALGORITHM, AlgorithmErrorCodes.IMAGE_NOT_GRAY8IMAGE, image.toString(), null, null);
         }
-        Gray8Image input = (Gray8Image) image;
-        Byte[] data = input.getData();
-        int nLimitY = Math.min(input.getHeight(), this.cY + this.nHeight);
-        int nLimitX = Math.min(input.getWidth(), this.cX + this.nWidth);
-        for (int i=this.cY; i<nLimitY; i++) {
-            int nStart = i * image.getWidth();
-            for (int j=this.cX; j<nLimitX; j++) {
-                data[nStart+j] = this.bValue;
+        final Gray8Image input = (Gray8Image) image;
+        final Byte[] data = input.getData();
+        final int nLimitY = Math.min(input.getHeight(), cY + nHeight);
+        final int nLimitX = Math.min(input.getWidth(), cX + nWidth);
+        for (int i = cY; i < nLimitY; i++) {
+            final int nStart = i * image.getWidth();
+            for (int j = cX; j < nLimitX; j++) {
+                data[nStart + j] = bValue;
             }
         }
-         super.setOutput(input);
+        super.setOutput(input);
     }
     
     /**
      * 
-     * @param cX Top-left horizontal coordinate of the rectangle.
-     * @param cY top-left vertical coordinate of the rectangle.
-     * @param nWidth Width of the rectangle.
-     * @param nHeight Height of the rectangle.
-     * @throws com.github.ojil.core.ImageError if the width or height is negative or zero.
+     * @param cX
+     *            Top-left horizontal coordinate of the rectangle.
+     * @param cY
+     *            top-left vertical coordinate of the rectangle.
+     * @param nWidth
+     *            Width of the rectangle.
+     * @param nHeight
+     *            Height of the rectangle.
+     * @throws ImageError
+     *             if the width or height is negative or zero.
      */
-    public void setWindow(int cX, int cY, int nWidth, int nHeight) 
-    	throws com.github.ojil.core.ImageError {
-    	if (nWidth <= 0 || nHeight <= 0) {
-            throw new ImageError(
-            		ImageError.PACKAGE.ALGORITHM,
-            		AlgorithmErrorCodes.OUTPUT_IMAGE_SIZE_NEGATIVE,
-            		new Integer(nWidth).toString(),
-            		new Integer(nHeight).toString(),
-            		null);
-    	}
+    public void setWindow(final int cX, final int cY, final int nWidth, final int nHeight) throws ImageError {
+        if ((nWidth <= 0) || (nHeight <= 0)) {
+            throw new ImageError(ImageError.PACKAGE.ALGORITHM, AlgorithmErrorCodes.OUTPUT_IMAGE_SIZE_NEGATIVE, new Integer(nWidth).toString(), new Integer(nHeight).toString(), null);
+        }
         this.cX = cX;
         this.cY = cY;
         this.nWidth = nWidth;

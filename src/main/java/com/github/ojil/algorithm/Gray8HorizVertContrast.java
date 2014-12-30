@@ -23,43 +23,56 @@
  */
 
 package com.github.ojil.algorithm;
+
 import com.github.ojil.core.Image;
+import com.github.ojil.core.ImageError;
 import com.github.ojil.core.Ladder;
 import com.github.ojil.core.PipelineStage;
 
 /**
- * Computes a simple measure of horizontal-vertical contrast.
- * The measure is the difference in variance
- * over a window of a given size measured horizontally and vertically.
- * The measure used is a linear combination of the horizontal and vertical
- * contrast, clamped between Byte.MIN_VALUE and Byte.MAX_VALUE. 
+ * Computes a simple measure of horizontal-vertical contrast. The measure is the
+ * difference in variance over a window of a given size measured horizontally
+ * and vertically. The measure used is a linear combination of the horizontal
+ * and vertical contrast, clamped between Byte.MIN_VALUE and Byte.MAX_VALUE.
+ * 
  * @author webb
  */
 public class Gray8HorizVertContrast extends PipelineStage {
-	PipelineStage pipe;
+    PipelineStage pipe;
     
-    /** Creates a new instance of Gray8HorizVertContrast. Builds the pipeline
-     * which computes the horizontal-vertical contrast measure. Result is
-     * (nA * horizontal + nB * vertical) / nC.
-     * @param nWindow the size of the window to compute contrast over.
-     * @param nA factor to multiply horizontal contrast by
-     * @param nB factor to multiply vertical contrast by
-     * @param nC divisor
+    /**
+     * Creates a new instance of Gray8HorizVertContrast. Builds the pipeline
+     * which computes the horizontal-vertical contrast measure. Result is (nA *
+     * horizontal + nB * vertical) / nC.
+     * 
+     * @param nWindow
+     *            the size of the window to compute contrast over.
+     * @param nA
+     *            factor to multiply horizontal contrast by
+     * @param nB
+     *            factor to multiply vertical contrast by
+     * @param nC
+     *            divisor
      */
-    public Gray8HorizVertContrast(int nWindow, int nA, int nB, int nC) {
-    	Gray8HorizVar ghv = new Gray8HorizVar(nWindow);
-    	Gray8VertVar gvv = new Gray8VertVar(nWindow);
-    	Gray16LinComb glc = new Gray16LinComb(nA, nB, nC);
-    	this.pipe = new Ladder(ghv, gvv, glc);
+    public Gray8HorizVertContrast(final int nWindow, final int nA, final int nB, final int nC) {
+        final Gray8HorizVar ghv = new Gray8HorizVar(nWindow);
+        final Gray8VertVar gvv = new Gray8VertVar(nWindow);
+        final Gray16LinComb glc = new Gray16LinComb(nA, nB, nC);
+        pipe = new Ladder(ghv, gvv, glc);
     }
     
-    /** Apply the contrast measure to the input input image.
-     * @param image the input Gray16Image
-     * @throws com.github.ojil.core.ImageError if image is not a Gray16Image
+    /**
+     * Apply the contrast measure to the input input image.
+     * 
+     * @param image
+     *            the input Gray16Image
+     * @throws ImageError
+     *             if image is not a Gray16Image
      */
-    public void push(Image image) throws com.github.ojil.core.ImageError {
-    	this.pipe.push(image);
-        super.setOutput(this.pipe.getFront());
+    @Override
+    public void push(final Image<?> image) throws ImageError {
+        pipe.push(image);
+        super.setOutput(pipe.getFront());
     }
     
 }

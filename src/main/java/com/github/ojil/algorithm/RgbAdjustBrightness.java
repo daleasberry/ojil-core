@@ -23,8 +23,9 @@
  */
 
 package com.github.ojil.algorithm;
-import com.github.ojil.core.ImageError;
+
 import com.github.ojil.core.Image;
+import com.github.ojil.core.ImageError;
 import com.github.ojil.core.PipelineStage;
 import com.github.ojil.core.RgbImage;
 import com.github.ojil.core.RgbVal;
@@ -32,72 +33,64 @@ import com.github.ojil.core.RgbVal;
 /**
  * Pipeline stage adjusts brightness of red, green, and blue bands independently
  * by a multiplicative factor.
+ * 
  * @author webb
  */
 public class RgbAdjustBrightness extends PipelineStage {
     int nRedFac, nGreenFac, nBlueFac;
     
-    /** Creates a new instance of RgbAdjustBrightness. Multiplicative factors
-     * are specified here.
+    /**
+     * Creates a new instance of RgbAdjustBrightness. Multiplicative factors are
+     * specified here.
      *
-     * @param nRed red factor (scaled by 256)
-     * @param nGreen green factor (scaled by 256)
-     * @param nBlue blue factor (scaled by 256)
+     * @param nRed
+     *            red factor (scaled by 256)
+     * @param nGreen
+     *            green factor (scaled by 256)
+     * @param nBlue
+     *            blue factor (scaled by 256)
      */
-    public RgbAdjustBrightness(
-            int nRed,
-            int nGreen,
-            int nBlue) {
-        this.nRedFac = nRed;
-        this.nGreenFac = nGreen;
-        this.nBlueFac = nBlue;
+    public RgbAdjustBrightness(final int nRed, final int nGreen, final int nBlue) {
+        nRedFac = nRed;
+        nGreenFac = nGreen;
+        nBlueFac = nBlue;
     }
     
-    /** Adjust brightness of RGB image. This is an in-place modification;
-     * input is modified.
+    /**
+     * Adjust brightness of RGB image. This is an in-place modification; input
+     * is modified.
      *
-     * @param image the input image.
+     * @param image
+     *            the input image.
      */
-    public void push(Image image) throws com.github.ojil.core.ImageError {
+    @Override
+    public void push(final Image<?> image) throws ImageError {
         if (!(image instanceof RgbImage)) {
-            throw new ImageError(
-                			ImageError.PACKAGE.ALGORITHM,
-                			AlgorithmErrorCodes.IMAGE_NOT_RGBIMAGE,
-                			image.toString(),
-                			null,
-                			null);
+            throw new ImageError(ImageError.PACKAGE.ALGORITHM, AlgorithmErrorCodes.IMAGE_NOT_RGBIMAGE, image.toString(), null, null);
         }
-        RgbImage imageInput = (RgbImage) image;
-        Integer[] rgb = imageInput.getData();
-        for (int i=0; i<imageInput.getHeight() * imageInput.getWidth(); i++) {
+        final RgbImage imageInput = (RgbImage) image;
+        final Integer[] rgb = imageInput.getData();
+        for (int i = 0; i < (imageInput.getHeight() * imageInput.getWidth()); i++) {
             // the scaling has to be done on unsigned values.
             int nRed = RgbVal.getR(rgb[i]) - Byte.MIN_VALUE;
             int nGreen = RgbVal.getG(rgb[i]) - Byte.MIN_VALUE;
             int nBlue = RgbVal.getB(rgb[i]) - Byte.MIN_VALUE;
             // scale and convert back to signed byte values
-            nRed = Math.max(Byte.MIN_VALUE, 
-                    Math.min(Byte.MAX_VALUE, 
-                    nRed * this.nRedFac / 256 + Byte.MIN_VALUE));
-            nGreen = Math.max(Byte.MIN_VALUE, 
-                    Math.min(Byte.MAX_VALUE, 
-                    nGreen * this.nGreenFac / 256 + Byte.MIN_VALUE));
-            nBlue = Math.max(Byte.MIN_VALUE, 
-                    Math.min(Byte.MAX_VALUE, 
-                    nBlue * this.nBlueFac / 256 + Byte.MIN_VALUE));
+            nRed = Math.max(Byte.MIN_VALUE, Math.min(Byte.MAX_VALUE, ((nRed * nRedFac) / 256) + Byte.MIN_VALUE));
+            nGreen = Math.max(Byte.MIN_VALUE, Math.min(Byte.MAX_VALUE, ((nGreen * nGreenFac) / 256) + Byte.MIN_VALUE));
+            nBlue = Math.max(Byte.MIN_VALUE, Math.min(Byte.MAX_VALUE, ((nBlue * nBlueFac) / 256) + Byte.MIN_VALUE));
             rgb[i] = RgbVal.toRgb((byte) nRed, (byte) nGreen, (byte) nBlue);
         }
         super.setOutput(imageInput);
     }
     
-    
-    
-    /** Return a string describing the cropping operation.
+    /**
+     * Return a string describing the cropping operation.
      *
      * @return the string describing the cropping operation.
      */
+    @Override
     public String toString() {
-        return super.toString() + " (" + this.nRedFac + "," +
-                this.nGreenFac + "," +
-                this.nBlueFac + ")"; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+        return super.toString() + " (" + nRedFac + "," + nGreenFac + "," + nBlueFac + ")"; //$NON-NLS-1$
     }
 }

@@ -3,8 +3,8 @@
  *
  * Given a target image size and a horizontal and vertical offset
  * generates a series of subimages within the input image,
- * each subimage offset by an integral multiple of the 
- * offset with size equal to the target size and lying 
+ * each subimage offset by an integral multiple of the
+ * offset with size equal to the target size and lying
  * entirely within the original image. The offset of the
  * subimage in the input image is given in the subimage class.
  *
@@ -30,39 +30,48 @@
  */
 
 package com.github.ojil.algorithm;
-import com.github.ojil.core.ImageError;
+
 import com.github.ojil.core.Gray8Image;
 import com.github.ojil.core.Gray8OffsetImage;
 import com.github.ojil.core.Image;
+import com.github.ojil.core.ImageError;
 import com.github.ojil.core.PipelineStage;
 
 /**
- * Generates sub images (cropped images positioned regularly across the input image) 
- * from an input Gray8Image. The subimages are of type Gray8OffsetImage which makes it
- * possible to determine their location in the original input image.
+ * Generates sub images (cropped images positioned regularly across the input
+ * image) from an input Gray8Image. The subimages are of type Gray8OffsetImage
+ * which makes it possible to determine their location in the original input
+ * image.
+ * 
  * @author webb
  */
 public class Gray8SubImageGenerator extends PipelineStage {
-    Gray8Image imageInput;  // input image
-    int nHeight;            // target height
-    int nHorizLimit = 0;    // number of subimages generated horizontally
-    int nVertLimit = 0;     // number of subimages generated vertically
-    int nHorizIndex = 0;    // current subimiage index, horizontal
-    int nVertIndex = 0;     // current subimage index, vertical
-    int nWidth;             // target width
-    int nXOffset;           // x offset multiple for subimages
-    int nYOffset;           // y offset multiple for subimages
+    Gray8Image imageInput; // input image
+    int nHeight; // target height
+    int nHorizLimit = 0; // number of subimages generated horizontally
+    int nVertLimit = 0; // number of subimages generated vertically
+    int nHorizIndex = 0; // current subimiage index, horizontal
+    int nVertIndex = 0; // current subimage index, vertical
+    int nWidth; // target width
+    int nXOffset; // x offset multiple for subimages
+    int nYOffset; // y offset multiple for subimages
     
     /**
-     * Creates a new instance of Gray8SubImageGenerator. The parameters specify the 
-     * size and spacing of the subimages. For example (20,30,10,15) generates
-     * 20x30 subimages, spaced every 10 pixels horizontally and 15 pixels vertically.
-     * @param nWidth The width of the generated subimage.
-     * @param nHeight The height of the generated subimage.
-     * @param nXOffset The horizontal offset from one subimage to the next.
-     * @param nYOffset The vertical offset from one subimage to the next.
+     * Creates a new instance of Gray8SubImageGenerator. The parameters specify
+     * the size and spacing of the subimages. For example (20,30,10,15)
+     * generates 20x30 subimages, spaced every 10 pixels horizontally and 15
+     * pixels vertically.
+     * 
+     * @param nWidth
+     *            The width of the generated subimage.
+     * @param nHeight
+     *            The height of the generated subimage.
+     * @param nXOffset
+     *            The horizontal offset from one subimage to the next.
+     * @param nYOffset
+     *            The vertical offset from one subimage to the next.
      */
-    public Gray8SubImageGenerator(int nWidth, int nHeight, int nXOffset, int nYOffset) {
+    public Gray8SubImageGenerator(final int nWidth, final int nHeight, final int nXOffset, final int nYOffset) {
         this.nWidth = nWidth;
         this.nHeight = nHeight;
         this.nXOffset = nXOffset;
@@ -70,107 +79,90 @@ public class Gray8SubImageGenerator extends PipelineStage {
         // create an output image. We'll reuse this
         // image, changing the contents and offset,
         // for every Gray8OffsetImage we output.
-        super.imageOutput = new Gray8OffsetImage( 
-            this.nWidth, 
-            this.nHeight, 
-            0, 
-            0);
+        super.imageOutput = new Gray8OffsetImage(this.nWidth, this.nHeight, 0, 0);
     }
     
     // We are done producing images when the last row is done
     /**
      * Returns true when no more subimages are available from the input image.
-     * isEmpty() should be called before getFront() to verify that subimages are available
-     * since it is an error to call getFront() when isEmpty() is true.
-     * @return true when no more subimages are available. 
+     * isEmpty() should be called before getFront() to verify that subimages are
+     * available since it is an error to call getFront() when isEmpty() is true.
+     * 
+     * @return true when no more subimages are available.
      */
+    @Override
     public boolean isEmpty() {
-        return this.nVertIndex == this.nVertLimit;
+        return nVertIndex == nVertLimit;
     }
     
     // Return the next subimage and increment the indices
     /**
      * Returns the next subimage.
+     * 
      * @return a subimage within the input image, of type Gray8OffsetImage.
-     * @throws com.github.ojil.core.ImageError when there are no more subimages available (isEmpty() would return
-     * true.)
+     * @throws ImageError
+     *             when there are no more subimages available (isEmpty() would
+     *             return true.)
      */
-     public Image getFront() throws com.github.ojil.core.ImageError
-    {
+    @Override
+    public Image<?> getFront() throws ImageError {
         // offset of first pixel of the subimage within the
         // larget image.
-        int nHOffset = this.nXOffset * this.nHorizIndex;
-        int nVOffset = this.nYOffset * this.nVertIndex;
-        Byte[] dataIn = this.imageInput.getData();
+        final int nHOffset = nXOffset * nHorizIndex;
+        final int nVOffset = nYOffset * nVertIndex;
+        final Byte[] dataIn = imageInput.getData();
         // reuse output image
         // check to make sure nobody damaged it somehow
         if (!(super.imageOutput instanceof Gray8OffsetImage)) {
-            throw new ImageError(
-                            ImageError.PACKAGE.ALGORITHM,
-                            AlgorithmErrorCodes.IMAGE_NOT_GRAY8IMAGE,
-                            imageOutput.toString(),
-                            null,
-                            null);
+            throw new ImageError(ImageError.PACKAGE.ALGORITHM, AlgorithmErrorCodes.IMAGE_NOT_GRAY8IMAGE, imageOutput.toString(), null, null);
         }
-        Gray8OffsetImage imageResult = (Gray8OffsetImage) super.imageOutput;
+        final Gray8OffsetImage imageResult = (Gray8OffsetImage) super.imageOutput;
         imageResult.setXOffset(nHOffset);
         imageResult.setYOffset(nVOffset);
-        Byte[] dataOut = imageResult.getData();
-        for (int i=0; i<this.nHeight; i++) {
-            int nVInLoc = i + nVOffset;
-            System.arraycopy( 
-                    dataIn, 
-                    nVInLoc*this.imageInput.getWidth() + nHOffset, 
-                    dataOut, 
-                    i*this.nWidth, 
-                    this.nWidth);
+        final Byte[] dataOut = imageResult.getData();
+        for (int i = 0; i < nHeight; i++) {
+            final int nVInLoc = i + nVOffset;
+            System.arraycopy(dataIn, (nVInLoc * imageInput.getWidth()) + nHOffset, dataOut, i * nWidth, nWidth);
         }
-        this.nHorizIndex ++;
-        if (this.nHorizIndex == this.nHorizLimit) {
-            this.nVertIndex ++;
-            this.nHorizIndex = 0;
+        nHorizIndex++;
+        if (nHorizIndex == nHorizLimit) {
+            nVertIndex++;
+            nHorizIndex = 0;
         }
         return imageResult;
     }
-
     
     /**
-     * Reinitializes the subimage generator and prepares it to generate the first
-     * Gray8OffsetImage for the new input.
-     * @param image The new input image (which must be of type Gray8Image).
-     * @throws com.github.ojil.core.ImageError if image is not of type Gray8Image, or is too small
-     * (less than the size of the subimages we're supposed to
-     * be generating).
+     * Reinitializes the subimage generator and prepares it to generate the
+     * first Gray8OffsetImage for the new input.
+     * 
+     * @param image
+     *            The new input image (which must be of type Gray8Image).
+     * @throws ImageError
+     *             if image is not of type Gray8Image, or is too small (less
+     *             than the size of the subimages we're supposed to be
+     *             generating).
      */
-    public void push(Image image) throws com.github.ojil.core.ImageError {
+    @Override
+    public void push(final Image<?> image) throws ImageError {
         if (!(image instanceof Gray8Image)) {
-            throw new ImageError(
-            				ImageError.PACKAGE.ALGORITHM,
-            				AlgorithmErrorCodes.IMAGE_NOT_GRAY8IMAGE,
-            				image.toString(),
-            				null,
-            				null);
+            throw new ImageError(ImageError.PACKAGE.ALGORITHM, AlgorithmErrorCodes.IMAGE_NOT_GRAY8IMAGE, image.toString(), null, null);
         }
-        if (image.getWidth() < this.nWidth || image.getHeight() < this.nHeight) {
-            throw new ImageError(
-            				ImageError.PACKAGE.ALGORITHM,
-            				AlgorithmErrorCodes.IMAGE_TOO_SMALL,
-            				image.toString(),
-            				new Integer(this.nWidth).toString(),
-            				new Integer(this.nHeight).toString());
+        if ((image.getWidth() < nWidth) || (image.getHeight() < nHeight)) {
+            throw new ImageError(ImageError.PACKAGE.ALGORITHM, AlgorithmErrorCodes.IMAGE_TOO_SMALL, image.toString(), new Integer(nWidth).toString(), new Integer(nHeight).toString());
         }
-        this.imageInput = (Gray8Image) image;
+        imageInput = (Gray8Image) image;
         // we want to find the largest integer l such that
-        // (l-1) * w + w  < iw 
+        // (l-1) * w + w < iw
         // where l = computed limit on index
         // w = subimage width or height
         // iw = image width or height
         // or l = iw / w (truncated)
         // Java division truncates
-        this.nHorizLimit = (image.getWidth() - this.nWidth) / this.nXOffset;
-        this.nVertLimit = (image.getHeight() - this.nHeight) / this.nYOffset;
-        this.nHorizIndex = 0; 
-        this.nVertIndex = 0;
+        nHorizLimit = (image.getWidth() - nWidth) / nXOffset;
+        nVertLimit = (image.getHeight() - nHeight) / nYOffset;
+        nHorizIndex = 0;
+        nVertIndex = 0;
     }
     
 }

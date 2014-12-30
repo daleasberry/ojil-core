@@ -23,14 +23,14 @@
  */
 
 package com.github.ojil.algorithm;
-import com.github.ojil.core.ImageError;
+
 import com.github.ojil.core.Gray8Image;
 import com.github.ojil.core.Image;
+import com.github.ojil.core.ImageError;
 import com.github.ojil.core.MathPlus;
 
 /**
- * Gray8Statistics is used to measure the mean and variance of a gray
- * image.
+ * Gray8Statistics is used to measure the mean and variance of a gray image.
  * 
  * 
  * @author webb
@@ -45,74 +45,71 @@ public class Gray8Statistics {
     public Gray8Statistics() {
     }
     
-    /** Estimate the mean and variance of an input gray image.
+    /**
+     * Estimate the mean and variance of an input gray image.
      *
-     * @param image the input image.
-     * @throws com.github.ojil.core.ImageError if the input image is not gray.
+     * @param image
+     *            the input image.
+     * @throws ImageError
+     *             if the input image is not gray.
      */
-    public void push(Image image) throws com.github.ojil.core.ImageError
-    {
+    public void push(final Image<?> image) throws ImageError {
         if (!(image instanceof Gray8Image)) {
-            throw new ImageError(
-                			ImageError.PACKAGE.ALGORITHM,
-                			AlgorithmErrorCodes.IMAGE_NOT_GRAY8IMAGE,
-                			image.toString(),
-                			null,
-                			null);
+            throw new ImageError(ImageError.PACKAGE.ALGORITHM, AlgorithmErrorCodes.IMAGE_NOT_GRAY8IMAGE, image.toString(), null, null);
         }
-        Gray8Image gray = (Gray8Image) image;
+        final Gray8Image gray = (Gray8Image) image;
         int nSum = 0, nSumSq = 0;
-        Byte[] data = gray.getData();
-        for (int i=0; i<gray.getHeight(); i++) {
-            for (int j=0; j<gray.getWidth(); j++) {
-                int pixel = (data[i*image.getWidth()+j]) - Byte.MIN_VALUE;
+        final Byte[] data = gray.getData();
+        for (int i = 0; i < gray.getHeight(); i++) {
+            for (int j = 0; j < gray.getWidth(); j++) {
+                final int pixel = (data[(i * image.getWidth()) + j]) - Byte.MIN_VALUE;
                 nSum += pixel;
-                nSumSq += pixel*pixel;
+                nSumSq += pixel * pixel;
             }
         }
-        /** Compute mean and variance. Both are scaled by 256 for accuracy.
+        /**
+         * Compute mean and variance. Both are scaled by 256 for accuracy.
          */
-        int nCount = image.getHeight() * image.getWidth();
-        this.nMean = 256 * nSum / nCount;
+        final int nCount = image.getHeight() * image.getWidth();
+        nMean = (256 * nSum) / nCount;
         // expanded form of variance computation
         // note order of multiplications and divisions. we're trying to
         // avoid overflow here.
-        this.nVariance =  
-                (nSumSq / (nCount - 1) - 
-                    nSum / nCount * nSum  / (nCount - 1)) << 8;
+        nVariance = ((nSumSq / (nCount - 1)) - (((nSum / nCount) * nSum) / (nCount - 1))) << 8;
     }
     
-    /** Return computed mean, times 256.
+    /**
+     * Return computed mean, times 256.
      *
      * @return the mean value, times 256.
      */
     public int getMean() {
-        return this.nMean;
+        return nMean;
     }
     
     /**
      * Return standard deviation, times 256 using Newton's iteration.
+     * 
      * @return the standard deviation, times 256.
-     * @throws com.github.ojil.core.ImageError if the variance computed in push() is less than zero.
+     * @throws ImageError
+     *             if the variance computed in push() is less than zero.
      */
-    public int getStdDev() throws com.github.ojil.core.ImageError {
+    public int getStdDev() throws ImageError {
         // n = variance * 256 * 256 (for accuracy)
-        int n = getVariance() << 8; // getVariance() already is * 256
-        if (n < 0) throw new ImageError(
-            			ImageError.PACKAGE.ALGORITHM,
-            			AlgorithmErrorCodes.STATISTICS_VARIANCE_LESS_THAN_ZERO,
-            			new Integer(n).toString(),
-            			null,
-            			null);
+        final int n = getVariance() << 8; // getVariance() already is * 256
+        if (n < 0) {
+            throw new ImageError(ImageError.PACKAGE.ALGORITHM, AlgorithmErrorCodes.STATISTICS_VARIANCE_LESS_THAN_ZERO, new Integer(n).toString(), null, null);
+        }
         // return standard deviation * 256 = sqrt(variance * 256 * 256)
         return MathPlus.sqrt(n);
     }
     
-    /** Return computed variance, times 256.
+    /**
+     * Return computed variance, times 256.
      *
      * @return the computed variance value.
      */
     public int getVariance() {
-        return this.nVariance;
+        return nVariance;
     }
 }
