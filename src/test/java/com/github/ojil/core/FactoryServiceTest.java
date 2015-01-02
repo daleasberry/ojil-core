@@ -8,7 +8,7 @@ public class FactoryServiceTest {
     
     @Test
     public void testGetImageFactory() {
-        assertNotNull(FactoryService.getImageFactory());
-        assertEquals(DefaultImageFactory.class, FactoryService.getImageFactory().getClass());
+        assertNotNull(ImageFactoryService.getImageFactory());
+        assertEquals(DefaultImageFactory.class, ImageFactoryService.getImageFactory().getClass());
     }
 }

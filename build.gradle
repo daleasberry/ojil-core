@@ -20,13 +20,13 @@ if (JavaVersion.current().isJava8Compatible()) {
     }
 }
 
-task sourcesJar(type: Jar, dependsOn:classes) {
+task sourcesJar(type: Jar, dependsOn: classes) {
     description 'Jars all source files for deployment into the Maven repository.'
     classifier = 'sources'
     from sourceSets.main.allSource
 }
 
-task javadocJar(type: Jar, dependsOn:javadoc) {
+task javadocJar(type: Jar, dependsOn: javadoc) {
     description 'Jars all javadoc files for deployment into the Maven repository.'
     classifier = 'javadoc'
     from javadoc.destinationDir
@@ -42,6 +42,53 @@ signing {
     sign configurations.archives
 }
 
+task uploadLocalArchives(type: Upload) {
+    configuration = configurations.archives
+    uploadDescriptor = true
+    repositories {
+        mavenDeployer {
+            beforeDeployment { MavenDeployment deployment -> signing.signPom(deployment) }
+            repository(url: this.properties['local.repository.url']) {
+                authentication(userName: this.properties['local.repository.user'], password: this.properties['local.repository.password'])
+            }
+            
+            snapshotRepository(url: this.properties['local.snapshot.repository.url']) {
+                authentication(userName: this.properties['local.repository.user'], password:this. properties['local.repository.password'])
+            }
+            pom.project {
+                name 'OJIL Core'
+                packaging 'jar'
+                description 'Open Java Imaging Library.'
+                url 'http://www.github.com/daleasberry/ojil-core'
+                
+                scm {
+                    url 'https://www.github.com/daleasberry/ojil-core'
+                    connection 'scm:git:git:git@github.com/daleasberry/ojil-core.git'
+                    developerConnection 'scm:git:git@github.com:daleasberry/ojil-core.git'
+                }
+                
+                licenses {
+                    license {
+                        name 'GNU Lesser General Public License'
+                        url 'https://www.gnu.org/licenses/lgpl.html'
+                        distribution 'repo'
+                    }
+                }
+                
+                developers {
+                    developer {
+                        id 'daleasberry'
+                        name 'Dale Asberry'
+                        email 'dale.asberry@gmail.com'
+                        organization 'Github'
+                        organizationUrl 'https://www.github.com/daleasberry'
+                    }
+                }
+            }
+        }
+    }
+}
+
 uploadArchives {
     repositories {
         mavenDeployer {
@@ -49,7 +96,6 @@ uploadArchives {
             repository(url: this.properties['maven.repository.url']) {
                 authentication(userName: this.properties['maven.repository.user'], password: this.properties['maven.repository.password'])
             }
-            println this.properties['maven.repository.user']+this.properties['maven.repository.password']
             
             snapshotRepository(url: this.properties['maven.snapshot.repository.url']) {
                 authentication(userName: this.properties['maven.repository.user'], password:this. properties['maven.repository.password'])

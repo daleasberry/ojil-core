@@ -32,7 +32,7 @@ package com.github.ojil.core;
  * 
  * @author webb
  */
-public abstract class Image<T extends Number, U extends Object> {
+public abstract class Image<T extends Number, PlatformImage extends Object> {
     
     /**
      * The image height.
@@ -47,7 +47,7 @@ public abstract class Image<T extends Number, U extends Object> {
     
     protected T[] imageData;
     
-    protected U platformImage;
+    protected PlatformImage platformImage;
     
     /**
      * Creates a new instance of Image
@@ -68,7 +68,7 @@ public abstract class Image<T extends Number, U extends Object> {
         imageData = theImageData;
     }
     
-    public Image(final int theWidth, final int theHeight, final ImageType theImageType, final T[] theImageData, final U thePlatformImage) {
+    public Image(final int theWidth, final int theHeight, final ImageType theImageType, final T[] theImageData, final PlatformImage thePlatformImage) {
         width = theWidth;
         height = theHeight;
         imageData = theImageData;
@@ -89,7 +89,7 @@ public abstract class Image<T extends Number, U extends Object> {
         imageType = theImageType;
     }
     
-    public Image(final U thePlatformImage) {
+    public Image(final PlatformImage thePlatformImage) {
         platformImage = thePlatformImage;
     }
     
@@ -136,7 +136,7 @@ public abstract class Image<T extends Number, U extends Object> {
         return imageData;
     }
     
-    public U getPlatformImage() {
+    public PlatformImage getPlatformImage() {
         return platformImage;
     }
     

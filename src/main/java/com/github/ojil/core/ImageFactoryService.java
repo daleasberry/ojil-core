@@ -1,10 +1,10 @@
 package com.github.ojil.core;
 
-public class FactoryService {
+public class ImageFactoryService {
     private OjilFactories factoryServiceSpi;
-    private static FactoryService factoryService;
+    private static ImageFactoryService factoryService;
     
-    private FactoryService() {
+    private ImageFactoryService() {
         Class<?> factoryServiceClass = null;
         try {
             factoryServiceClass = ClassLoader.getSystemClassLoader().loadClass("com.github.ojil.platform.FactoryServiceSpi");
@@ -19,17 +19,17 @@ public class FactoryService {
         }
     }
     
-    public static synchronized ImageFactory getImageFactory() {
-        if (null == FactoryService.factoryService) {
-            FactoryService.factoryService = new FactoryService();
+    public static synchronized ImageFactory<?> getImageFactory() {
+        if (null == ImageFactoryService.factoryService) {
+            ImageFactoryService.factoryService = new ImageFactoryService();
         }
-        return FactoryService.factoryService.factoryServiceSpi.getImageFactory();
+        return ImageFactoryService.factoryService.factoryServiceSpi.getImageFactory();
     }
     
     public static synchronized IoFactory getIoFactory() {
-        if (null == FactoryService.factoryService) {
-            FactoryService.factoryService = new FactoryService();
+        if (null == ImageFactoryService.factoryService) {
+            ImageFactoryService.factoryService = new ImageFactoryService();
         }
-        return FactoryService.factoryService.factoryServiceSpi.getIoFactory();
+        return ImageFactoryService.factoryService.factoryServiceSpi.getIoFactory();
     }
 }
